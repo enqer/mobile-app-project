@@ -1,4 +1,4 @@
-package login
+package com.example.flextube.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
