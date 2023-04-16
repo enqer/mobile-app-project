@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // tu będzie coś
+        // albo nie
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
