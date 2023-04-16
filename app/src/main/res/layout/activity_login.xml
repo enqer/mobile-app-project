@@ -6,4 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".login.LoginActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LOGIN"
+        tools:layout_editor_absoluteX="185dp"
+        tools:layout_editor_absoluteY="285dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/switch_to_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch "
+        tools:layout_editor_absoluteX="164dp"
+        tools:layout_editor_absoluteY="348dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
