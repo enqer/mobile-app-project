@@ -10,11 +10,12 @@ import android.widget.TextView
 import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
+import com.squareup.picasso.Picasso
 
 class VideoAdapter
     (
     private val mVideo: ArrayList<Video>,
-    val mItemListener: ItemClickListener
+//    val mItemListener: ItemClickListener
     ) : RecyclerView.Adapter<VideoAdapter.VideoViewHolder>()
 {
         companion object{
@@ -28,19 +29,22 @@ class VideoAdapter
 
     ) : RecyclerView.ViewHolder(itemView) {
         // elementy z fragmentHome_video_item
-        lateinit var link: VideoView
+        var videoPicture: ImageView
         lateinit var creatorName: TextView
         lateinit var creatorLogo: ImageView
-        lateinit var title: TextView
+        var title: TextView
 
         lateinit var videoInfo: TextView
 
-        private lateinit var context: Context
+        private var context: Context
 
         init {
             super.itemView
+
+            videoPicture = itemView.findViewById(R.id.video)
             videoInfo = itemView.findViewById(R.id.videoInfo)
             title = itemView.findViewById(R.id.videoTitle)
+
             context = itemView.context
 
         }
@@ -61,6 +65,9 @@ class VideoAdapter
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         val currentItem: Video = mVideo[position]
 
+        val linkUrl = currentItem.link
+
+            Picasso.get().load(linkUrl).into(holder.videoPicture);
         holder.title.text = currentItem.title
         holder.videoInfo.text = currentItem.creatorName + currentItem.views + currentItem.uploadDate
         // sets a data
