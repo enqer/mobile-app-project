@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import com.example.flextube.MainActivity
 import com.example.flextube.R
+import com.example.flextube.settings.SettingsActivity
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,7 +15,7 @@ class LoginActivity : AppCompatActivity() {
 
         val button: Button = findViewById(R.id.switch_to_main)
         button.setOnClickListener{
-            val intent = Intent(this,MainActivity::class.java)
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
     }

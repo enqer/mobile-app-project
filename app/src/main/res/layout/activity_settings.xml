@@ -4,12 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/myLightGray"
     tools:context=".settings.SettingsActivity">
 
+    <LinearLayout
+        android:id="@+id/linearLayout8"
+        android:layout_width="match_parent"
+        android:layout_height="185dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/name_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="85dp"
+        android:layout_weight="1"
+        android:text="Name"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/person_icon"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:id="@+id/person_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="70dp"
+        android:layout_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/person" />
+
+    <ImageView
+        android:id="@+id/close_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,21 +55,21 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="100dp"
+        android:background="@color/white"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout8">
 
         <ImageView
             android:id="@+id/moon_image"
-            android:layout_width="44dp"
+            android:layout_width="36dp"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
             app:srcCompat="@drawable/moon" />
 
         <TextView
-            android:id="@+id/dark_mode_id"
+            android:id="@+id/dark_mode_TV"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="28dp"
@@ -53,6 +88,8 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="2dp"
@@ -63,13 +100,13 @@
 
         <ImageView
             android:id="@+id/language_image"
-            android:layout_width="44dp"
+            android:layout_width="36dp"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
             app:srcCompat="@drawable/language" />
 
         <TextView
-            android:id="@+id/language_id"
+            android:id="@+id/language_TV"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="28dp"
@@ -78,5 +115,101 @@
             android:textSize="18sp" />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <ImageView
+            android:id="@+id/settings_image"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            app:srcCompat="@drawable/settings" />
+
+        <TextView
+            android:id="@+id/settings_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="12dp"
+            android:text="Settings"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <ImageView
+            android:id="@+id/question_mark_image"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            app:srcCompat="@drawable/question_mark" />
+
+        <TextView
+            android:id="@+id/help_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="12dp"
+            android:text="Help"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="2dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+
+        <ImageView
+            android:id="@+id/information_image"
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            app:srcCompat="@drawable/question_mark" />
+
+        <TextView
+            android:id="@+id/information_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="12dp"
+            android:text="How it works?"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout6"></LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
