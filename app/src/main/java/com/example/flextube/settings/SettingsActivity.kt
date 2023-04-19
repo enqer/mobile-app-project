@@ -2,66 +2,87 @@ package com.example.flextube.settings
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.flextube.R
 
 class SettingsActivity : AppCompatActivity() {
+
     lateinit var switch1: Switch
-    //lateinit var name_TV: TextView
-    //var name_TV = findViewById<TextView>(R.id.name_TV)
-    //val personIcon = findViewById<ImageView>(R.id.person_icon)
-    lateinit var closeButtonIcon: ImageView
-    //lateinit var personIcon: ImageView
-    lateinit var moonImage: ImageView
-    lateinit var languageImage: ImageView
-    lateinit var settingsImage: ImageView
-    lateinit var questionImage: ImageView
-    lateinit var informationImage: ImageView
+
+    fun closeClick(closeButtonIcon: ImageView){
+        closeButtonIcon.setOnClickListener {
+            // Here put the code to be executed when you click item
+            Toast.makeText(this, "Close", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun languageClick(){
+        // Initialize LinearLayout and add support for the click event
+        val linearLayout = findViewById<LinearLayout>(R.id.linearLayout2)
+        linearLayout.setOnClickListener {
+            // Here put the code to be executed when you click LinearLayout
+            Toast.makeText(this, "Language", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun settingsClick(){
+        val linearLayout = findViewById<LinearLayout>(R.id.linearLayout3)
+        linearLayout.setOnClickListener {
+            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun helpClick(){
+        val linearLayout = findViewById<LinearLayout>(R.id.linearLayout5)
+        linearLayout.setOnClickListener {
+            Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun howItWorksClick(){
+        val linearLayout = findViewById<LinearLayout>(R.id.linearLayout6)
+        linearLayout.setOnClickListener {
+            Toast.makeText(this, "How it works?", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun darkModeSwitch(){
+        // Switch state change support
+        switch1.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // turn on dark mode
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                // turn on light mode
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        // Inicjalizacja elementów interfejsu użytkownika
-        closeButtonIcon = findViewById(R.id.close_button)
+        val closeButtonIcon = findViewById<ImageView>(R.id.close_button)
         switch1 = findViewById(R.id.switch1)
-        //personIcon = findViewById(R.id.person_icon)
-        moonImage = findViewById(R.id.moon_image)
-        languageImage = findViewById(R.id.language_image)
-        settingsImage = findViewById(R.id.settings_image)
-        questionImage = findViewById(R.id.question_mark_image)
-        informationImage = findViewById(R.id.information_image)
+
+        closeClick(closeButtonIcon)
+        languageClick()
+        settingsClick()
+        helpClick()
+        howItWorksClick()
+
+        darkModeSwitch()
+        // notka: te funkcje jebnij to z powrotem tutaj
+        // notka: dodać to gówno na więcej theme
+        // notka: dodać inne kolory na tło całej aplikacji
 
 
-
-        // Obsługa zmiany stanu Switcha
-        switch1.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Włącz tryb ciemny
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
-                closeButtonIcon.setColorFilter(resources.getColor(R.color.white))
-                //personIcon.setColorFilter(resources.getColor(R.color.white))
-                moonImage.setColorFilter(resources.getColor(R.color.white))
-                languageImage.setColorFilter(resources.getColor(R.color.white))
-                settingsImage.setColorFilter(resources.getColor(R.color.white))
-                questionImage.setColorFilter(resources.getColor(R.color.white))
-                informationImage.setColorFilter(resources.getColor(R.color.white))
-            } else {
-                // Włącz tryb jasny
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-                closeButtonIcon.setColorFilter(resources.getColor(R.color.white))
-                //personIcon.setColorFilter(resources.getColor(R.color.black))
-                moonImage.setColorFilter(resources.getColor(R.color.black))
-                languageImage.setColorFilter(resources.getColor(R.color.black))
-                settingsImage.setColorFilter(resources.getColor(R.color.black))
-                questionImage.setColorFilter(resources.getColor(R.color.black))
-                informationImage.setColorFilter(resources.getColor(R.color.black))
-            }
-        }
     }
 }
