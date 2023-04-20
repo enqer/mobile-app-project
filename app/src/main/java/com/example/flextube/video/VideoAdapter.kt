@@ -27,7 +27,7 @@ class VideoAdapter(
 //        var creatorName: TextView
 //        var creatorLogo: ImageView
         var title: TextView
-
+        var duration: TextView
         var videoInfo: TextView
 
         private var context: Context
@@ -36,7 +36,7 @@ class VideoAdapter(
             super.itemView
 
             videoPicture = itemView.findViewById(R.id.video)
-
+            duration = itemView.findViewById(R.id.duration)
             videoInfo = itemView.findViewById(R.id.videoInfo)
             title = itemView.findViewById(R.id.videoTitle)
 
@@ -67,8 +67,8 @@ class VideoAdapter(
         Picasso.get().load(linkUrl).into(holder.videoPicture);
 
         holder.title.text = currentItem.title
-        holder.videoInfo.text = currentItem.channelName + " ∙ " + currentItem.viewCount + " ∙ " + currentItem.publishedDate
-
+        holder.videoInfo.text = currentItem.channelName + " ∙ " + currentItem.viewCount + " views" + " ∙ " + currentItem.publishedDate
+        holder.duration.text = currentItem.duration
 
         holder.itemView.setOnClickListener {
             mItemListener.onItemClick(mVideo[position])
