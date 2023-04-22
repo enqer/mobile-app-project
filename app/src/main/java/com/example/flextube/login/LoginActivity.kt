@@ -36,6 +36,10 @@ class LoginActivity : AppCompatActivity() {
             signIn()
 
         }
+        guest.setOnClickListener {
+            val signInIntent = Intent(this, MainActivity::class.java)
+            startActivity(signInIntent)
+        }
     }
 
     fun signIn() {
