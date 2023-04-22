@@ -9,12 +9,11 @@ class Video(
     val urlPhoto: String,
     var duration: String,
     val title: String,
-    val creatorLogo: String,
-    val channelName: String,
     val viewCount: String,
     val likeCount: String,
     val commentCount: String,
-    var publishedDate: String
+    var publishedDate: String,
+    val authorVideo: AuthorVideo
     ) {
     // Przekształcanie na normalne formaty
     init {

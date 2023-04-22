@@ -9,12 +9,20 @@ data class VideoIdsApiModel (
 
     )   {
         data class VideoItem(
-        @SerializedName("id")
+            @SerializedName("id")
         val id: Id,
+
+            @SerializedName("snippet")
+        val snippet: Snippet,
         ){
             data class Id(
                 @SerializedName("videoId")
                 val videoId: String
+            ){}
+            data class Snippet
+                (
+                @SerializedName("channelId")
+                val channelId: String,
             ){}
         }
 

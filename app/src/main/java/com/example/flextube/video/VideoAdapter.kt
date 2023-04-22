@@ -24,8 +24,8 @@ class VideoAdapter(
     ) : RecyclerView.ViewHolder(itemView) {
         // elementy z fragmentHome_video_item
         var videoPicture: ImageView
-//        var creatorName: TextView
-//        var creatorLogo: ImageView
+
+        var authorLogo: ImageView
         var title: TextView
         var duration: TextView
         var videoInfo: TextView
@@ -39,6 +39,7 @@ class VideoAdapter(
             duration = itemView.findViewById(R.id.duration)
             videoInfo = itemView.findViewById(R.id.videoInfo)
             title = itemView.findViewById(R.id.videoTitle)
+            authorLogo = itemView.findViewById(R.id.accountLogo)
 
             context = itemView.context
 
@@ -61,14 +62,16 @@ class VideoAdapter(
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         val currentItem: Video = mVideo[position]
 
-        val linkUrl = currentItem.urlPhoto
+//        val linkUrl = currentItem.urlPhoto
 
         // create picture by url
-        Picasso.get().load(linkUrl).into(holder.videoPicture);
+        Picasso.get().load(currentItem.urlPhoto).into(holder.videoPicture);
 
         holder.title.text = currentItem.title
-        holder.videoInfo.text = currentItem.channelName + " ∙ " + currentItem.viewCount + " views" + " ∙ " + currentItem.publishedDate
+        holder.videoInfo.text = currentItem.authorVideo.name + " ∙ " + currentItem.viewCount + " views" + " ∙ " + currentItem.publishedDate
         holder.duration.text = currentItem.duration
+
+        Picasso.get().load(currentItem.authorVideo.urlLogo).into(holder.authorLogo)
 
         holder.itemView.setOnClickListener {
             mItemListener.onItemClick(mVideo[position])

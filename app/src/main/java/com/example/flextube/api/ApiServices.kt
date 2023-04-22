@@ -1,5 +1,8 @@
-package com.example.flextube.video
+package com.example.flextube.api
 
+import com.example.flextube.video.AuthorApiModel
+import com.example.flextube.video.VideoApiModel
+import com.example.flextube.video.VideoIdsApiModel
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,7 +16,7 @@ interface ApiServices {
     fun getVideos(
         @Query("part") part: String = "snippet",
         @Query("key") key: String = KEY2,
-        @Query("maxResults") results: Int = 5  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
+        @Query("maxResults") results: Int = 10  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
     ) : Call<VideoIdsApiModel>
 
     // return views depends on id
@@ -25,6 +28,14 @@ interface ApiServices {
         @Query("id") id: String,
         @Query("key") key: String = KEY2
     ) : Call<VideoApiModel>
+
+    @GET("channels")
+    fun getChannel(
+        @Query("part") part: String = "snippet",
+        @Query("part") part2: String = "statistics",
+        @Query("id") id: String,
+        @Query("key") key: String = KEY2
+    ) : Call<AuthorApiModel>
 
     companion object {
         private final const val KEY = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"

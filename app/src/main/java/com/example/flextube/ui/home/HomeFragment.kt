@@ -1,6 +1,5 @@
 package com.example.flextube.ui.home
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,26 +11,29 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.databinding.FragmentHomeBinding
-import com.example.flextube.video.ApiServices
+import com.example.flextube.api.ApiServices
+import com.example.flextube.video.AuthorApiModel
+import com.example.flextube.video.AuthorVideo
 import com.example.flextube.video.Video
 import com.example.flextube.video.VideoAdapter
 import com.example.flextube.video.VideoApiModel
 import com.example.flextube.video.VideoIdsApiModel
-import com.example.flextube.video.VideoStatsApiModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class HomeFragment : Fragment() {
 
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: RecyclerView.Adapter<VideoAdapter.VideoViewHolder>
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
-    public var videosList: ArrayList<Video> = ArrayList<Video>()        // przechowuje obiekty klasy Video
-    public var idVideos: ArrayList<String> = ArrayList<String>()        // przechowuje id video
-    public var idChannels: ArrayList<String> = ArrayList<String>()      // przechowuje id twórcy powyższego video
+    public var videosList: ArrayList<Video> = ArrayList<Video>()                // przechowuje obiekty klasy Video
+    public var authorList: ArrayList<AuthorVideo> = ArrayList<AuthorVideo>()    // przechowuje obiekty klasy authorVideo
+    public var idVideos: ArrayList<String> = ArrayList<String>()                // przechowuje id video
+    public var idAuthors: ArrayList<String> = ArrayList<String>()              // przechowuje id twórcy powyższego video
+    var idAuthorsVideos: HashMap<String, String> = HashMap<String, String>()
+
+    var iterator = 0
 
     private var _binding: FragmentHomeBinding? = null
 
@@ -71,21 +73,29 @@ class HomeFragment : Fragment() {
                 if (response.isSuccessful){
                     val vid = response.body()
                     Log.i("RETROFIT", "works")
-                    if (vid != null) {
+                    if (vid != null && authorList.size > 0) {
                         Log.i("RETROFIT/ID", vid.items[0].id)
-                        for(i in vid.items){
+                        Log.i("RETROFIT/CHANNELID", authorList[iterator].id)
+                        var author = authorList[iterator]
+                        for( i in vid.items){
+                            for (j in authorList)
+                            {
+                                if (j.id == idAuthorsVideos[i.id]){
+                                    author = j
+                                }
+                            }
                             videosList.add(Video(
                                 i.id,
                                 i.snippet.thumbnails.photoVideo.urlPhoto,
                                 i.contentDetails.duration,
                                 i.snippet.title,
-                                "creatorLogo do zrobienia",
-                                i.snippet.channelTitle,
                                 i.statistics.viewCount,
                                 i.statistics.likeCount,
                                 i.statistics.commentCount,
-                                i.snippet.publishedAt
+                                i.snippet.publishedAt,
+                                author
                             ))
+                            iterator++
                         }
                     }
                 }
@@ -121,7 +131,10 @@ class HomeFragment : Fragment() {
                     if (body != null) {
                         for (i in body.items){
                             idVideos.add(i.id.videoId)
-                            Log.i("RETROFIT", i.id.videoId)
+                            idAuthors.add(i.snippet.channelId)
+                            Log.i("video id", i.id.videoId)
+                            Log.i("channel id", i.snippet.channelId)
+                            idAuthorsVideos[i.id.videoId] = i.snippet.channelId
                         }
                         viewVideos()
                     }
@@ -135,17 +148,55 @@ class HomeFragment : Fragment() {
 
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    // pobiera dane o filmie pojedynczo, fajnie by to było zmienić z multiple id but idk jak zrobić
+    // tak bo argumenty musiałyby być zmienne to samo w api chyba że na sztywno dać po np 10 wyników
+    private fun viewVideos() {
+        if (idVideos.size > 0 && idAuthors.size > 0){
+            for (i in idAuthors) {
+                getAuthors(i)
+                Log.i("view authors kurwa", i)
+            }
+            for (i in idVideos)
+                getVideos(i)
+
+
+        }
+    }
+
+    private fun getAuthors(id: String) {
+        val api = ApiServices.getRetrofit()
+        val channel: Call<AuthorApiModel> = api.getChannel(id=id)
+        channel.enqueue(object : Callback<AuthorApiModel>{
+            override fun onResponse(
+                call: Call<AuthorApiModel>,
+                response: Response<AuthorApiModel>
+            ) {
+                if (response.isSuccessful){
+                    val chan = response.body()
+                    if (chan != null) {
+                        for (i in chan.items){
+                            authorList.add(
+                                AuthorVideo(
+                                    i.id,
+                                    i.snippet.title,
+                                    i.snippet.thumbnails.picture.url,
+                                    i.statistics.subscriberCount
+                                )
+                            )
+                            Log.i("autorzy pobierani", i.id)
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call<AuthorApiModel>, t: Throwable) {
+                Log.i("Retrofit/IdChannel", t.stackTraceToString())
+            }
+        })
     }
 
 
-    private fun viewVideos() {
-        if (idVideos.size > 0){
-            for (i in idVideos){
-                getVideos(i)
-            }
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
