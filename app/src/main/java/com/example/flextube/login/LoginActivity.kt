@@ -20,7 +20,6 @@ import com.google.android.gms.tasks.Task
 
 class LoginActivity : AppCompatActivity() {
 
-
     lateinit var gso: GoogleSignInOptions
     lateinit var gsc: GoogleSignInClient
 
@@ -28,10 +27,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-
         val google: View = findViewById(R.id.google_area);
         val guest: View = findViewById(R.id.guest_area);
-        val btn : Button = findViewById(R.id.test)
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build()
         gsc = GoogleSignIn.getClient(this,gso)
 
@@ -39,30 +36,12 @@ class LoginActivity : AppCompatActivity() {
             signIn()
 
         }
-        btn.setOnClickListener(){
-            signOut()
-        }
-
-
     }
 
     fun signIn() {
         val signInIntent: Intent = gsc.signInIntent
         startActivityForResult(signInIntent,1000)
 
-    }
-    fun getStatus(){
-        val user: TextView = findViewById(R.id.user)
-        val acct: GoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
-        if(acct!=null){
-            val name: String = acct.email
-            user.setText(name)
-        }
-
-    }
-
-    fun signOut(){
-        gsc.signOut()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -71,11 +50,9 @@ class LoginActivity : AppCompatActivity() {
             try {
                 val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
                 task.getResult(ApiException::class.java)
-                getStatus()
             } catch (e: ApiException) {
-                Toast.makeText(this, "Something goes wrong: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Something went wrong: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
 }
