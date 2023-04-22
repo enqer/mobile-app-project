@@ -146,4 +146,5 @@
     <color name="darkGreen">#006400</color>
     <color name="mediumBlue">#0000CD</color>
     <color name="darkBlue">#00008B</color>
+    <color name="bg">#252526</color>
 </resources>

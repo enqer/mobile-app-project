@@ -3,5 +3,6 @@
 
     <!-- Other values-->
     <attr name="customBgColor" format="reference" />
+    <attr name="customIconColor" format="reference" />
 
 </resources>
