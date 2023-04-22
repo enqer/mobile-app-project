@@ -5,8 +5,9 @@
 <!--                nazwaLayoutu_coRobi(ogólnie)_nazwaElementów-->
 <!--                np. fragmentLogin_menu_editText-->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="fragmentHome_videoInfo_textView">
+        <item name="android:font" tools:targetApi="o">@font/ptmono</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/grey</item>
