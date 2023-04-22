@@ -2,24 +2,136 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/login_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".login.LoginActivity">
 
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/Sign_in"
+        android:layout_width="175dp"
+        android:layout_height="48dp"
+        android:fontFamily="@font/ptmono"
+        android:text="Sign in"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.335">
+
+    </TextView>
+
+    <View
+        android:id="@+id/google_area"
+        android:layout_width="297dp"
+        android:layout_height="97dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.385"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Sign_in"
+        app:layout_constraintVertical_bias="0.086">
+
+    </View>
+
+    <ImageView
+        android:id="@+id/google"
+        android:layout_width="104dp"
+        android:layout_height="97dp"
+        android:layout_marginStart="44dp"
+        android:src="@drawable/google_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/google_area"
+        tools:ignore="MissingConstraints"></ImageView>
+
+    <TextView
+        android:id="@+id/google_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LOGIN"
-        tools:layout_editor_absoluteX="185dp"
-        tools:layout_editor_absoluteY="285dp"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="36dp"
+        android:fontFamily="@font/ptmono"
+        android:text="Google"
+        android:textSize="25dp"
+        app:layout_constraintStart_toEndOf="@+id/google"
+        app:layout_constraintTop_toTopOf="@+id/google_area">
+
+    </TextView>
+
+    <View
+        android:id="@+id/guest_area"
+        android:layout_width="297dp"
+        android:layout_height="93dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.385"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/google_area"
+        app:layout_constraintVertical_bias="0.123">
+
+    </View>
+
+    <ImageView
+        android:id="@+id/guest"
+        android:layout_width="89dp"
+        android:layout_height="92dp"
+        android:layout_marginStart="52dp"
+        android:src="@drawable/guest_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guest_area"
+        tools:ignore="MissingConstraints">
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/guest_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/ptmono"
+        android:text="Guest"
+        android:textSize="25dp"
+        app:layout_constraintStart_toEndOf="@+id/guest"
+        app:layout_constraintTop_toTopOf="@+id/guest_area">
+
+
+    </TextView>
 
     <Button
-        android:id="@+id/switch_to_main"
+        android:id="@+id/test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Switch "
-        tools:layout_editor_absoluteX="164dp"
-        tools:layout_editor_absoluteY="348dp" />
+        android:layout_marginTop="68dp"
+        android:text="Sign out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.689"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.814">
+
+    </Button>
+
+    <TextView
+        android:id="@+id/user"
+        android:layout_width="171dp"
+        android:layout_height="33dp"
+        android:text=""
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.906">
+
+    </TextView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
