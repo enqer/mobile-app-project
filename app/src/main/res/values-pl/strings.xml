@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FlexTube</string>
+    <string name="title_home">Początek</string>
+    <string name="title_dashboard">Panel</string>
+    <string name="title_notifications">Powiadomienia</string>
+    <string name="how_it_works">Jak to działa?</string>
+    <string name="help">Pomoc</string>
+    <string name="settings">Ustawienia</string>
+    <string name="dark_mode">Tryb ciemny</string>
+    <string name="language_en">Language: %1$s</string>
+    <string name="language_pl">Język: %1$s</string>
+</resources>

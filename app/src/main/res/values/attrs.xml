@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Other values-->
+    <attr name="customBgColor" format="reference" />
+    <attr name="customIconColor" format="reference" />
+
+</resources>

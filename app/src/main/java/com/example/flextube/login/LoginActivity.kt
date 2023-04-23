@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.flextube.MainActivity
 import com.example.flextube.R
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -17,6 +18,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Api
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+
+import com.example.flextube.settings.SettingsActivity
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -26,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
 
         val google: View = findViewById(R.id.google_area);
         val guest: View = findViewById(R.id.guest_area);
@@ -39,6 +44,12 @@ class LoginActivity : AppCompatActivity() {
         guest.setOnClickListener {
             val signInIntent = Intent(this, MainActivity::class.java)
             startActivity(signInIntent)
+
+        val button: Button = findViewById(R.id.switch_to_main)
+        button.setOnClickListener{
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+
         }
     }
 
