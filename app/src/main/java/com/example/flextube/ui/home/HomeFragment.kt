@@ -1,11 +1,11 @@
 package com.example.flextube.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,9 +15,11 @@ import com.example.flextube.api.ApiServices
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.video.AuthorVideo
 import com.example.flextube.video.Video
+import com.example.flextube.VideoActivity
 import com.example.flextube.video.VideoAdapter
 import com.example.flextube.video.VideoApiModel
 import com.example.flextube.video.VideoIdsApiModel
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -93,6 +95,9 @@ class HomeFragment : Fragment() {
                                 i.statistics.likeCount,
                                 i.statistics.commentCount,
                                 i.snippet.publishedAt,
+                                i.player.embedHtml,
+                                i.player.embedHeight,
+                                i.player.embedWidth,
                                 author
                             ))
                             iterator++
@@ -105,7 +110,12 @@ class HomeFragment : Fragment() {
 //                mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
                 mAdapter = VideoAdapter(videosList, object : VideoAdapter.ItemClickListener{
                     override fun onItemClick(video: Video) {
-                        Toast.makeText(requireContext(), video.title,Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(requireContext(), video.title,Toast.LENGTH_SHORT).show()
+                        val intent = Intent(activity?.baseContext, VideoActivity::class.java)
+                        val gson = Gson()
+                        val json: String = gson.toJson(video)
+                        intent.putExtra("video", json)
+                        startActivity(intent)
                     }
                 })
                 mRecyclerView.layoutManager=mLayoutManager

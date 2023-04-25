@@ -13,6 +13,9 @@ class Video(
     val likeCount: String,
     val commentCount: String,
     var publishedDate: String,
+    val playerHtml: String,
+    val playerHeight: Long,
+    val playerWidth: Long,
     val authorVideo: AuthorVideo
     ) {
     // Przekształcanie na normalne formaty

@@ -16,6 +16,8 @@ interface ApiServices {
     fun getVideos(
         @Query("part") part: String = "snippet",
         @Query("key") key: String = KEY2,
+        @Query("type") type: String = "video",  // musi być ustawione jeśli chcemy videoEmbeddable
+//        @Query("videoEmbeddable") videoEmbeddable: String = "true",  // dzięki temu wyszukujemy filmy tylko dostępne dla stron trzecich
         @Query("maxResults") results: Int = 10  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
     ) : Call<VideoIdsApiModel>
 
@@ -25,6 +27,7 @@ interface ApiServices {
         @Query("part") part: String = "contentDetails",
         @Query("part") part2: String = "statistics",
         @Query("part") part3: String = "snippet",
+        @Query("part") part4: String = "player",
         @Query("id") id: String,
         @Query("key") key: String = KEY2
     ) : Call<VideoApiModel>
