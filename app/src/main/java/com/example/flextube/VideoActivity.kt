@@ -11,14 +11,28 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.flextube.api.ApiServices
+import com.example.flextube.comment.Comment
+import com.example.flextube.comment.CommentAdapter
+import com.example.flextube.comment.CommentApiModel
 import com.example.flextube.databinding.ActivityVideoBinding
 import com.example.flextube.video.Video
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class VideoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVideoBinding
+
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mAdapter: RecyclerView.Adapter<CommentAdapter.CommentViewHolder>
+    private lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private var commentList: ArrayList<Comment> = ArrayList<Comment>()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +51,7 @@ class VideoActivity : AppCompatActivity() {
         // view the date of video
         binding.itemVideoTitle.text = video.title
         binding.itemVideoInfo.text = "${video.viewCount} views ∙ ${video.publishedDate}"
-        binding.itemVideoLike.text = video.likeCount + " likes"
+        binding.itemVideoLike.text = video.likeCount
         binding.itemVideoChannelName.text = video.authorVideo.name
         binding.itemVideoChannelSubs.text = video.authorVideo.subscriberCount + " subskrypcji"
         Picasso.get().load(video.authorVideo.urlLogo).into(binding.itemVideoChannelLogo)
@@ -72,7 +86,46 @@ class VideoActivity : AppCompatActivity() {
 
         webView.loadDataWithBaseURL("https://www.youtube.com", data_html, "text/html", "UTF-8", null);
 
+        mRecyclerView = binding.videoRecycleview
+        mRecyclerView.setHasFixedSize(true)
+        mLayoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false)
 
+        getComments(video.id)
 
+    }
+
+    private fun getComments(id: String){
+        val retrofit = ApiServices.getRetrofit()
+        val comment: Call<CommentApiModel> = retrofit.getCommentsOfVideo(videoId = id)
+        comment.enqueue(object : Callback<CommentApiModel> {
+            override fun onResponse(
+                call: Call<CommentApiModel>,
+                response: Response<CommentApiModel>
+            ) {
+                if (response.isSuccessful){
+                    val c = response.body()
+                    for (i in c?.items!!){
+                        commentList.add(Comment(
+                            i.snippet.topLevelComment.id,
+                            i.snippet.topLevelComment.snip.textDisplay,
+                            i.snippet.topLevelComment.snip.authorDisplayName,
+                            i.snippet.topLevelComment.snip.authorProfileImageUrl,
+                            i.snippet.topLevelComment.snip.likeCount,
+                            i.snippet.topLevelComment.snip.publishedAt
+                        ))
+                    }
+                }
+                mRecyclerView.setHasFixedSize(true)
+                mAdapter = CommentAdapter(commentList)
+                mRecyclerView.layoutManager=mLayoutManager
+                mRecyclerView.adapter = mAdapter
+//                mAdapter.notifyDataSetChanged()
+            }
+
+            override fun onFailure(call: Call<CommentApiModel>, t: Throwable) {
+                Log.i("RETROFIT/COMMENT", "no works")
+                Log.i("RETROFIT/COMMENT", t.message.toString())
+            }
+        })
     }
 }

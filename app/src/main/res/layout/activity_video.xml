@@ -63,7 +63,7 @@
                 android:id="@+id/eqweqwe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_home_black_24dp" />
+                app:srcCompat="@drawable/like_v2" />
 
             <TextView
                 android:id="@+id/item_video_like"
@@ -81,7 +81,7 @@
                 android:id="@+id/imageView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_notifications_black_24dp" />
+                app:srcCompat="@drawable/dislike_v2" />
 
             <TextView
                 android:id="@+id/item_video_dislike"
@@ -113,7 +113,8 @@
         android:id="@+id/linearLayout9"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -168,22 +169,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_margin="5dp"
+        android:background="@drawable/background_comment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
-        
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/textView9"
+                style="@style/activityVideo_comment_textView"
+                android:text="Komentarze: "
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/item_video_commentCount"
+                style="@style/activityVideo_comment_textView"
+                android:text="0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView9"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/imageView6"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@drawable/guest_icon" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -196,6 +221,12 @@
                 android:layout_height="65dp"
                 android:background="@android:color/transparent"
                 app:srcCompat="@android:drawable/ic_menu_send" />
+
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/video_recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

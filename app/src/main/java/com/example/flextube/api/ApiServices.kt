@@ -1,5 +1,6 @@
 package com.example.flextube.api
 
+import com.example.flextube.comment.CommentApiModel
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.video.VideoApiModel
 import com.example.flextube.video.VideoIdsApiModel
@@ -15,7 +16,7 @@ interface ApiServices {
     @GET("search")
     fun getVideos(
         @Query("part") part: String = "snippet",
-        @Query("key") key: String = KEY2,
+        @Query("key") key: String = KEY,
         @Query("type") type: String = "video",  // musi być ustawione jeśli chcemy videoEmbeddable
 //        @Query("videoEmbeddable") videoEmbeddable: String = "true",  // dzięki temu wyszukujemy filmy tylko dostępne dla stron trzecich
         @Query("maxResults") results: Int = 10  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
@@ -29,7 +30,7 @@ interface ApiServices {
         @Query("part") part3: String = "snippet",
         @Query("part") part4: String = "player",
         @Query("id") id: String,
-        @Query("key") key: String = KEY2
+        @Query("key") key: String = KEY
     ) : Call<VideoApiModel>
 
     @GET("channels")
@@ -37,8 +38,21 @@ interface ApiServices {
         @Query("part") part: String = "snippet",
         @Query("part") part2: String = "statistics",
         @Query("id") id: String,
-        @Query("key") key: String = KEY2
+        @Query("key") key: String = KEY
     ) : Call<AuthorApiModel>
+
+    @GET("commentThreads")
+    fun getCommentsOfVideo(
+        @Query("part") part: String ="snippet",
+        @Query("order") order: String = "relevance", // najpopularniejsze
+        @Query("videoId") videoId: String,
+        @Query("maxResults") results: Int = 10,
+        @Query("key") key: String = KEY
+    ) : Call<CommentApiModel>
+
+
+
+
 
     companion object {
         private final const val KEY = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"

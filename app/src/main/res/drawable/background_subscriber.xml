@@ -7,9 +7,9 @@
 <!--        android:width="3dp"-->
 <!--        android:color="@color/black"/>-->
 
-<!--    <gradient android:startColor="@color/black"-->
-<!--            android:endColor="@color/black"-->
-<!--        android:angle="90"/>-->
+    <gradient android:startColor="@color/black"
+            android:endColor="@color/black"
+        android:angle="90"/>
 
     <padding
         android:left="5dp"
