@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+        <FrameLayout
+            android:id="@+id/shortsScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/ic_play"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.497"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.391">
+
+                </ImageView>
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/accountShortsLogo"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="28dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/shortsAuthor"
+                    android:layout_width="141dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="64dp"
+                    android:text="author"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/accountShortsLogo">
+
+                </TextView>
+
+                <ImageView
+                    android:id="@+id/shortsLike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="#00000000"
+                    android:src="@drawable/like"
+                    app:layout_constraintBottom_toTopOf="@+id/likeCount"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/likeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="169"
+                    app:layout_constraintBottom_toTopOf="@+id/shortsDislike"
+                    app:layout_constraintEnd_toEndOf="parent"></TextView>
+
+                <ImageView
+                    android:id="@+id/shortsDislike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:src="@drawable/dislike"
+                    app:layout_constraintBottom_toTopOf="@+id/dislikeCount"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/dislikeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="129"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"></TextView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        </FrameLayout>
+
+
+
+</androidx.cardview.widget.CardView>
