@@ -34,6 +34,8 @@ class VideoActivity : AppCompatActivity() {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private var commentList: ArrayList<Comment> = ArrayList<Comment>()
 
+    val webView = binding.videoDisplay
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +60,7 @@ class VideoActivity : AppCompatActivity() {
         binding.itemVideoCommentCount.text = video.commentCount
 
 
-        val webView: WebView = binding.videoDisplay
+//        val webView: WebView = binding.videoDisplay
         webView.setInitialScale(1)
         webView.webChromeClient = WebChromeClient()
         webView.settings.allowFileAccess = true
@@ -105,14 +107,16 @@ class VideoActivity : AppCompatActivity() {
                 if (response.isSuccessful){
                     val c = response.body()
                     for (i in c?.items!!){
-                        commentList.add(Comment(
+                        commentList.add(
+                            Comment(
                             i.snippet.topLevelComment.id,
                             i.snippet.topLevelComment.snip.textDisplay,
                             i.snippet.topLevelComment.snip.authorDisplayName,
                             i.snippet.topLevelComment.snip.authorProfileImageUrl,
                             i.snippet.topLevelComment.snip.likeCount,
                             i.snippet.topLevelComment.snip.publishedAt
-                        ))
+                        )
+                        )
                     }
                 }
                 mRecyclerView.setHasFixedSize(true)
@@ -128,4 +132,6 @@ class VideoActivity : AppCompatActivity() {
             }
         })
     }
+
+
 }
