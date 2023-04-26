@@ -22,6 +22,9 @@ class Video(
     init {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             convertDuration()
+            if (duration == "0s"){
+                duration = "Live"
+            }
         }
         convertPublishedAt()
     }

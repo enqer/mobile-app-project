@@ -2,6 +2,7 @@ package com.example.flextube
 
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
@@ -9,7 +10,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,8 +35,9 @@ class VideoActivity : AppCompatActivity() {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private var commentList: ArrayList<Comment> = ArrayList<Comment>()
 
-    val webView = binding.videoDisplay
+//    val webView = binding.videoDisplay
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,17 +61,24 @@ class VideoActivity : AppCompatActivity() {
         Picasso.get().load(video.authorVideo.urlLogo).into(binding.itemVideoChannelLogo)
         binding.itemVideoCommentCount.text = video.commentCount
 
+        val useragent: String = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"
 
-//        val webView: WebView = binding.videoDisplay
+        val webView: WebView = binding.videoDisplay
         webView.setInitialScale(1)
         webView.webChromeClient = WebChromeClient()
         webView.settings.allowFileAccess = true
+        webView.settings.mediaPlaybackRequiresUserGesture=false
         webView.settings.pluginState = WebSettings.PluginState.ON
         webView.settings.pluginState = WebSettings.PluginState.ON_DEMAND
         webView.webViewClient = WebViewClient()
         webView.settings.javaScriptEnabled = true
         webView.settings.loadWithOverviewMode = true
         webView.settings.useWideViewPort = true
+        webView.settings.allowFileAccess = true
+        webView.settings.allowContentAccess = true
+        webView.settings.loadsImagesAutomatically = true
+        webView.settings.userAgentString = useragent
+
         val displaymetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displaymetrics)
         val height = displaymetrics.heightPixels
@@ -85,7 +94,7 @@ class VideoActivity : AppCompatActivity() {
                     "<body style=\"background:black;margin:0 0 0 0; padding:0 0 0 0;\"> " + video.playerHtml+
 //                    "<iframe style=\"background:black;\" width=' $width' height='$height' src=\"$VIDEO_URL\" frameborder=\"0\"></iframe> " +
                     "</body> </html> "
-
+//        webView.loadUrl("$data_html?autoplay=1")
         webView.loadDataWithBaseURL("https://www.youtube.com", data_html, "text/html", "UTF-8", null);
 
         mRecyclerView = binding.videoRecycleview

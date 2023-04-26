@@ -59,7 +59,7 @@ class HomeFragment : Fragment() {
         mRecyclerView.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
 
-
+//        getMostPopularVideos()    // do poprawy albo wywalenia
         getIDsOfVideos()
 
         return root
@@ -132,7 +132,7 @@ class HomeFragment : Fragment() {
 
     private fun getIDsOfVideos(){
         val api = ApiServices.getRetrofit()
-        val ids: Call<VideoIdsApiModel> = api.getVideos()
+        val ids: Call<VideoIdsApiModel> = api.getSearchedVideos()
         Log.i("RETROFIT", "getID")
         ids.enqueue(object : Callback<VideoIdsApiModel>{
             override fun onResponse(call: Call<VideoIdsApiModel>, response: Response<VideoIdsApiModel>) {
@@ -164,7 +164,7 @@ class HomeFragment : Fragment() {
         if (idVideos.size > 0 && idAuthors.size > 0){
             for (i in idAuthors) {
                 getAuthors(i)
-                Log.i("view authors kurwa", i)
+                Log.i("view authors ", i)
             }
             for (i in idVideos)
                 getVideos(i)
@@ -204,6 +204,91 @@ class HomeFragment : Fragment() {
         })
     }
 
+    // dla testów do poprawy albo do wywalenia
+//    private fun getMostPopularVideos(){
+//        val retrofit = ApiServices.getRetrofit()
+//        val mPopular: Call<VideoApiModel> = retrofit.getMostPopularVideos()
+//        mPopular.enqueue(object : Callback<VideoApiModel>{
+//            override fun onResponse(call: Call<VideoApiModel>, response: Response<VideoApiModel>) {
+//                if (response.isSuccessful){
+//                    for (i in response.body()?.items!!){
+//                        getAuthors(i.snippet.channelId)
+//                        addToVideosToList(response.body()!!)
+//                    }
+//
+////                    for ((index, i) in response.body()?.items!!.withIndex()){
+////                        videosList.add(Video(
+////                            i.id,
+////                            i.snippet.thumbnails.photoVideo.urlPhoto,
+////                            i.contentDetails.duration,
+////                            i.snippet.title,
+////                            i.statistics.viewCount,
+////                            i.statistics.likeCount,
+////                            i.statistics.commentCount,
+////                            i.snippet.publishedAt,
+////                            i.player.embedHtml,
+////                            i.player.embedHeight,
+////                            i.player.embedWidth,
+////                            authorList[index]
+////                        ))
+////                    }
+//                }
+////                mRecyclerView.setHasFixedSize(true)
+//////                mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
+////                mAdapter = VideoAdapter(videosList, object : VideoAdapter.ItemClickListener{
+////                    override fun onItemClick(video: Video) {
+//////                        Toast.makeText(requireContext(), video.title,Toast.LENGTH_SHORT).show()
+////                        val intent = Intent(activity?.baseContext, VideoActivity::class.java)
+////                        val gson = Gson()
+////                        val json: String = gson.toJson(video)
+////                        intent.putExtra("video", json)
+////                        startActivity(intent)
+////                    }
+////                })
+////                mRecyclerView.layoutManager=mLayoutManager
+////                mRecyclerView.adapter = mAdapter
+////                mAdapter.notifyDataSetChanged()
+//            }
+//            override fun onFailure(call: Call<VideoApiModel>, t: Throwable) {
+//                Log.i("Retrofit/mostPopularVideos", t.stackTraceToString())
+//            }
+//        })
+//    }
+//
+//    // dla testów do poprawy albo wywalenia
+//    fun addToVideosToList(body: VideoApiModel) {
+//        for ((index, i) in body?.items!!.withIndex()){
+//            videosList.add(Video(
+//                i.id,
+//                i.snippet.thumbnails.photoVideo.urlPhoto,
+//                i.contentDetails.duration,
+//                i.snippet.title,
+//                i.statistics.viewCount,
+//                i.statistics.likeCount,
+//                i.statistics.commentCount,
+//                i.snippet.publishedAt,
+//                i.player.embedHtml,
+//                i.player.embedHeight,
+//                i.player.embedWidth,
+//                authorList[index]
+//            ))
+//        }
+//        mRecyclerView.setHasFixedSize(true)
+////                mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
+//        mAdapter = VideoAdapter(videosList, object : VideoAdapter.ItemClickListener{
+//            override fun onItemClick(video: Video) {
+////                        Toast.makeText(requireContext(), video.title,Toast.LENGTH_SHORT).show()
+//                val intent = Intent(activity?.baseContext, VideoActivity::class.java)
+//                val gson = Gson()
+//                val json: String = gson.toJson(video)
+//                intent.putExtra("video", json)
+//                startActivity(intent)
+//            }
+//        })
+//        mRecyclerView.layoutManager=mLayoutManager
+//        mRecyclerView.adapter = mAdapter
+//        mAdapter.notifyDataSetChanged()
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
