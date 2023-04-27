@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
@@ -21,9 +22,8 @@ import java.util.Locale
 class SettingsActivity : AppCompatActivity() {
 
     lateinit var switch1: Switch
-    private lateinit var sharedPreferences: SharedPreferences
     private val DARK_MODE = "darkMode"
-
+    private val LANGUAGE = "language"
 
     fun setLocale(activity: Activity, languageCode: String?) {
         val locale = Locale(languageCode)
@@ -33,82 +33,100 @@ class SettingsActivity : AppCompatActivity() {
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
     }
+
+    fun getLanguageCode(language: String): String {
+        return when (language) {
+            "English" -> "en"
+            "Polish" -> "pl"
+            else -> "en" // default
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val closeButtonIcon = findViewById<ImageView>(R.id.close_button)
 
         switch1 = findViewById(R.id.switch1)
-        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-
-        // Odczytywanie zapisanego języka
-        val savedLanguage = sharedPreferences.getString("language", "")
-
-        // Initialize LinearLayout and add support for the click event
+        val closeButtonIcon = findViewById<ImageView>(R.id.close_button)
         val linearLayout2 = findViewById<LinearLayout>(R.id.linearLayout2) // language
-        linearLayout2.setOnClickListener {
-            val languages = arrayOf("English", "Polish") // Przykładowe dostępne języki
-            val alertDialogBuilder = AlertDialog.Builder(this)
-            alertDialogBuilder.setTitle("Choose Language")
-                .setItems(languages) { dialog, which ->
-                    val selectedLanguage = languages[which]
-                    if (selectedLanguage == "English"){
-                        setLocale(this, "en")
-                    }
-                    if (selectedLanguage == "Polish"){
-                        setLocale(this, "pl")
-                    }
-                    Toast.makeText(this, "Selected Language: $selectedLanguage", Toast.LENGTH_SHORT).show()
-
-                    // Zapisywanie wybranego języka
-                    val editor = sharedPreferences.edit()
-                    editor.putString("language", selectedLanguage)
-                    editor.apply()
-                    dialog.dismiss() // Zamknięcie okna dialogowego po wyborze języka
-                    // that's interesting
-                    //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.dismiss() // Zamknięcie okna dialogowego po kliknięciu przycisku "Cancel"
-                }
-            alertDialogBuilder.create().show()
-        }
-
-        // Dodajemy obserwatora na zmiany wartości w SharedPreferences
-        closeButtonIcon.setOnClickListener { // close button
-            onBackPressed()
-        }
-
         val linearLayout3 = findViewById<LinearLayout>(R.id.linearLayout3) // settings
-        linearLayout3.setOnClickListener {
-            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
-        }
-
         val linearLayout5 = findViewById<LinearLayout>(R.id.linearLayout5) // help
-        linearLayout5.setOnClickListener {
-            Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show()
-        }
-
         val linearLayout6 = findViewById<LinearLayout>(R.id.linearLayout6) // how it works
-        linearLayout6.setOnClickListener {
-            Toast.makeText(this, "How it works?", Toast.LENGTH_SHORT).show()
-        }
 
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+
         val isDarkModeOn = sharedPreferences.getBoolean(DARK_MODE, false)
         if (isDarkModeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             switch1.isChecked = true
+
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             switch1.isChecked = false
+
         }
 
 
+        linearLayout2.setOnClickListener {
+            val languages = arrayOf("English", "Polish")
+            val alertDialogBuilder = AlertDialog.Builder(this)
+            alertDialogBuilder.setTitle("Choose Language")
+                .setItems(languages) { dialog, which ->
+                    val selectedLanguage = languages[which]
+                    setLocale(this, getLanguageCode(selectedLanguage)) // Set selected language
+                    Toast.makeText(this, "Selected Language: $selectedLanguage", Toast.LENGTH_SHORT).show()
 
-        // Switch state change support
+                    // Language save
+                    val editor = sharedPreferences.edit()
+                    editor.putString(LANGUAGE, selectedLanguage)
+                    editor.apply()
+                    dialog.dismiss() // close window
+                    // that's interesting
+                    if (switch1.isChecked == true){
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    }
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss() // close window at cancel button
+                }
+            alertDialogBuilder.create().show()
+        }
+
+
+        closeButtonIcon.setOnClickListener { // close button
+            onBackPressed()
+        }
+
+        linearLayout3.setOnClickListener {
+            //Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("You are literally in settings. What dod you expect?")
+            builder.setPositiveButton("OK", null)
+            builder.show()
+        }
+
+        linearLayout5.setOnClickListener {
+            //Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show()
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("There is no help.")
+            builder.setPositiveButton("OK", null)
+            builder.show()
+        }
+
+
+        linearLayout6.setOnClickListener {
+            //Toast.makeText(this, "How it works?", Toast.LENGTH_SHORT).show()
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("It doesn't")
+            builder.setPositiveButton("OK", null)
+            builder.show()
+        }
+
         switch1.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 // turn on dark mode
