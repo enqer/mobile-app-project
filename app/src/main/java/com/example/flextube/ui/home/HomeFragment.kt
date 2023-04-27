@@ -91,7 +91,7 @@ class HomeFragment : Fragment() {
                                 i.snippet.title,
                                 i.statistics.viewCount,
                                 i.statistics.likeCount,
-                                i.statistics.commentCount,
+                                i.statistics.likeCount,
                                 i.snippet.publishedAt,
                                 author
                             ))

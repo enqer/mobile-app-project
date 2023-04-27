@@ -8,8 +8,8 @@
 
     <item
         android:id="@+id/navigation_shorts"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:icon="@drawable/youtube_shorts_logo"
+        android:title="Shorts" />
 
     <item
         android:id="@+id/navigation_library"

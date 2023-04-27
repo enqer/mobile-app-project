@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_shorts"
-        android:name="com.example.flextube.ui.shorts.shortsFragment"
+        android:name="com.example.flextube.ui.shorts.ShortsFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_shorts" />
 

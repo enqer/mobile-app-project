@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
-import com.example.flextube.video.VideoAdapter
 import com.squareup.picasso.Picasso
 
 data class ShortsAdapter(
-    private val mShorts: ArrayList<ShortsItem>
+    private val mShorts: ArrayList<Shorts>
 ) : RecyclerView.Adapter<ShortsAdapter.ShortsViewHolder>()
 {
     class ShortsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -23,6 +21,7 @@ data class ShortsAdapter(
     var author: TextView
     var likes: TextView
     var dislikes: TextView
+    var title: TextView
 
     private var context: Context
 
@@ -33,6 +32,7 @@ data class ShortsAdapter(
         authorLogo = itemView.findViewById(R.id.accountShortsLogo)
         likes = itemView.findViewById(R.id.likeCount)
         dislikes = itemView.findViewById(R.id.dislikeCount)
+        title = itemView.findViewById(R.id.shortsTitle)
         context = itemView.context
 
 
@@ -47,12 +47,13 @@ data class ShortsAdapter(
     }
 
     override fun onBindViewHolder(holder: ShortsAdapter.ShortsViewHolder, position: Int) {
-        val currentShorts : ShortsItem = mShorts[position]
+        val currentShorts : Shorts = mShorts[position]
 
-        Picasso.get().load(currentShorts.authorLogo).into(holder.authorLogo)
-        holder.author.text= currentShorts.author
-        holder.likes.text = currentShorts.likeCount
-        holder.dislikes.text = currentShorts.dislikeCount
+        Picasso.get().load(currentShorts.channelLogoUrl).into(holder.authorLogo)
+        holder.author.text= currentShorts.channelName
+        holder.likes.text = currentShorts.likeCount.toString()
+        holder.dislikes.text = currentShorts.dislikeCount.toString()
+        holder.title.text = currentShorts.title_shorts
 
     }
 
