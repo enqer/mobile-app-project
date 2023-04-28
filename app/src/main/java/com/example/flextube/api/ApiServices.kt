@@ -16,7 +16,7 @@ interface ApiServices {
     @GET("search")
     fun getVideos(
         @Query("part") part: String = "snippet",
-        @Query("key") key: String = KEY,
+        @Query("key") key: String = KEY2,
         @Query("maxResults") results: Int = 10  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
     ) : Call<VideoIdsApiModel>
 
@@ -41,7 +41,7 @@ interface ApiServices {
     @GET("search")
     fun getShorts(
         @Query("part") part: String = "snippet",
-        @Query("key") key: String = KEY,
+        @Query("key") key: String = KEY2,
         @Query("videoDuration") videoDuration: String = "short",
         @Query("q") q: String = "shorts",
         @Query("type") type: String = "video",
@@ -54,7 +54,7 @@ interface ApiServices {
         @Query("part") part2: String = "statistics",
         @Query("part") part3: String = "snippet",
         @Query("id") id: String,
-        @Query("key") key: String = KEY
+        @Query("key") key: String = KEY2
     ) : Call<ShortsApiModel>
 
     companion object {

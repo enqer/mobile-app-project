@@ -5,24 +5,28 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flextube.R
 import com.example.flextube.api.ApiServices
 import com.example.flextube.databinding.FragmentShortsBinding
 import com.example.flextube.shorts.Shorts
 import com.example.flextube.shorts.ShortsAdapter
-import com.example.flextube.shorts.ShortsItem
 import com.example.flextube.video.AuthorVideo
 import com.example.flextube.video.ShortsApiModel
 import com.example.flextube.video.Video
-import com.example.flextube.video.VideoApiModel
 import com.example.flextube.video.VideoIdsApiModel
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class ShortsFragment : Fragment() {
 
@@ -35,12 +39,17 @@ class ShortsFragment : Fragment() {
     var authorList: ArrayList<AuthorVideo> = ArrayList<AuthorVideo>()
     var idAuthors: ArrayList<String> = ArrayList()
     val titleList : ArrayList<String> = ArrayList()
+    lateinit var youtube: YouTubePlayerView
+    val ide: String = "https://www.youtube.com/shorts/hGRHvqNUkaE"
+
+
 
     private var _binding: FragmentShortsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +58,7 @@ class ShortsFragment : Fragment() {
     ): View {
         val dashboardViewModel =
             ViewModelProvider(this).get(ShortsViewModel::class.java)
+
 
         _binding = FragmentShortsBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -59,6 +69,7 @@ class ShortsFragment : Fragment() {
 
         snapHelper.attachToRecyclerView(mRecyclerView)
         mRecyclerView.layoutManager = mLayoutManager
+
 
         ///endless recycler view endless scrolling
 //        val sh= ShortsItem("https://pbs.twimg.com/profile_images/556495456805453826/wKEOCDN0_400x400.png","Dudu","34","34")
@@ -73,9 +84,19 @@ class ShortsFragment : Fragment() {
 //        Shortlist.add(sh3)
 
 
+
+
         getIDsOfVideos()
 
-//        mAdapter = ShortsAdapter(Short)
+
+        //val shs = Shorts("https://www.youtube.com/shorts/c3rnBab80Z4","shorts","t","dfd",3,4)
+//        Shortlist.add(shs)
+//        mRecyclerView.setHasFixedSize(true)
+//        mAdapter = ShortsAdapter(Shortlist)
+//        mRecyclerView.layoutManager=mLayoutManager
+//        mRecyclerView.adapter = mAdapter
+//        mAdapter.notifyDataSetChanged()
+        //        mAdapter = ShortsAdapter(Short)
 //
         //mRecyclerView.adapter = mAdapter
 //        mAdapter.notifyDataSetChanged()
@@ -122,6 +143,7 @@ class ShortsFragment : Fragment() {
                     val vid = response.body()
                     if (vid != null) {
                         for ( i in vid.items){
+                            
                             Shortlist.add(Shorts(
                                 i.id,
                                 i.snippet.title,
@@ -150,6 +172,10 @@ class ShortsFragment : Fragment() {
             }
         })
         return
+    }
+    private fun startShorts(){
+
+
     }
 
 
