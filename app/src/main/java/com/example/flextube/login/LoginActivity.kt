@@ -20,6 +20,8 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 
 import com.example.flextube.settings.SettingsActivity
+import com.example.flextube.ui.library.LibraryFragment
+import com.example.flextube.ui.library.LibraryViewModel
 
 
 class LoginActivity : AppCompatActivity() {
@@ -43,8 +45,8 @@ class LoginActivity : AppCompatActivity() {
 
         }
         guest.setOnClickListener {
-            val signInIntent = Intent(this, MainActivity::class.java)
-            //val signInIntent = Intent(this, SettingsActivity::class.java)
+            //val signInIntent = Intent(this, MainActivity::class.java)
+            val signInIntent = Intent(this, SettingsActivity::class.java)
             startActivity(signInIntent)
         }
 //            val button: Button = findViewById(R.id.switch_to_main)

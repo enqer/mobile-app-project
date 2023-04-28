@@ -56,6 +56,9 @@ class SettingsActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
+        val selectedLanguage = sharedPreferences.getString(LANGUAGE, "Polsih") // default to English
+        setLocale(this, selectedLanguage?.let { getLanguageCode(it) })
+
         val isDarkModeOn = sharedPreferences.getBoolean(DARK_MODE, false)
         if (isDarkModeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -66,7 +69,6 @@ class SettingsActivity : AppCompatActivity() {
             switch1.isChecked = false
 
         }
-
 
         linearLayout2.setOnClickListener {
             val languages = arrayOf("English", "Polish")
@@ -82,21 +84,23 @@ class SettingsActivity : AppCompatActivity() {
                     editor.putString(LANGUAGE, selectedLanguage)
                     editor.apply()
                     dialog.dismiss() // close window
-                    // that's interesting
-                    if (switch1.isChecked == true){
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    } else {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    }
+                    //that's interesting
+//                    if (switch1.isChecked == true){
+//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//                    } else {
+//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//                    }
+                    finish();
+                    startActivity(getIntent());
+
                 }
                 .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.dismiss() // close window at cancel button
                 }
             alertDialogBuilder.create().show()
         }
-
 
         closeButtonIcon.setOnClickListener { // close button
             onBackPressed()
@@ -117,7 +121,6 @@ class SettingsActivity : AppCompatActivity() {
             builder.setPositiveButton("OK", null)
             builder.show()
         }
-
 
         linearLayout6.setOnClickListener {
             //Toast.makeText(this, "How it works?", Toast.LENGTH_SHORT).show()
@@ -140,6 +143,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
     }
+
 
     override fun onBackPressed() {
         super.onBackPressed()
