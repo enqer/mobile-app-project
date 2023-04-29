@@ -57,6 +57,10 @@ data class ShortsAdapter(
         webView.settings.allowFileAccess = true
         webView.settings.allowContentAccess = true
         webView.settings.loadsImagesAutomatically = true
+        webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setUseWideViewPort(true);
+
+
 
     }
 }
@@ -81,7 +85,7 @@ data class ShortsAdapter(
         }
 
         val displaymetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displaymetrics)
+        //windowManager.defaultDisplay.getMetrics(displaymetrics)
         val height = displaymetrics.heightPixels
         val width = displaymetrics.widthPixels
         val VIDEO_URL = "https://www.youtube.com/watch?v=IcqKOeK8ZcU"
@@ -92,9 +96,9 @@ data class ShortsAdapter(
                     "<link rel=\"stylesheet\" media=\"screen and (-webkit-device-pixel-ratio:1.5)\" href=\"hdpi.css\" />" +
                     "</head> " +
                     "<body style=\"background:black;margin:0 0 0 0; padding:0 0 0 0;\"> " + currentShorts.player+
-//                    "<iframe style=\"background:black;\" width=' $width' height='$height' src=\"$VIDEO_URL\" frameborder=\"0\"></iframe> " +
+                    "<iframe frameborder=0 allowfullscreen width=100% height=100% src=link  frameborder=0 allowfullscreen></iframe>" +
                     "</body> </html> "
-//        webView.loadUrl("$data_html?autoplay=1")
+        holder.webView.loadUrl("$data_html?autoplay=1")
         holder.webView.loadDataWithBaseURL("https://www.youtube.com", data_html, "text/html", "UTF-8", null);
         //holder.webView.loadUrl("youtube.com/shorts/"+currentShorts.id_shorts)
         Picasso.get().load(currentShorts.channelLogoUrl).into(holder.authorLogo)
