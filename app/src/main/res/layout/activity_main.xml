@@ -37,18 +37,18 @@
             android:id="@+id/searchQ"
             android:layout_width="200dp"
             android:layout_height="match_parent"
+            android:layout_margin="5dp"
             android:background="@drawable/background_search"
             android:focusable="true"
             android:hint="Search..."
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:lines="1"
-            android:paddingLeft="15dp"
             android:maxLines="1"
-            android:layout_margin="5dp"
+            android:paddingLeft="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/toSettings"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/logoApp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton

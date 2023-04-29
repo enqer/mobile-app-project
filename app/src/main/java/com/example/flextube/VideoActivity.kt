@@ -6,10 +6,12 @@ import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -102,6 +104,22 @@ class VideoActivity : AppCompatActivity() {
         mLayoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false)
 
         getComments(video.id)
+
+        // increase and decrease comment section
+        var belowedLayout = false
+        val btnBelow = binding.swipeBelow
+        btnBelow.setOnClickListener {
+            val params = RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            if (belowedLayout)
+                params.addRule(RelativeLayout.BELOW, binding.toDownLayout.id)
+            else
+                params.addRule(RelativeLayout.BELOW, binding.videoDisplay.id)
+            binding.changeBelow.layoutParams = params
+            belowedLayout = !belowedLayout
+        }
 
     }
 
