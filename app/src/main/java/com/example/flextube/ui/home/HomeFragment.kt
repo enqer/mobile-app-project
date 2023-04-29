@@ -34,7 +34,7 @@ class HomeFragment : Fragment() {
     public var idVideos: ArrayList<String> = ArrayList<String>()                // przechowuje id video
     public var idAuthors: ArrayList<String> = ArrayList<String>()              // przechowuje id twórcy powyższego video
     var idAuthorsVideos: HashMap<String, String> = HashMap<String, String>()
-
+//    lateinit var q: String
     var iterator = 0
 
     private var _binding: FragmentHomeBinding? = null
@@ -50,8 +50,17 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val q = if (arguments?.getString("q") != null && arguments?.getString("q").toString() != "")
+            arguments?.getString("q").toString()
+        else
+            "youtube"
+
+        Log.i("czy działa wyszukane hasło?", q)
+
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
+
+
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -60,7 +69,7 @@ class HomeFragment : Fragment() {
         mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
 
 //        getMostPopularVideos()    // do poprawy albo wywalenia
-        getIDsOfVideos()
+        getIDsOfVideos(q)
 
         return root
     }
@@ -130,9 +139,9 @@ class HomeFragment : Fragment() {
         return
     }
 
-    private fun getIDsOfVideos(){
+    private fun getIDsOfVideos(q: String){
         val api = ApiServices.getRetrofit()
-        val ids: Call<VideoIdsApiModel> = api.getSearchedVideos()
+        val ids: Call<VideoIdsApiModel> = api.getSearchedVideos(q=q)
         Log.i("RETROFIT", "getID")
         ids.enqueue(object : Callback<VideoIdsApiModel>{
             override fun onResponse(call: Call<VideoIdsApiModel>, response: Response<VideoIdsApiModel>) {

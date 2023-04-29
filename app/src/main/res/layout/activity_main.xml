@@ -23,11 +23,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/logoApp"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:src="@drawable/app_logo_black"
+            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

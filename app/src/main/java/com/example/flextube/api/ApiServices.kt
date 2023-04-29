@@ -29,7 +29,7 @@ interface ApiServices {
     fun getSearchedVideos(
         @Query("part") part: String = "snippet",
         @Query("key") key: String = KEY,
-        @Query("q") q: String = "youtube",
+        @Query("q") q: String,
         @Query("type") type: String = "video", // musi być ustawione jeśli chcemy videoEmbeddable
         @Query("maxResults") maxResults: Int = 20  // 10 filmów się wyświetli na głównej tylko, defaultowo jest 5 na api
     ) : Call<VideoIdsApiModel>

@@ -6,14 +6,15 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.flextube.databinding.ActivityMainBinding
 import com.example.flextube.settings.SettingsActivity
+import com.example.flextube.ui.home.HomeFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,11 +52,20 @@ class MainActivity : AppCompatActivity() {
                 if (p1 == EditorInfo.IME_ACTION_SEARCH){
                     val query: String = searchQuery.text.toString()
                     Log.i("Szukane hasło",query)
+
+                    val bundle = Bundle()
+                    bundle.putString("q", query)
+                    navController.navigate(R.id.navigation_home,bundle)
                     return true
                 }
                 return false
             }
         })
+        val logoApp = binding.logoApp
+        logoApp.setOnClickListener {
+            searchQuery.text.clear()
+            navController.navigate(R.id.navigation_home)
+        }
 
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
