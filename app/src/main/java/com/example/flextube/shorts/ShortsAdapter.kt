@@ -5,6 +5,7 @@ import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -59,6 +60,9 @@ data class ShortsAdapter(
         webView.settings.loadsImagesAutomatically = true
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
+        webView.getSettings().setLoadWithOverviewMode(true);
+
+
 
 
 
@@ -75,29 +79,19 @@ data class ShortsAdapter(
     override fun onBindViewHolder(holder: ShortsAdapter.ShortsViewHolder, position: Int) {
         val currentShorts : Shorts = mShorts[position]
 
-        holder.webView.webChromeClient = object : WebChromeClient() {
-            override fun onProgressChanged(view: WebView?, newProgress: Int) {
-                super.onProgressChanged(view, newProgress)
-                if (newProgress >= 100) {
-                    holder.webView.evaluateJavascript("document.getElementsByTagName('video')[0].play();", null)
-                }
-            }
-        }
-
-        val displaymetrics = DisplayMetrics()
-        //windowManager.defaultDisplay.getMetrics(displaymetrics)
-        val height = displaymetrics.heightPixels
-        val width = displaymetrics.widthPixels
-        val VIDEO_URL = "https://www.youtube.com/watch?v=IcqKOeK8ZcU"
         val data_html =
             "<!DOCTYPE html><html> <head> <meta charset=\"UTF-8\">" +
                     "<meta name=\"viewport\" content=\"target-densitydpi=high-dpi\" /> " +
                     "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> " +
                     "<link rel=\"stylesheet\" media=\"screen and (-webkit-device-pixel-ratio:1.5)\" href=\"hdpi.css\" />" +
                     "</head> " +
-                    "<body style=\"background:black;margin:0 0 0 0; padding:0 0 0 0;\"> " + currentShorts.player+
-                    "<iframe frameborder=0 allowfullscreen width=100% height=100% src=link  frameborder=0 allowfullscreen></iframe>" +
-                    "</body> </html> "
+                    "<body style=\"background:black;margin:0 0 0 0;height:700px padding:0 0 0 0;\"> " + currentShorts.player+
+                    "<iframe  width=\"400\" height=\"700\" frameborder=\"0\" allowfullscreen=\"true\"></iframe>" +
+
+        "</body> </html> "
+
+
+
         holder.webView.loadUrl("$data_html?autoplay=1")
         holder.webView.loadDataWithBaseURL("https://www.youtube.com", data_html, "text/html", "UTF-8", null);
         //holder.webView.loadUrl("youtube.com/shorts/"+currentShorts.id_shorts)
