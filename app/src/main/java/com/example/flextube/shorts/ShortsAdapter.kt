@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
+import com.squareup.picasso.Picasso
 
 
 data class ShortsAdapter(
@@ -78,6 +79,11 @@ data class ShortsAdapter(
                 }
             }
         }
+
+        val displaymetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displaymetrics)
+        val height = displaymetrics.heightPixels
+        val width = displaymetrics.widthPixels
         val VIDEO_URL = "https://www.youtube.com/watch?v=IcqKOeK8ZcU"
         val data_html =
             "<!DOCTYPE html><html> <head> <meta charset=\"UTF-8\">" +
@@ -90,12 +96,12 @@ data class ShortsAdapter(
                     "</body> </html> "
 //        webView.loadUrl("$data_html?autoplay=1")
         holder.webView.loadDataWithBaseURL("https://www.youtube.com", data_html, "text/html", "UTF-8", null);
-       // holder.webView.loadUrl("youtube.com/shorts/"+currentShorts.id_shorts)
-//        Picasso.get().load(currentShorts.channelLogoUrl).into(holder.authorLogo)
-//        holder.author.text= currentShorts.channelName
-//        holder.likes.text = currentShorts.likeCount.toString()
-//        holder.dislikes.text = currentShorts.dislikeCount.toString()
-//        holder.title.text = currentShorts.title_shorts
+        //holder.webView.loadUrl("youtube.com/shorts/"+currentShorts.id_shorts)
+        Picasso.get().load(currentShorts.channelLogoUrl).into(holder.authorLogo)
+        holder.author.text= currentShorts.channelName
+        holder.likes.text = currentShorts.likeCount.toString()
+        holder.dislikes.text = currentShorts.dislikeCount.toString()
+        holder.title.text = currentShorts.title_shorts
 
 
     }

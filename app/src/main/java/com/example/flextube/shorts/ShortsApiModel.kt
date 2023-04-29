@@ -23,7 +23,11 @@ data class ShortsApiModel(
     ) {
         data class Player(
             @SerializedName("embedHtml")
-            val embedHtml: String
+            val embedHtml: String,
+            @SerializedName("embedHeight")
+            val embedHeight: Long,
+            @SerializedName("embedWidth")
+            val embedWidth: Long
         )
         data class Statistics(
             @SerializedName("likeCount")
