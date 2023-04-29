@@ -17,7 +17,7 @@ import com.example.flextube.databinding.FragmentShortsBinding
 import com.example.flextube.shorts.Shorts
 import com.example.flextube.shorts.ShortsAdapter
 import com.example.flextube.video.AuthorVideo
-import com.example.flextube.video.ShortsApiModel
+import com.example.flextube.shorts.ShortsApiModel
 import com.example.flextube.video.Video
 import com.example.flextube.video.VideoIdsApiModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer

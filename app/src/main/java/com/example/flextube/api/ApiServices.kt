@@ -1,7 +1,7 @@
 package com.example.flextube.api
 
 import com.example.flextube.video.AuthorApiModel
-import com.example.flextube.video.ShortsApiModel
+import com.example.flextube.shorts.ShortsApiModel
 import com.example.flextube.video.VideoApiModel
 import com.example.flextube.video.VideoIdsApiModel
 import retrofit2.Call
@@ -43,7 +43,6 @@ interface ApiServices {
         @Query("part") part: String = "snippet",
         @Query("key") key: String = KEY2,
         @Query("videoDuration") videoDuration: String = "short",
-        @Query("q") q: String = "shorts",
         @Query("type") type: String = "video",
         @Query("videoCategoryId") videoCategoryId: String = "17"
     ) : Call<VideoIdsApiModel>
@@ -53,6 +52,7 @@ interface ApiServices {
         @Query("part") part: String = "contentDetails",
         @Query("part") part2: String = "statistics",
         @Query("part") part3: String = "snippet",
+        @Query("part") part4: String = "player",
         @Query("id") id: String,
         @Query("key") key: String = KEY2
     ) : Call<ShortsApiModel>
