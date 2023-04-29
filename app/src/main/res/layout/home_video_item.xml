@@ -59,6 +59,8 @@
                     style="@style/fragmentHome_videoInfo_textView"
                     android:textColor="@color/black"
                     android:textSize="20sp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:text="Title" />
 
                 <TextView
