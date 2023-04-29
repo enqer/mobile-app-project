@@ -40,6 +40,8 @@ class LoginActivity : AppCompatActivity() {
 
         google.setOnClickListener {
             signIn()
+            val signInIntent = Intent(this, MainActivity::class.java)
+            startActivity(signInIntent)
 
         }
         guest.setOnClickListener {

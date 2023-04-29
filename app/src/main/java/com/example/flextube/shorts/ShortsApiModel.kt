@@ -1,4 +1,4 @@
-package com.example.flextube.video
+package com.example.flextube.shorts
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName
 @Keep
 data class ShortsApiModel(
     @SerializedName("items")
-    val items: List<ShortsItem>
+    val items: List<Shorts>
 ){
-    data class ShortsItem(
+    data class Shorts(
         @SerializedName("id")
         val id: String,
 
@@ -16,9 +16,15 @@ data class ShortsApiModel(
         val snippet: Snippet,
 
         @SerializedName("statistics")
-        val statistics: Statistics
+        val statistics: Statistics,
+        @SerializedName("player")
+        val player: Player
 
     ) {
+        data class Player(
+            @SerializedName("embedHtml")
+            val embedHtml: String
+        )
         data class Statistics(
             @SerializedName("likeCount")
             val likeCount: Long,
