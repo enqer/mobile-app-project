@@ -9,4 +9,7 @@
     <string name="settings">Ustawienia</string>
     <string name="dark_mode">Tryb ciemny</string>
     <string name="language">Język: Polski</string>
+    <string name="playlist">Lista odtwarzania</string>
+    <string name="history">Historia</string>
+    <string name="video_thumbnail">Miniaturka wideo</string>
 </resources>

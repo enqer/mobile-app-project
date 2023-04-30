@@ -1,5 +1,6 @@
 package com.example.flextube.api
 
+import com.example.flextube.playlist.PlaylistApiModel
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.video.VideoApiModel
 import com.example.flextube.video.VideoIdsApiModel
@@ -17,7 +18,7 @@ interface ApiServices {
         @Query("part") part: String = "snippet",
         @Query("key") key: String = KEY2,
         @Query("maxResults") results: Int = 10  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
-    ) : Call<VideoIdsApiModel>
+    ): Call<VideoIdsApiModel>
 
     // return views depends on id
     @GET("videos")
@@ -27,7 +28,7 @@ interface ApiServices {
         @Query("part") part3: String = "snippet",
         @Query("id") id: String,
         @Query("key") key: String = KEY2
-    ) : Call<VideoApiModel>
+    ): Call<VideoApiModel>
 
     @GET("channels")
     fun getChannel(
@@ -35,7 +36,18 @@ interface ApiServices {
         @Query("part") part2: String = "statistics",
         @Query("id") id: String,
         @Query("key") key: String = KEY2
-    ) : Call<AuthorApiModel>
+    ): Call<AuthorApiModel>
+
+    @GET("playlists")
+    fun getPlaylist(
+        @Query("part") part: String,
+        @Query("channelId") channelId: String,
+        @Query("key") key: String = KEY2,
+        @Query("pageToken") pageToken: String?,
+        @Query("maxResults") maxResults: String?
+
+    ): Call<PlaylistApiModel>
+
 
     companion object {
         private final const val KEY = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"
@@ -47,5 +59,6 @@ interface ApiServices {
                     .build()
             return retrofit.create(ApiServices::class.java)
         }
+
     }
 }

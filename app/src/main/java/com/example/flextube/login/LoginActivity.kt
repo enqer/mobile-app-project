@@ -45,8 +45,8 @@ class LoginActivity : AppCompatActivity() {
 
         }
         guest.setOnClickListener {
-            //val signInIntent = Intent(this, MainActivity::class.java)
-            val signInIntent = Intent(this, SettingsActivity::class.java)
+            val signInIntent = Intent(this, MainActivity::class.java)
+            //val signInIntent = Intent(this, SettingsActivity::class.java)
             startActivity(signInIntent)
         }
 //            val button: Button = findViewById(R.id.switch_to_main)

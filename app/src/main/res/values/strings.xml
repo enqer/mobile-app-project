@@ -8,4 +8,7 @@
     <string name="settings">Settings</string>
     <string name="dark_mode">Dark mode</string>
     <string name="language">Language: English</string>
+    <string name="playlist">Playlist</string>
+    <string name="history">History</string>
+    <string name="video_thumbnail">Video Thumbnail</string>
 </resources>

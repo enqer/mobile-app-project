@@ -1,12 +1,17 @@
 package com.example.flextube.ui.library
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.databinding.FragmentLibraryBinding
 
 class LibraryFragment : Fragment() {
@@ -35,8 +40,18 @@ class LibraryFragment : Fragment() {
         return root
     }
 
+    private fun getPlaylistItems(id: String){
+
+    }
+
+    private fun PlaylistApiModel() {
+
+    }
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
