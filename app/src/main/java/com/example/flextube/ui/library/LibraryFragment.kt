@@ -8,8 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
+import com.example.flextube.R
 import com.example.flextube.api.ApiServices
 import com.example.flextube.databinding.FragmentLibraryBinding
+import com.example.flextube.playlist.Playlist
+import com.example.flextube.playlist.PlaylistAdapter
 import com.example.flextube.playlist.PlaylistApiModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,6 +22,7 @@ import retrofit2.Response
 class LibraryFragment : Fragment() {
 
     private var _binding: FragmentLibraryBinding? = null
+    private val playlists: MutableList<Playlist> = mutableListOf()
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -32,6 +37,14 @@ class LibraryFragment : Fragment() {
 
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        val playlistRecyclerView = root.findViewById(R.id.playlist_recyclerview) as RecyclerView
+
+        //val playlistRecyclerView = binding.playlistRecyclerView
+        val adapter = PlaylistAdapter(playlists)
+        playlistRecyclerView.adapter = adapter
+
+
         getPlaylist()
 
 
@@ -56,8 +69,12 @@ class LibraryFragment : Fragment() {
                         playlistItems?.let {
                             for (item in playlistItems) {
                                 val title = item.snippetYt.title
+                                val desciption = item.snippetYt.description
+                                val thumbnails = item.snippetYt.thumbnails.high.url
                                 Log.d(TAG, "Title: $title")
-                                Log.d(TAG, "id: $item.id")
+                                Log.d(TAG, "description: $desciption")
+                                Log.d(TAG, "thumbnails: $thumbnails")
+                                //Log.d(TAG, "id: $item.id")
                             }
                         }
                     } else {
