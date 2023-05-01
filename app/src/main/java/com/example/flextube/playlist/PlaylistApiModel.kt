@@ -23,11 +23,39 @@ data class PlaylistApiModel(
         val contentDetail: ContentDetail
     )
 
+    data class SnippetYt(
+        @SerializedName("title")
+        val title: String,
+
+        @SerializedName("description")
+        val description: String,
+
+        @SerializedName("customUrl")
+        val customUrl: String,
+
+        @SerializedName("publishedAt")
+        val publishedAt: String,
+
+        @SerializedName("thumbnails")
+        val thumbnails: ThumbnailsYt,
+
+        @SerializedName("country")
+        val country: String
+
+    )
+    data class ThumbnailsYt(
+        @SerializedName("high")
+        val high: High
+    ) {
+        data class High(
+            @SerializedName("url")
+            val url: String
+        )
+    }
+
     data class ContentDetail(
         @SerializedName("itemCount")
         val itemCount: Int
     )
+
 }
-
-
-

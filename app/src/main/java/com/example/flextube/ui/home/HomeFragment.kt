@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
         mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
 
 
-        getIDsOfVideos()
+        //getIDsOfVideos()
 
         return root
     }
