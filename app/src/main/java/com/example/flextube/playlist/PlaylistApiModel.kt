@@ -44,10 +44,10 @@ data class PlaylistApiModel(
 
     )
     data class ThumbnailsYt(
-        @SerializedName("high")
-        val high: High
+        @SerializedName("medium")
+        val medium: Medium
     ) {
-        data class High(
+        data class Medium(
             @SerializedName("url")
             val url: String
         )

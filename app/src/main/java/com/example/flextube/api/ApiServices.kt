@@ -44,7 +44,7 @@ interface ApiServices {
         @Query("channelId") channelId: String,
         @Query("key") key: String = KEY2,
         @Query("pageToken") pageToken: String?,
-        @Query("maxResults") maxResults: String?
+        @Query("maxResults") maxResults: Int
 
     ): Call<PlaylistApiModel>
 
