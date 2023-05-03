@@ -37,6 +37,13 @@ class ShortsFragment : Fragment() {
 
 
 
+
+
+
+
+
+
+
     private var _binding: FragmentShortsBinding? = null
 
     // This property is only valid between onCreateView and
@@ -175,6 +182,7 @@ class ShortsFragment : Fragment() {
                             ))
 
                         Log.i("tak",i.snippet.title)
+                        Log.i("tak",i.player.embedHtml)
                         Log.i("tak", i.statistics.likeCount.toString())
                         Log.i("tak",i.snippet.channelTitle)
                         }

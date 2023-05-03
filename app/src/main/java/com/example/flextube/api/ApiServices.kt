@@ -4,14 +4,18 @@ import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.shorts.ShortsApiModel
 import com.example.flextube.video.VideoApiModel
 import com.example.flextube.video.VideoIdsApiModel
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface ApiServices {
-
+    @Headers("Authorization: Bearer {TOKEN}")
     // returns image date and name of channel
     @GET("search")
     fun getVideos(
@@ -62,11 +66,27 @@ interface ApiServices {
         private final const val KEY = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"
         private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
         private final const val KEY3= "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
+        var authToken: String = ""
+
+
+
         fun getRetrofit(): ApiServices {
-            val retrofit: Retrofit =
-                Retrofit.Builder().baseUrl("https://www.googleapis.com/youtube/v3/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
+            val client = OkHttpClient.Builder()
+                .addInterceptor { chain ->
+                    val request: Request = chain.request()
+                        .newBuilder()
+                        .addHeader("Authorization", "Bearer $authToken") // dodaj nagłówek z tokenem autoryzacji
+                        .build()
+                    chain.proceed(request)
+                }
+                .build()
+
+            val retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl("https://www.googleapis.com/youtube/v3/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build()
+
             return retrofit.create(ApiServices::class.java)
         }
     }

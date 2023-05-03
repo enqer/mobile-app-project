@@ -33,6 +33,9 @@ class HomeFragment : Fragment() {
     public var idAuthors: ArrayList<String> = ArrayList<String>()              // przechowuje id twórcy powyższego video
     var idAuthorsVideos: HashMap<String, String> = HashMap<String, String>()
 
+
+
+
     var iterator = 0
 
     private var _binding: FragmentHomeBinding? = null

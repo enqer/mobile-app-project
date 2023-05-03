@@ -10,8 +10,7 @@
         android:id="@+id/shortsScreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
-        tools:ignore="MissingClass">
+        android:background="@color/black">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -37,8 +36,9 @@
                 android:layout_height="24dp"
                 android:layout_gravity="bottom"
                 android:layout_marginStart="4dp"
-                android:layout_marginBottom="74dp"
+                android:layout_marginBottom="55dp"
                 android:text="author"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/accountShortsLogo">
 
@@ -51,7 +51,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
                 android:background="#00000000"
-                android:src="@drawable/like"
+                android:src="@drawable/like_30dp"
                 app:layout_constraintBottom_toTopOf="@+id/likeCount"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -61,19 +61,19 @@
                 android:id="@+id/likeCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="20dp"
                 android:layout_marginBottom="16dp"
                 android:text="169"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/shortsDislike"
-                app:layout_constraintEnd_toEndOf="parent"></TextView>
-
+                app:layout_constraintEnd_toEndOf="parent" />
             <ImageView
                 android:id="@+id/shortsDislike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
-                android:src="@drawable/dislike"
+                android:src="@drawable/dislike_30dp"
                 app:layout_constraintBottom_toTopOf="@+id/dislikeCount"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -85,18 +85,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="16dp"
-                android:text="129"
+                android:text="0"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"></TextView>
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <TextView
                 android:id="@+id/shortsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="60dp"
+                android:gravity="left"
                 android:text="film title"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
             </TextView>

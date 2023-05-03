@@ -38,6 +38,8 @@ data class ShortsAdapter(
     init {
         super.itemView
 
+        val useragent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+
         webView= itemView.findViewById(R.id.shortsScreen)
         author = itemView.findViewById(R.id.shortsAuthor)
         authorLogo = itemView.findViewById(R.id.accountShortsLogo)
@@ -61,7 +63,8 @@ data class ShortsAdapter(
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
-
+        webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+        webView.settings.userAgentString = useragent
 
 
 
@@ -82,17 +85,19 @@ data class ShortsAdapter(
         val data_html =
             "<!DOCTYPE html><html> <head> <meta charset=\"UTF-8\">" +
                     "<meta name=\"viewport\" content=\"target-densitydpi=high-dpi\" /> " +
-                    "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> " +
+                    "<meta name=\"viewport\" content=\"width=100%, initial-scale=1\"> " +
                     "<link rel=\"stylesheet\" media=\"screen and (-webkit-device-pixel-ratio:1.5)\" href=\"hdpi.css\" />" +
                     "</head> " +
-                    "<body style=\"background:black;margin:0 0 0 0;height:700px padding:0 0 0 0;\"> " + currentShorts.player+
-                    "<iframe  width=\"400\" height=\"700\" frameborder=\"0\" allowfullscreen=\"true\"></iframe>" +
+                    "<style>html, body, iframe { height: 100%; width: 100%; margin: 0; padding: 0; autoplay:1;}</style>" +
+                    "<body>" +
+                    currentShorts.player+
 
-        "</body> </html> "
+             "</body> </html> "
 
 
 
-        holder.webView.loadUrl("$data_html?autoplay=1")
+
+        //holder.webView.loadUrl("$data_html?autoplay=1")
         holder.webView.loadDataWithBaseURL("https://www.youtube.com", data_html, "text/html", "UTF-8", null);
         //holder.webView.loadUrl("youtube.com/shorts/"+currentShorts.id_shorts)
         Picasso.get().load(currentShorts.channelLogoUrl).into(holder.authorLogo)
