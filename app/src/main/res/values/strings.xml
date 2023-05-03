@@ -11,4 +11,6 @@
     <string name="playlist">Playlist</string>
     <string name="history">History</string>
     <string name="video_thumbnail">Video Thumbnail</string>
+    <string name="playlist_name">Playlist name:</string>
+    <string name="like">Videos I like</string>
 </resources>

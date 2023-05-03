@@ -49,10 +49,21 @@ interface ApiServices {
     ): Call<PlaylistApiModel>
 
 
+//    @GET("playlistitems")
+//    fun getPlaylistItems(
+//        @Query("part") part: String,
+//        @Query("playlistId") playlistId: String,
+//        @Query("key") key: String = KEY2,
+//        @Query("videoId") videoId: String,
+//        @Query("maxResults") maxResults: Int
+//    ): Call <PlaylistItemsApiModel>
+
+
     companion object {
-        private final const val KEY = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"
+        //private final const val KEY = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"
         //private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
-        final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+        //final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+        final const val KEY2 = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
         fun getRetrofit(): ApiServices {
             val retrofit: Retrofit =
                 Retrofit.Builder().baseUrl("https://www.googleapis.com/youtube/v3/")

@@ -10,11 +10,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
+import com.example.flextube.video.VideoAdapter
 import com.squareup.picasso.Picasso
 import retrofit2.http.Tag
 
 class PlaylistAdapter(
     private val playlists: ArrayList<Playlist>,
+    private val mItemListener: PlaylistAdapter.ItemClickListener,
     private var context: Context? = null
     ) :
     RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
@@ -61,6 +63,14 @@ class PlaylistAdapter(
         holder.playlistElementsTextView.text = "${playlist.itemCount} elements"
         Picasso.get().load(playlist.thumbnailUrl).into(holder.playlistImageView)
 
+        holder.itemView.setOnClickListener{
+            mItemListener.onItemClick(playlists[position])
+        }
+
         Log.d(TAG, "PlaylistAdapter/onBindViewHolder")
+    }
+
+    public interface ItemClickListener{
+        fun onItemClick(playlist: Playlist)
     }
 }

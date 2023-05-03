@@ -12,4 +12,6 @@
     <string name="playlist">Lista odtwarzania</string>
     <string name="history">Historia</string>
     <string name="video_thumbnail">Miniaturka wideo</string>
+    <string name="playlist_name">Nazwa playlisty:</string>
+    <string name="like">Wideo które lubię</string>
 </resources>
