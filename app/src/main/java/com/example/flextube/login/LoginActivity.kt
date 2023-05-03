@@ -32,14 +32,16 @@ class LoginActivity : AppCompatActivity() {
         val serverClientId = getString(com.example.flextube.R.string.id_client)
         gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(serverClientId)
+            .requestEmail()
             .build()
         gsc = GoogleSignIn.getClient(this, gso)
 
 
         google.setOnClickListener {
             signIn()
-          //  val signInIntent = Intent(this, MainActivity::class.java)
-           // startActivity(signInIntent)
+
+//              val signInIntent = Intent(this, MainActivity::class.java)
+//            startActivity(signInIntent)
 
         }
         guest.setOnClickListener {
@@ -57,17 +59,20 @@ class LoginActivity : AppCompatActivity() {
     fun signIn() {
         val signInIntent: Intent = gsc.signInIntent
         startActivityForResult(signInIntent, 1000)
+        Log.d("LoginActivity", "Sign-in intent started")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1000 && resultCode == RESULT_OK) {
+        Log.d("LoginActivity", "onActivityResult: requestCode=$requestCode, resultCode=$resultCode")
+        if (requestCode == 1000) {
             try {
                 val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
                 val account = task.getResult(ApiException::class.java)
                 val idToken = account.idToken
-                val authCode = account.serverAuthCode
                 ApiServices.authToken = idToken ?: ""
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
 
             } catch (e: ApiException) {
                 Toast.makeText(this, "Something went wrong: ${e.message}", Toast.LENGTH_SHORT)
