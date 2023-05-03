@@ -71,6 +71,7 @@ class HomeFragment : Fragment() {
 //        getMostPopularVideos()    // do poprawy albo wywalenia
         getIDsOfVideos(q)
 
+
         return root
     }
 
