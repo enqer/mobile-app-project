@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flextube.R
 import com.example.flextube.databinding.FragmentHomeBinding
 import com.example.flextube.api.ApiServices
 import com.example.flextube.video.AuthorApiModel
@@ -68,7 +69,6 @@ class HomeFragment : Fragment() {
         mRecyclerView.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
 
-//        getMostPopularVideos()    // do poprawy albo wywalenia
         getIDsOfVideos(q)
 
 
@@ -101,9 +101,9 @@ class HomeFragment : Fragment() {
                                 i.snippet.thumbnails.photoVideo.urlPhoto,
                                 i.contentDetails.duration,
                                 i.snippet.title,
-                                i.statistics.viewCount,
-                                i.statistics.likeCount,
-                                i.statistics.commentCount,
+                                convertNumbers(i.statistics.viewCount),
+                                convertNumbers(i.statistics.likeCount),
+                                convertNumbers(i.statistics.commentCount),
                                 i.snippet.publishedAt,
                                 i.player.embedHtml,
                                 i.player.embedHeight,
@@ -200,7 +200,7 @@ class HomeFragment : Fragment() {
                                     i.id,
                                     i.snippet.title,
                                     i.snippet.thumbnails.picture.url,
-                                    i.statistics.subscriberCount
+                                    convertNumbers(i.statistics.subscriberCount)
                                 )
                             )
                             Log.i("autorzy pobierani", i.id)
@@ -214,94 +214,47 @@ class HomeFragment : Fragment() {
         })
     }
 
-    // dla testów do poprawy albo do wywalenia
-//    private fun getMostPopularVideos(){
-//        val retrofit = ApiServices.getRetrofit()
-//        val mPopular: Call<VideoApiModel> = retrofit.getMostPopularVideos()
-//        mPopular.enqueue(object : Callback<VideoApiModel>{
-//            override fun onResponse(call: Call<VideoApiModel>, response: Response<VideoApiModel>) {
-//                if (response.isSuccessful){
-//                    for (i in response.body()?.items!!){
-//                        getAuthors(i.snippet.channelId)
-//                        addToVideosToList(response.body()!!)
-//                    }
-//
-////                    for ((index, i) in response.body()?.items!!.withIndex()){
-////                        videosList.add(Video(
-////                            i.id,
-////                            i.snippet.thumbnails.photoVideo.urlPhoto,
-////                            i.contentDetails.duration,
-////                            i.snippet.title,
-////                            i.statistics.viewCount,
-////                            i.statistics.likeCount,
-////                            i.statistics.commentCount,
-////                            i.snippet.publishedAt,
-////                            i.player.embedHtml,
-////                            i.player.embedHeight,
-////                            i.player.embedWidth,
-////                            authorList[index]
-////                        ))
-////                    }
-//                }
-////                mRecyclerView.setHasFixedSize(true)
-//////                mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
-////                mAdapter = VideoAdapter(videosList, object : VideoAdapter.ItemClickListener{
-////                    override fun onItemClick(video: Video) {
-//////                        Toast.makeText(requireContext(), video.title,Toast.LENGTH_SHORT).show()
-////                        val intent = Intent(activity?.baseContext, VideoActivity::class.java)
-////                        val gson = Gson()
-////                        val json: String = gson.toJson(video)
-////                        intent.putExtra("video", json)
-////                        startActivity(intent)
-////                    }
-////                })
-////                mRecyclerView.layoutManager=mLayoutManager
-////                mRecyclerView.adapter = mAdapter
-////                mAdapter.notifyDataSetChanged()
-//            }
-//            override fun onFailure(call: Call<VideoApiModel>, t: Throwable) {
-//                Log.i("Retrofit/mostPopularVideos", t.stackTraceToString())
-//            }
-//        })
-//    }
-//
-//    // dla testów do poprawy albo wywalenia
-//    fun addToVideosToList(body: VideoApiModel) {
-//        for ((index, i) in body?.items!!.withIndex()){
-//            videosList.add(Video(
-//                i.id,
-//                i.snippet.thumbnails.photoVideo.urlPhoto,
-//                i.contentDetails.duration,
-//                i.snippet.title,
-//                i.statistics.viewCount,
-//                i.statistics.likeCount,
-//                i.statistics.commentCount,
-//                i.snippet.publishedAt,
-//                i.player.embedHtml,
-//                i.player.embedHeight,
-//                i.player.embedWidth,
-//                authorList[index]
-//            ))
-//        }
-//        mRecyclerView.setHasFixedSize(true)
-////                mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
-//        mAdapter = VideoAdapter(videosList, object : VideoAdapter.ItemClickListener{
-//            override fun onItemClick(video: Video) {
-////                        Toast.makeText(requireContext(), video.title,Toast.LENGTH_SHORT).show()
-//                val intent = Intent(activity?.baseContext, VideoActivity::class.java)
-//                val gson = Gson()
-//                val json: String = gson.toJson(video)
-//                intent.putExtra("video", json)
-//                startActivity(intent)
-//            }
-//        })
-//        mRecyclerView.layoutManager=mLayoutManager
-//        mRecyclerView.adapter = mAdapter
-//        mAdapter.notifyDataSetChanged()
-//    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+    private fun convertNumbers(num: String) : String{
+        Log.i("LICZBA", num)
+        var s = num.reversed()
+        var new = ""
+        var count = 0
+        for (i in s){
+            if (count == 3){
+                new += "."
+                count = 0
+            }
+            new += i
+            count++
+        }
+        var indexStart = 0
+        var amount = ""
+        if (new.length >= 12){
+            indexStart = 12
+            amount = requireContext().resources.getString(R.string.num1000000000)
+        }else if (new.length > 10){
+            indexStart = 8
+            amount = requireContext().resources.getString(R.string.num1000000)
+        } else if (new.length >= 9){
+            indexStart = 6
+            amount = requireContext().resources.getString(R.string.num1000000)
+        } else if (new.length > 4){
+            indexStart = 4
+            amount = requireContext().resources.getString(R.string.num1000)
+        } else if (new.length == 4){
+            indexStart = 2
+            amount = requireContext().resources.getString(R.string.num1000)
+        }
+        s = new.subSequence(indexStart, new.length).toString()
+        if ((indexStart == 4 || indexStart == 6) && s[0] == '0')
+            s = s.subSequence(2,s.length).toString()
+        Log.i("VIDEOCHECKNUMBER", s.reversed() + amount)
+        return s.reversed() + amount
     }
 }

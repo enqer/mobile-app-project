@@ -2,6 +2,8 @@ package com.example.flextube.video
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.flextube.R
+import kotlin.coroutines.coroutineContext
 
 
 class Video(
@@ -9,9 +11,9 @@ class Video(
     val urlPhoto: String,
     var duration: String,
     val title: String,
-    val viewCount: String,
-    val likeCount: String,
-    val commentCount: String,
+    var viewCount: String,
+    var likeCount: String,
+    var commentCount: String,
     var publishedDate: String,
     val playerHtml: String,
     val playerHeight: Long,
@@ -27,7 +29,9 @@ class Video(
             }
         }
         convertPublishedAt()
+
     }
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)

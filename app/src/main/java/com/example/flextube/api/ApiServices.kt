@@ -12,17 +12,7 @@ import retrofit2.http.Query
 
 interface ApiServices {
 
-    // returns most popular videos in PL
-//    @GET("videos")
-//    fun getMostPopularVideos(
-//        @Query("part") part: String = "contentDetails",
-//        @Query("part") part2: String = "statistics",
-//        @Query("part") part3: String = "snippet",
-//        @Query("part") part4: String = "player",
-//        @Query("regionCode") regionCode: String = "PL",
-//        @Query("chart") chart: String = "mostPopular",
-//        @Query("key") key: String = KEY
-//    ) : Call<VideoApiModel>
+
 
     // returns image date and name of channel
     @GET("search")
@@ -68,8 +58,9 @@ interface ApiServices {
 
 
     companion object {
-        private final const val KEY = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"
-        private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+        private const val KEY = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
+        private const val KEY2 = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"
+        private const val KEY3 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
         fun getRetrofit(): ApiServices {
             val retrofit: Retrofit =
                 Retrofit.Builder().baseUrl("https://www.googleapis.com/youtube/v3/")

@@ -151,4 +151,9 @@
     <color name="mediumBlue">#0000CD</color>
     <color name="darkBlue">#00008B</color>
     <color name="bg">#252526</color>
+
+
+    <color name="greyly">#f2f2f2</color>
+    <color name="blackly">#101010</color>
+    <color name="greyful">#7c7c7c</color>
 </resources>

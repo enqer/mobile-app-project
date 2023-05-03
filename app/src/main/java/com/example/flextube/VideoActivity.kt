@@ -2,10 +2,13 @@ package com.example.flextube
 
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
@@ -40,7 +43,7 @@ class VideoActivity : AppCompatActivity() {
 //    val webView = binding.videoDisplay
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoBinding.inflate(layoutInflater)
@@ -56,12 +59,13 @@ class VideoActivity : AppCompatActivity() {
 
         // view the date of video
         binding.itemVideoTitle.text = video.title
-        binding.itemVideoInfo.text = "${video.viewCount} views ∙ ${video.publishedDate}"
+        binding.itemVideoInfo.text = "${video.viewCount} ${baseContext.resources.getString(R.string.views)} ∙ ${video.publishedDate}"
         binding.itemVideoLike.text = video.likeCount
         binding.itemVideoChannelName.text = video.authorVideo.name
-        binding.itemVideoChannelSubs.text = video.authorVideo.subscriberCount + " subskrypcji"
+        binding.itemVideoChannelSubs.text = "${video.authorVideo.subscriberCount} ${baseContext.resources.getString(R.string.channelSubs)}"
         Picasso.get().load(video.authorVideo.urlLogo).into(binding.itemVideoChannelLogo)
         binding.itemVideoCommentCount.text = video.commentCount
+
 
         val useragent: String = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"
 
@@ -105,25 +109,41 @@ class VideoActivity : AppCompatActivity() {
 
         getComments(video.id)
 
-        // increase and decrease comment section
-        var belowedLayout = false
+        // increase and decrease comment section (swipe and click version)
+        val changeBelowComment = binding.changeBelow
+
+        val params = RelativeLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
         val btnBelow = binding.swipeBelow
+//        btnBelow.setOnTouchListener(object : OnSwipeTouchListener(baseContext){
+//            override fun onSwipeTop(){
+//                params.addRule(RelativeLayout.BELOW, binding.videoDisplay.id)
+//                changeBelowComment.layoutParams = params
+//            }
+//
+//            override fun onSwipeBottom() {
+//                super.onSwipeBottom()
+//                params.addRule(RelativeLayout.BELOW, binding.toDownLayout.id)
+//                changeBelowComment.layoutParams = params
+//            }
+//        })
+
+
+        var belowedLayout = false
         btnBelow.setOnClickListener {
-            val params = RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
             if (belowedLayout)
                 params.addRule(RelativeLayout.BELOW, binding.toDownLayout.id)
             else
                 params.addRule(RelativeLayout.BELOW, binding.videoDisplay.id)
-            binding.changeBelow.layoutParams = params
+            changeBelowComment.layoutParams = params
             belowedLayout = !belowedLayout
         }
 
     }
 
-    private fun getComments(id: String){
+    private fun getComments(id: String) {
         val retrofit = ApiServices.getRetrofit()
         val comment: Call<CommentApiModel> = retrofit.getCommentsOfVideo(videoId = id)
         comment.enqueue(object : Callback<CommentApiModel> {
@@ -131,24 +151,24 @@ class VideoActivity : AppCompatActivity() {
                 call: Call<CommentApiModel>,
                 response: Response<CommentApiModel>
             ) {
-                if (response.isSuccessful){
+                if (response.isSuccessful) {
                     val c = response.body()
-                    for (i in c?.items!!){
+                    for (i in c?.items!!) {
                         commentList.add(
                             Comment(
-                            i.snippet.topLevelComment.id,
-                            i.snippet.topLevelComment.snip.textDisplay,
-                            i.snippet.topLevelComment.snip.authorDisplayName,
-                            i.snippet.topLevelComment.snip.authorProfileImageUrl,
-                            i.snippet.topLevelComment.snip.likeCount,
-                            i.snippet.topLevelComment.snip.publishedAt
-                        )
+                                i.snippet.topLevelComment.id,
+                                i.snippet.topLevelComment.snip.textDisplay,
+                                i.snippet.topLevelComment.snip.authorDisplayName,
+                                i.snippet.topLevelComment.snip.authorProfileImageUrl,
+                                convertNumbers(i.snippet.topLevelComment.snip.likeCount.toString()),
+                                i.snippet.topLevelComment.snip.publishedAt
+                            )
                         )
                     }
                 }
                 mRecyclerView.setHasFixedSize(true)
                 mAdapter = CommentAdapter(commentList)
-                mRecyclerView.layoutManager=mLayoutManager
+                mRecyclerView.layoutManager = mLayoutManager
                 mRecyclerView.adapter = mAdapter
 //                mAdapter.notifyDataSetChanged()
             }
@@ -158,7 +178,45 @@ class VideoActivity : AppCompatActivity() {
                 Log.i("RETROFIT/COMMENT", t.message.toString())
             }
         })
+
+
     }
-
-
+    private fun convertNumbers(num: String) : String{
+        Log.i("LICZBA", num)
+        var s = num.reversed()
+        var new = ""
+        var count = 0
+        for (i in s){
+            if (count == 3){
+                new += "."
+                count = 0
+            }
+            new += i
+            count++
+        }
+        var indexStart = 0
+        var amount = ""
+        if (new.length >= 12){
+            indexStart = 12
+            amount = baseContext.resources.getString(R.string.num1000000000)
+        }else if (new.length > 10){
+            indexStart = 8
+            amount = baseContext.resources.getString(R.string.num1000000)
+        } else if (new.length >= 9){
+            indexStart = 6
+            amount = baseContext.resources.getString(R.string.num1000000)
+        } else if (new.length > 4){
+            indexStart = 4
+            amount = baseContext.resources.getString(R.string.num1000)
+        } else if (new.length == 4){
+            indexStart = 2
+            amount = baseContext.resources.getString(R.string.num1000)
+        }
+        s = new.subSequence(indexStart, new.length).toString()
+        if ((indexStart == 4 || indexStart == 6) && s[0] == '0')
+            s = s.subSequence(2,s.length).toString()
+        Log.i("VIDEOCHECKNUMBER", s.reversed() + amount)
+        return s.reversed() + amount
+    }
 }
+

@@ -6,7 +6,7 @@ class Comment
     val text: String,
     val author: String,
     val authorLogo: String,
-    val likeCount: Int,
+    val likeCount: String,
     var publishedAt: String
             ) {
 

@@ -9,4 +9,14 @@
     <string name="dark_mode">Dark mode</string>
     <string name="language_en">Language: %1$s</string>
     <string name="language_pl">Język: %1$s</string>
+
+
+    <string name="live">Live</string>
+    <string name="comments">Comments:</string>
+    <string name="channelSubs">subscribers</string>
+    <string name="sub">Subscribe</string>
+    <string name="views">views</string>
+    <string name="num1000">K</string>
+    <string name="num1000000">M</string>
+    <string name="num1000000000">B</string>
 </resources>

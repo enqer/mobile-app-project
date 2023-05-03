@@ -4,6 +4,6 @@ class AuthorVideo (
     val id: String,
     val name: String,
     val urlLogo: String,
-    val subscriberCount: String
+    var subscriberCount: String
         ){
 }

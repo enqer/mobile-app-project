@@ -59,6 +59,7 @@
             <TextView
                 android:id="@+id/item_video_info"
                 style="@style/activityVideo_videoInfo_textView"
+                android:textColor="@color/greyful"
                 android:text="TextView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/item_video_title" />
@@ -97,7 +98,7 @@
 
                 <TextView
                     android:id="@+id/item_video_like"
-                    style="@style/activityVideo_textBtn_TextView"
+                    style="@style/activityVideo_text_TextView"
                     android:layout_weight="1"
                     android:text="32tyś"
                     android:textAlignment="textStart" />
@@ -171,7 +172,7 @@
 
                 <TextView
                     android:id="@+id/item_video_channelName"
-                    style="@style/activityVideo_textBtn_TextView"
+                    style="@style/activityVideo_text_TextView"
                     android:layout_weight="1"
                     android:text="TextView"
                     android:textAlignment="textStart"
@@ -179,7 +180,8 @@
 
                 <TextView
                     android:id="@+id/item_video_channelSubs"
-                    style="@style/activityVideo_textBtn_TextView"
+                    style="@style/activityVideo_text_TextView"
+                    android:textColor="@color/greyful"
                     android:text="TextView"
                     android:textAlignment="textStart" />
             </LinearLayout>
@@ -190,8 +192,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:textAllCaps="false"
+                android:textSize="16sp"
                 android:background="@drawable/background_subscriber"
-                android:text="Subskrybuj"
+                android:text="@string/sub"
                 app:backgroundTint="@null" />
         </LinearLayout>
 
@@ -211,13 +215,7 @@
             app:layout_constraintTop_toBottomOf="@+id/toDownLayout">
 
 
-            <ImageButton
-                android:id="@+id/swipeBelow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="0dp"
-                android:src="@drawable/height_arrow"
-               />
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -228,7 +226,8 @@
                 <TextView
                     android:id="@+id/textView9"
                     style="@style/activityVideo_comment_textView"
-                    android:text="Komentarze: "
+                    android:text="@string/comments"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -236,9 +235,21 @@
                 <TextView
                     android:id="@+id/item_video_commentCount"
                     style="@style/activityVideo_comment_textView"
+                    android:layout_marginLeft="3dp"
                     android:text="0"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView9"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/swipeBelow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="0dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/height_arrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
