@@ -65,6 +65,7 @@ class ShortsFragment : Fragment() {
         mRecyclerView = _binding!!.shortsRecyclerview
         mRecyclerView.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
+        Log.d("dd",ApiServices.authToken)
         val snapHelper: LinearSnapHelper = object : LinearSnapHelper() {
             override fun findTargetSnapPosition(
                 layoutManager: RecyclerView.LayoutManager,
@@ -206,6 +207,7 @@ class ShortsFragment : Fragment() {
 
 
     }
+
 
 
     override fun onDestroyView() {
