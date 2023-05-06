@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "460223798693",
+    "project_id": "flextube-82f8a",
+    "storage_bucket": "flextube-82f8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460223798693:android:8520c122fa4e91e7605c4c",
+        "android_client_info": {
+          "package_name": "com.example.flextube"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460223798693-hb59qtno49nt8ckq8bvqmkr8at5vm5u4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1xRwZzzi_cw1y0JpTJ5d-XcnCOPP81Qw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "460223798693-hb59qtno49nt8ckq8bvqmkr8at5vm5u4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
