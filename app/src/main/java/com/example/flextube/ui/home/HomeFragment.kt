@@ -16,7 +16,7 @@ import com.example.flextube.api.ApiServices
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.video.AuthorVideo
 import com.example.flextube.video.Video
-import com.example.flextube.VideoActivity
+import com.example.flextube.video.VideoActivity
 import com.example.flextube.video.VideoAdapter
 import com.example.flextube.video.VideoApiModel
 import com.example.flextube.video.VideoIdsApiModel
@@ -35,7 +35,6 @@ class HomeFragment : Fragment() {
     public var idVideos: ArrayList<String> = ArrayList<String>()                // przechowuje id video
     public var idAuthors: ArrayList<String> = ArrayList<String>()              // przechowuje id twórcy powyższego video
     var idAuthorsVideos: HashMap<String, String> = HashMap<String, String>()
-//    lateinit var q: String
     var iterator = 0
 
     private var _binding: FragmentHomeBinding? = null
@@ -43,8 +42,6 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,11 +53,8 @@ class HomeFragment : Fragment() {
         else
             "youtube"
 
-        Log.i("czy działa wyszukane hasło?", q)
-
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
-
 
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -69,6 +63,7 @@ class HomeFragment : Fragment() {
         mRecyclerView.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
 
+        // getting id channels and videos of searching videos
         getIDsOfVideos(q)
 
 
@@ -76,18 +71,15 @@ class HomeFragment : Fragment() {
     }
 
 
+    // getting videos by id video
     private fun getVideos(id: String){
         val api = ApiServices.getRetrofit()
         val videos: Call<VideoApiModel> = api.getStatsVideos(id=id)
-        Log.i("RETROFIT", "getVideos")
         videos.enqueue(object : Callback<VideoApiModel>{
             override fun onResponse(call: Call<VideoApiModel>, response: Response<VideoApiModel>) {
                 if (response.isSuccessful){
                     val vid = response.body()
-                    Log.i("RETROFIT", "works")
                     if (vid != null && authorList.size > 0) {
-                        Log.i("RETROFIT/ID", vid.items[0].id)
-                        Log.i("RETROFIT/CHANNELID", authorList[iterator].id)
                         var author = authorList[iterator]
                         for( i in vid.items){
                             for (j in authorList)
@@ -114,7 +106,6 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-                Log.i("RETROFIT/GETVIDEOS", "works")
                 //                mRecyclerView = binding.homeRecyclerview
                 mRecyclerView.setHasFixedSize(true)
 //                mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
@@ -140,10 +131,10 @@ class HomeFragment : Fragment() {
         return
     }
 
+    // getting id channels and videos (after that we can searching for full data of video)
     private fun getIDsOfVideos(q: String){
         val api = ApiServices.getRetrofit()
         val ids: Call<VideoIdsApiModel> = api.getSearchedVideos(q=q)
-        Log.i("RETROFIT", "getID")
         ids.enqueue(object : Callback<VideoIdsApiModel>{
             override fun onResponse(call: Call<VideoIdsApiModel>, response: Response<VideoIdsApiModel>) {
                 if (response.isSuccessful){
@@ -152,8 +143,6 @@ class HomeFragment : Fragment() {
                         for (i in body.items){
                             idVideos.add(i.id.videoId)
                             idAuthors.add(i.snippet.channelId)
-                            Log.i("video id", i.id.videoId)
-                            Log.i("channel id", i.snippet.channelId)
                             idAuthorsVideos[i.id.videoId] = i.snippet.channelId
                         }
                         viewVideos()
@@ -168,21 +157,17 @@ class HomeFragment : Fragment() {
 
 
 
-    // pobiera dane o filmie pojedynczo, fajnie by to było zmienić z multiple id but idk jak zrobić
-    // tak bo argumenty musiałyby być zmienne to samo w api chyba że na sztywno dać po np 10 wyników
+    // view videos with authors (multiple ids to getvideos??)
     private fun viewVideos() {
         if (idVideos.size > 0 && idAuthors.size > 0){
-            for (i in idAuthors) {
+            for (i in idAuthors)
                 getAuthors(i)
-                Log.i("view authors ", i)
-            }
             for (i in idVideos)
                 getVideos(i)
-
-
         }
     }
 
+    // getting authors of videos
     private fun getAuthors(id: String) {
         val api = ApiServices.getRetrofit()
         val channel: Call<AuthorApiModel> = api.getChannel(id=id)
@@ -203,7 +188,6 @@ class HomeFragment : Fragment() {
                                     convertNumbers(i.statistics.subscriberCount)
                                 )
                             )
-                            Log.i("autorzy pobierani", i.id)
                         }
                     }
                 }
@@ -221,7 +205,6 @@ class HomeFragment : Fragment() {
         _binding = null
     }
     private fun convertNumbers(num: String) : String{
-        Log.i("LICZBA", num)
         var s = num.reversed()
         var new = ""
         var count = 0
@@ -254,7 +237,6 @@ class HomeFragment : Fragment() {
         s = new.subSequence(indexStart, new.length).toString()
         if ((indexStart == 4 || indexStart == 6) && s[0] == '0')
             s = s.subSequence(2,s.length).toString()
-        Log.i("VIDEOCHECKNUMBER", s.reversed() + amount)
         return s.reversed() + amount
     }
 }

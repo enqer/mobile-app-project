@@ -25,15 +25,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         val btnToSetting = binding.toSettings
         btnToSetting.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
-        
-
 
         val navView: BottomNavigationView = binding.navView
 
@@ -46,6 +42,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
+        // searching videos by words
         val searchQuery = binding.searchQ
         searchQuery.setOnEditorActionListener(object : TextView.OnEditorActionListener{
             override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
@@ -61,6 +58,7 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         })
+        // changing view to home on logo
         val logoApp = binding.logoApp
         logoApp.setOnClickListener {
             searchQuery.text.clear()

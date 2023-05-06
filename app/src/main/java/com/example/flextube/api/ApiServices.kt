@@ -59,8 +59,8 @@ interface ApiServices {
 
     companion object {
         private const val KEY = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
-        private const val KEY2 = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"
-        private const val KEY3 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+        private const val KEY3 = "AIzaSyCjW8nV6QzOMQQt5PlYdzZlgTR63jB6dQU"
+        private const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
         fun getRetrofit(): ApiServices {
             val retrofit: Retrofit =
                 Retrofit.Builder().baseUrl("https://www.googleapis.com/youtube/v3/")

@@ -2,8 +2,10 @@ package com.example.flextube.video
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.flextube.R
-import kotlin.coroutines.coroutineContext
+import java.time.Duration
+
+
+
 
 
 class Video(
@@ -20,29 +22,31 @@ class Video(
     val playerWidth: Long,
     val authorVideo: AuthorVideo
     ) {
+
     // Przekształcanie na normalne formaty
     init {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            convertDuration()
-            if (duration == "0s"){
-                duration = "Live"
-            }
+            duration = convertTime(duration)
         }
         convertPublishedAt()
-
     }
 
-
-
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun convertDuration(){
-
-        duration = humanReadableDuration(duration)
-
+    fun convertTime(time: String): String {
+        val duration = Duration.parse(time)
+        val hours = duration.toHours()
+        val minutes = duration.minusHours(hours).toMinutes()
+        val seconds = duration.minusHours(hours).minusMinutes(minutes).seconds
+        return if (hours > 0) {
+            String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            if (minutes < 10) {
+                String.format("%01d:%02d", minutes, seconds)
+            } else {
+                String.format("%02d:%02d", minutes, seconds)
+            }
+        }
     }
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun humanReadableDuration(s: String): String = java.time.Duration.parse(s).toString()
-        .substring(2).toLowerCase().replace(Regex("[hms](?!\$)")) { "${it.value} " }
 
     private fun convertPublishedAt(){
         publishedDate = publishedDate.subSequence(0,publishedDate.indexOf('T')).toString()

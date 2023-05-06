@@ -1,14 +1,11 @@
-package com.example.flextube
+package com.example.flextube.video
 
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
@@ -19,12 +16,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.flextube.R
 import com.example.flextube.api.ApiServices
 import com.example.flextube.comment.Comment
 import com.example.flextube.comment.CommentAdapter
 import com.example.flextube.comment.CommentApiModel
 import com.example.flextube.databinding.ActivityVideoBinding
-import com.example.flextube.video.Video
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -35,12 +32,12 @@ import retrofit2.Response
 class VideoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityVideoBinding
 
+    // comments variables
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: RecyclerView.Adapter<CommentAdapter.CommentViewHolder>
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private var commentList: ArrayList<Comment> = ArrayList<Comment>()
 
-//    val webView = binding.videoDisplay
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility")
@@ -50,25 +47,25 @@ class VideoActivity : AppCompatActivity() {
 //        setContentView(R.layout.activity_video)
         setContentView(binding.root)
 
-
+        // getting object of video
         val intent = intent
         val gson = Gson()
         val json = intent.getStringExtra("video")
         val video: Video = gson.fromJson(json, Video::class.java)
-        Log.i("video player", video.playerHtml)
 
-        // view the date of video
+        // sets a data of video object
         binding.itemVideoTitle.text = video.title
         binding.itemVideoInfo.text = "${video.viewCount} ${baseContext.resources.getString(R.string.views)} ∙ ${video.publishedDate}"
         binding.itemVideoLike.text = video.likeCount
         binding.itemVideoChannelName.text = video.authorVideo.name
-        binding.itemVideoChannelSubs.text = "${video.authorVideo.subscriberCount} ${baseContext.resources.getString(R.string.channelSubs)}"
+        binding.itemVideoChannelSubs.text = "${video.authorVideo.subscriberCount} ${baseContext.resources.getString(
+            R.string.channelSubs
+        )}"
         Picasso.get().load(video.authorVideo.urlLogo).into(binding.itemVideoChannelLogo)
         binding.itemVideoCommentCount.text = video.commentCount
 
-
+        // webview settings
         val useragent: String = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"
-
         val webView: WebView = binding.videoDisplay
         webView.setInitialScale(1)
         webView.webChromeClient = WebChromeClient()
@@ -84,7 +81,6 @@ class VideoActivity : AppCompatActivity() {
         webView.settings.allowContentAccess = true
         webView.settings.loadsImagesAutomatically = true
         webView.settings.userAgentString = useragent
-
         val displaymetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displaymetrics)
         val height = displaymetrics.heightPixels
@@ -107,9 +103,10 @@ class VideoActivity : AppCompatActivity() {
         mRecyclerView.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false)
 
+        // getting comments by id of video
         getComments(video.id)
 
-        // increase and decrease comment section (swipe and click version)
+        // increase and decrease comment section (swipe and click version to choose)
         val changeBelowComment = binding.changeBelow
 
         val params = RelativeLayout.LayoutParams(
@@ -143,6 +140,7 @@ class VideoActivity : AppCompatActivity() {
 
     }
 
+    //getting comments by id of video
     private fun getComments(id: String) {
         val retrofit = ApiServices.getRetrofit()
         val comment: Call<CommentApiModel> = retrofit.getCommentsOfVideo(videoId = id)
@@ -178,11 +176,10 @@ class VideoActivity : AppCompatActivity() {
                 Log.i("RETROFIT/COMMENT", t.message.toString())
             }
         })
-
-
     }
+
+    // converting numbers (example: 2.300 -> 2.3K)
     private fun convertNumbers(num: String) : String{
-        Log.i("LICZBA", num)
         var s = num.reversed()
         var new = ""
         var count = 0
@@ -215,7 +212,6 @@ class VideoActivity : AppCompatActivity() {
         s = new.subSequence(indexStart, new.length).toString()
         if ((indexStart == 4 || indexStart == 6) && s[0] == '0')
             s = s.subSequence(2,s.length).toString()
-        Log.i("VIDEOCHECKNUMBER", s.reversed() + amount)
         return s.reversed() + amount
     }
 }

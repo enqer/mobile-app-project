@@ -56,15 +56,8 @@ class VideoAdapter(
 
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         val currentItem: Video = mVideo[position]
-        Log.i("TESTUJEMY", "${currentItem.viewCount}. ${currentItem.commentCount}, ${currentItem.likeCount}, ${currentItem.authorVideo.subscriberCount}")
         val c = holder.authorLogo.context // getting context
-        // changing format of display numbers
-//        val a = convertNumbers(currentItem.viewCount,c)
-//        currentItem.viewCount = a
-//        currentItem.commentCount = convertNumbers(currentItem.commentCount,c)
-//        currentItem.likeCount = convertNumbers(currentItem.likeCount,c)
-//        currentItem.authorVideo.subscriberCount = convertNumbers(currentItem.authorVideo.subscriberCount,c)
-
+        
         // create picture by url
         Picasso.get().load(currentItem.urlPhoto).into(holder.videoPicture);
 
