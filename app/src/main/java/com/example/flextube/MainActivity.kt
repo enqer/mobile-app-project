@@ -1,5 +1,6 @@
 package com.example.flextube
 
+import android.R.attr.data
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,21 +10,15 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.flextube.api.ApiServices
 import com.example.flextube.databinding.ActivityMainBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.ResponseTypeValues
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
@@ -45,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("Current User", currentUser?.uid.toString())
         Log.d("Current User", currentUser?.email.toString())
         Log.d("Current User", currentUser?.photoUrl.toString())
+
 
 //        val api = ApiServices.getRetrofitAuth()
 //        val a: Call<String> = api.auth(login_hint = currentUser?.email.toString())
@@ -78,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         webView.settings.loadsImagesAutomatically = true
         webView.settings.javaScriptEnabled = true
         webView.settings.userAgentString = useragent
-        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile&response_type=code&redirect_uri=com.example.flextube%3A/oauth2redirect&client_id=460223798693-7pc3ftjusn904pa7b1faei2ci0r9ko45.apps.googleusercontent.com")
+        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?scope=email%20profile&response_type=code&redirect_uri=http://localhost:5000&client_id=460223798693-7pc3ftjusn904pa7b1faei2ci0r9ko45.apps.googleusercontent.com")
         val int = Intent(Intent.ACTION_VIEW, Uri.parse(s))
 //        webView.context.startActivity(int)
         val alertDialogBuilder = AlertDialog.Builder(this)

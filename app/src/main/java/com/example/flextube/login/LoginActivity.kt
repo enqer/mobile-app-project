@@ -138,12 +138,13 @@ class LoginActivity : AppCompatActivity() {
 //
 //        }
 //    }
+//        mAuth.signOut()
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser
 
         if (user != null){
             val homeIntent = Intent(this, MainActivity::class.java)
-            startActivity(homeIntent)
+//            startActivity(homeIntent)
         } else {
             val signInRequest = BeginSignInRequest.builder()
                 .setGoogleIdTokenRequestOptions(
@@ -168,11 +169,14 @@ class LoginActivity : AppCompatActivity() {
         google.setOnClickListener {
             signIn()
         }
+        val guest: View = findViewById(R.id.guest_area)
+        guest.setOnClickListener {
+            mAuth.signOut()
+        }
     }
     private fun signIn() {
         val signInIntent: Intent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -185,6 +189,9 @@ class LoginActivity : AppCompatActivity() {
                 try {
                     val account = task.getResult(ApiException::class.java)!!
                     Log.w("FirebaseAuthSuccess", account.id!!)
+                    Log.w("FirebaseAuthSuccess", account.idToken!!)
+                    account.serverAuthCode?.let { Log.w("FirebaseAuthSuccess", it) }
+//                    updateUI(account)
                     firebaseAuthWithGoogle(account.idToken!!)
                 }catch (e: ApiException){
                     Log.w("FirebaseAuthInSuccess", e)
@@ -194,6 +201,18 @@ class LoginActivity : AppCompatActivity() {
             }
 
         }
+//        user.authentication.do { authentication, error in
+//            guard error == nil else { return }
+//            guard let authentication = authentication else { return }
+//
+//            // Get the access token to attach it to a REST or gRPC request.
+//            let accessToken = authentication.accessToken
+//
+//                    // Or, get an object that conforms to GTMFetcherAuthorizationProtocol for
+//                    // use with GTMAppAuth and the Google APIs client library.
+//                    let authorizer = authentication.fetcherAuthorizer()
+//        }
+
     }
 
     private fun firebaseAuthWithGoogle(idToken: String){
@@ -203,9 +222,10 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful){
                     Log.w("firebaseAuthWithGoogle", "success")
                     val user = mAuth.currentUser
+                    Log.d("Current User", user?.displayName.toString())
                     val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+//                    startActivity(intent)
+//                    finish()
                 } else{
                     Log.w("firebaseAuthWithGoogle", "not success/", task.exception)
                 }
