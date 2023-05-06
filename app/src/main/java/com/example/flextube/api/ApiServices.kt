@@ -29,7 +29,7 @@ interface ApiServices {
     fun getVideos(
         @Query("part") part: String = "snippet",
         @Query("maxResults") results: Int = 10  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
-    ) : Call<VideoIdsApiModel>
+    ): Call<VideoIdsApiModel>
 
     // return views depends on id
     @GET("videos")
@@ -39,7 +39,7 @@ interface ApiServices {
         @Query("part") part3: String = "snippet",
         @Query("id") id: String,
         //@Query("key") key: String = KEY3
-    ) : Call<VideoApiModel>
+    ): Call<VideoApiModel>
 
     @GET("channels")
     fun getChannel(
@@ -47,7 +47,7 @@ interface ApiServices {
         @Query("part") part2: String = "statistics",
         @Query("id") id: String,
         //@Query("key") key: String = KEY2
-    ) : Call<AuthorApiModel>
+    ): Call<AuthorApiModel>
 
     @GET("search")
     fun getShorts(
@@ -57,7 +57,7 @@ interface ApiServices {
         @Query("q") q: String = "shorts",
         @Query("type") type: String = "video",
         @Query("videoCategoryId") videoCategoryId: String = "17"
-    ) : Call<VideoIdsApiModel>
+    ): Call<VideoIdsApiModel>
 
     @GET("videos")
     fun getStatsShorts(
@@ -66,8 +66,8 @@ interface ApiServices {
         @Query("part") part3: String = "snippet",
         @Query("part") part4: String = "player",
         @Query("id") id: String,
-       // @Query("key") key: String = KEY
-    ) : Call<ShortsApiModel>
+        // @Query("key") key: String = KEY
+    ): Call<ShortsApiModel>
 //    @POST("https://accounts.google.com/o/oauth2/v2/auth")
 //    @FormUrlEncoded
 //    fun getAuthorization(
@@ -78,13 +78,13 @@ interface ApiServices {
 //    ) : Call<ResponseBody>
 
 
-    @POST("token HTTP/1.1")
+    @POST("token")
     @FormUrlEncoded
     fun getToken(
         @Field("code") code: String,
-        @Field("client_id") clientId: String="469398138855-2e433poad55hgnvjhe2l7ljj2b09bkqg.apps.googleusercontent.com",
-        @Field("client_secret") clientSecret: String="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",
-        @Field("redirect_uri") redirectUri: String="http://localhost:8080",
+        @Field("client_id") clientId: String = "469398138855-2qgn9emqks2dv1ou3mfcoo1upenj854e.apps.googleusercontent.com",
+        @Field("client_secret") clientSecret: String = "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",
+        @Field("redirect_uri") redirectUri: String = "http://127.0.0.1:9004",
         @Field("code_verifier") codeVerifier: String,
         @Field("grant_type") grantType: String = "authorization_code"
     ): Call<TokenResponse>
@@ -93,14 +93,33 @@ interface ApiServices {
     companion object {
         private final const val KEY = "AIzaSyDrvd66oJPdfjmm8c93lOSupl0ls71uDB8"
         private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
-        private final const val KEY3= "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
+        private final const val KEY3 = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
         var authToken: String = ""
 
 
+        fun getClient(): ApiServices {
+            val httpClient = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val original = chain.request()
+                val requestBuilder = original.newBuilder()
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                val request = requestBuilder.build()
+                chain.proceed(request)
+            }
+                .build()
+
+            val retrofit: Retrofit = Retrofit.Builder()
+
+                .baseUrl("https://oauth2.googleapis.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient)
+                .build()
+            return retrofit.create(ApiServices::class.java)
+        }
 
 
 
-        fun getRetrofit(): ApiServices {
+    fun getRetrofit(): ApiServices {
             Log.i("tok", authToken)
             val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
