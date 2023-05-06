@@ -1,13 +1,17 @@
 package com.example.flextube.ui.library
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.preference.PreferenceManager.getDefaultSharedPreferences
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.example.flextube.R
@@ -30,6 +34,7 @@ class LibraryFragment : Fragment() {
     private lateinit var mAdapter: RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private val playlistlist: ArrayList<Playlist> = ArrayList()
+    private val DARK_MODE = "darkMode"
 
     private val binding get() = _binding!!
 
@@ -65,6 +70,7 @@ class LibraryFragment : Fragment() {
 
     // Search available playlist on channel using channelId then show them
     private fun getPlaylist() {
+        // Variables used in SQLite stuff
         val dbHelper = context?.let { DatabaseHelper(it) }
         val db = dbHelper?.writableDatabase
 
@@ -184,7 +190,7 @@ class LibraryFragment : Fragment() {
     }
 
 
-
+    // Execute order 66
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

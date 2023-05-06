@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?attr/customBgColor"
     tools:context=".ui.library.LibraryFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/history_recyclerview"
+        android:background="?attr/customBgColor"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginStart="20dp"
@@ -41,6 +43,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/playlist_recyclerview"
+        android:background="?attr/customBgColor"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginStart="20dp"
@@ -68,6 +71,7 @@
         android:layout_marginBottom="18dp"
         android:text="@string/playlist"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/playlist_recyclerview"
         app:layout_constraintStart_toEndOf="@+id/imageView" />
 
@@ -89,6 +93,7 @@
         android:layout_marginBottom="18dp"
         android:text="@string/history"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/history_recyclerview"
         app:layout_constraintStart_toEndOf="@+id/imageView3" />
 
