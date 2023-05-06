@@ -1,6 +1,5 @@
 package com.example.flextube.ui.library
 
-import android.R.id.message
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -8,23 +7,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
+import com.example.flextube.R
 import com.example.flextube.api.ApiServices
+import com.example.flextube.database.DatabaseHelper
 import com.example.flextube.databinding.FragmentLibraryBinding
 import com.example.flextube.playlist.Playlist
 import com.example.flextube.playlist.PlaylistAdapter
 import com.example.flextube.playlist.PlaylistApiModel
 import com.example.flextube.playlist_item.PlaylistActivity
+import com.example.flextube.settings.SettingsActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
+// Start LibraryFragment
 class LibraryFragment : Fragment() {
     private var _binding: FragmentLibraryBinding? = null
     private lateinit var mRecyclerView: RecyclerView
-    //private lateinit var mAdapter: PlaylistAdapter
     private lateinit var mAdapter: RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private val playlistlist: ArrayList<Playlist> = ArrayList()
@@ -40,24 +42,32 @@ class LibraryFragment : Fragment() {
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
         return binding.root
 
-        getPlaylist()
+        // Here add functions or code to execute
+
     }
 
+    // Better option to add functions or code to execute
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        mAdapter = PlaylistAdapter(playlistlist, 0, 0) // utworzenie adaptera z pustą listą
-//        mLayoutManager = LinearLayoutManager(requireContext())
-//        mRecyclerView = binding.playlistRecyclerview.apply {
-//            layoutManager = mLayoutManager
-//            adapter = mAdapter
-//            setHasFixedSize(true)
-//        }
+        val imageView = view.findViewById<ImageView>(R.id.person_icon)
+
+        // Start new activity (SettingsActivity)
+        imageView.setOnClickListener {
+            Log.d(TAG,"LibraryFragment/onViewCreated/imageView.setOnClickListener -> Start new activity")
+
+            val intent = Intent(activity, SettingsActivity::class.java)
+            startActivity(intent)
+        }
 
         getPlaylist()
     }
 
+    // Search available playlist on channel using channelId then show them
     private fun getPlaylist() {
+        val dbHelper = context?.let { DatabaseHelper(it) }
+        val db = dbHelper?.writableDatabase
+
         val apiServices = ApiServices.getRetrofit()
         val channelId = "UCOyHGlRFb30g-h76XiBW_pw"
         val key = ApiServices.KEY2
@@ -79,12 +89,14 @@ class LibraryFragment : Fragment() {
                                 val thumbnailsUrl = item.snippetYt.thumbnails.medium.url
                                 val itemCount = item.contentDetail.itemCount
 
+                                // Just check that everything is fine
                                 Log.d(TAG, "Id: $id")
                                 Log.d(TAG, "Title: $title")
                                 Log.d(TAG, "Description: $desciption")
                                 Log.d(TAG, "Thumbnails: $thumbnailsUrl")
                                 Log.d(TAG, "ItemCount: $itemCount")
 
+                                // Adding stuff (important)
                                 playlistlist.add(
                                     Playlist(
                                         id,
@@ -94,14 +106,54 @@ class LibraryFragment : Fragment() {
                                         itemCount
                                     )
                                 )
+
+
                             }
+                            // Makes the items clickable and move to different activity from fragment
                             mAdapter = PlaylistAdapter(playlistlist, object : PlaylistAdapter.ItemClickListener{
                                 override fun onItemClick(playlist: Playlist) {
                                     Log.d(TAG, "LibraryFragment/getPlaylist/onItemClick -> Item clicked")
-//                                    val intent = Intent(
-//                                        activity!!.baseContext,
-//                                        PlaylistActivity::class.java
-//                                    )
+
+                                    // Save and store data in SQLite
+                                    val dataValue = playlist.id
+
+                                    val insertQuery = "INSERT INTO my_table (data) VALUES ('$dataValue')"
+                                    if (db != null) {
+                                        db.execSQL(insertQuery)
+                                    }
+
+                                    val selectQuery = "SELECT data FROM my_table"
+                                    val cursor = db?.rawQuery(selectQuery, null)
+
+                                    if (cursor != null) {
+                                        if (cursor.moveToFirst()) {
+                                            if (cursor != null) {
+                                                do {
+                                                    val columnIndex = cursor.getColumnIndex("data")
+                                                    val dataValue = cursor.getString(columnIndex)
+                                                    Log.d("MyApp", "Pobrana wartość: $dataValue")
+                                                } while (cursor.moveToNext())
+                                            }
+                                        }
+                                    }
+
+                                    // CODE REQUIRED TO RESET ALL ITEMS IN DATABASE
+                                    // UNCOMMENT THAT LINES AND CLICK THE BUTTON
+                                    // THEN SHUT DOWN YOUR APP AND COMMENT THAT LINES AGAIN
+
+//                                    val deleteQuery = "DELETE FROM my_table"
+//                                    if (db != null) {
+//                                        db.execSQL(deleteQuery)
+//                                    }
+
+                                    // END OF RESTARTING DATABASE CODE
+
+                                    if (cursor != null) {
+                                        cursor.close()
+                                    }
+                                    // End of SQLite
+
+                                    // Starts new activity
                                     val startNew = Intent(context, PlaylistActivity::class.java)
 
                                     startNew.putExtra("message", playlist.id)
@@ -117,7 +169,7 @@ class LibraryFragment : Fragment() {
                                 adapter = mAdapter
                                 setHasFixedSize(true)
 
-                                mAdapter.notifyDataSetChanged() // zaktualizuj adapter
+                                mAdapter.notifyDataSetChanged() // update adapter
                             }
                         }
                     } else {
@@ -130,6 +182,8 @@ class LibraryFragment : Fragment() {
                 }
             })
     }
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

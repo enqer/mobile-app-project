@@ -77,7 +77,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="10dp"
-        android:src="@drawable/thumbs_up"
+        android:src="@drawable/repeat"
         app:layout_constraintBottom_toTopOf="@+id/history_recyclerview"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="18dp"
-        android:text="@string/like"
+        android:text="@string/history"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/history_recyclerview"
         app:layout_constraintStart_toEndOf="@+id/imageView3" />
