@@ -171,7 +171,9 @@ class LoginActivity : AppCompatActivity() {
                 if (acc != null) {
                     Log.d("server code",acc)
                 }
-                auth()
+                //auth()
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
             } catch (e: ApiException) {
                 Toast.makeText(this, "Something went wrong: ${e.message}", Toast.LENGTH_SHORT)
                     .show()

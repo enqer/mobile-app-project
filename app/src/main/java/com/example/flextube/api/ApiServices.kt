@@ -3,6 +3,7 @@ package com.example.flextube.api
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.browser.customtabs.CustomTabsService.FilePurpose
 import com.example.flextube.auth.TokenResponse
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.shorts.ShortsApiModel
@@ -16,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
 import java.security.MessageDigest
@@ -76,7 +78,7 @@ interface ApiServices {
 //        @Field("scope") scope: String="https://www.googleapis.com/auth/youtube"
 //    ) : Call<ResponseBody>
 
-
+    @Headers("Accept: application/x-www-form-urlencoded")
     @POST("token")
     @FormUrlEncoded
     fun getToken(
@@ -86,6 +88,15 @@ interface ApiServices {
         @Field("redirect_uri") redirectUri: String = "http://127.0.0.1:9004",
         @Field("code_verifier") codeVerifier: String,
         @Field("grant_type") grantType: String = "authorization_code"
+    ): Call<TokenResponse>
+
+    @POST("token")
+    @FormUrlEncoded
+    fun refreshToken(
+        @Field("client_id") clientId: String = "469398138855-2qgn9emqks2dv1ou3mfcoo1upenj854e.apps.googleusercontent.com",
+        @Field("client_secret") clientSecret: String = "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",
+        @Field("refresh_token") refreshToken: String,
+        @Field("grant_type") grantType: String="refresh_token"
     ): Call<TokenResponse>
 
 
@@ -124,7 +135,7 @@ interface ApiServices {
                 .addInterceptor { chain ->
                     val request: Request = chain.request()
                         .newBuilder()
-                        .addHeader("Authorization", "Bearer $authToken")
+                        .addHeader("Authorization", "Bearer ya29.a0AWY7CknCHtTWjt1wwAYnt9cFtZM-JmH0l3w3saEiumEcor8MBUYAGvGp6JmtACMZYlECZV0F4D15ZSrS-QCdmHfnhcg9TSw-wAoCDt06IIhOl1bSeKeEOB8v4SQf3PyrbjGrIh2fsTJLM5AF-JvUN3IGRctFaCgYKAe4SARISFQG1tDrpTKIizmtWMNDWj6R8UBkD2w0163")
                         .build()
                     chain.proceed(request)
                 }
