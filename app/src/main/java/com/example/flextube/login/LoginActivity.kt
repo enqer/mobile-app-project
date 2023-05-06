@@ -1,6 +1,7 @@
 package com.example.flextube.login
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,6 +10,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.flextube.MainActivity
@@ -23,6 +25,10 @@ import com.google.android.gms.tasks.Task
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.security.MessageDigest
+import java.security.SecureRandom
+import java.security.spec.MGF1ParameterSpec.SHA256
+import java.util.Base64
 
 
 class LoginActivity : AppCompatActivity() {
@@ -31,8 +37,10 @@ class LoginActivity : AppCompatActivity() {
     lateinit var gsc: GoogleSignInClient
     //val webView: WebView = WebView(this)
     // val webView: WebView = WebView(requireNotNull(this).applicationContext)
+    lateinit var codeVerifier: String
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.flextube.R.layout.activity_login)
@@ -46,6 +54,9 @@ class LoginActivity : AppCompatActivity() {
             .requestEmail()
             .build()
         gsc = GoogleSignIn.getClient(this, gso)
+
+        codeVerifier=generateCodeChallenge(generateCodeVerifier())
+
 
 
         google.setOnClickListener {
@@ -78,11 +89,11 @@ class LoginActivity : AppCompatActivity() {
         gsc.signOut()
     }
     fun auth(){
-        val webView:WebView = WebView(applicationContext)
+        val webView= WebView(this)
         val settings: WebSettings = webView.settings
         settings.userAgentString = "Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36"
         webView.settings.javaScriptEnabled = true
-        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2e433poad55hgnvjhe2l7ljj2b09bkqg.apps.googleusercontent.com&redirect_uri=http://localhost:8080&response_type=code&scope=https://www.googleapis.com/auth/youtube")
+        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2qgn9emqks2dv1ou3mfcoo1upenj854e.apps.googleusercontent.com&redirect_uri=http://localhost:8080&response_type=code&scope=https://www.googleapis.com/auth/youtube")
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
@@ -91,7 +102,8 @@ class LoginActivity : AppCompatActivity() {
                     // Wyciągamy kod autoryzacyjny z URL-a
                     val code = url.substringAfter("code=").substringBefore("&")
                     Log.d("kod autoryzacyjny", code.toString())
-                    authToken(code)
+                    Log.d("kod autoryzacyjny", url)
+                    authToken(code,codeVerifier)
 
                 }
             }
@@ -101,9 +113,10 @@ class LoginActivity : AppCompatActivity() {
         alertDialogBuilder.setView(webView)
         alertDialogBuilder.create().show()
     }
-    fun authToken(code:String){
+    fun authToken(code:String,codeVerifier: String){
         val apiService = ApiServices.getRetrofit2()
-        val call = apiService.getToken(code=code)
+        Log.i("verifier",codeVerifier)
+        val call = apiService.getToken(code=code, codeVerifier = codeVerifier)
         call.enqueue(object : Callback<TokenResponse> {
             override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                 Log.d("kod response",response.code().toString())
@@ -114,6 +127,7 @@ class LoginActivity : AppCompatActivity() {
                     if (result != null) {
                         Log.d("token", result.accessToken.toString())
                         ApiServices.authToken = result.accessToken
+
                     }
                 }
             }
@@ -122,9 +136,27 @@ class LoginActivity : AppCompatActivity() {
                 Log.i("nie",t.message.toString())
             }
         })
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
 
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        startActivity(intent)
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun generateCodeVerifier(): String {
+        val random = SecureRandom()
+        val bytes = ByteArray(32)
+        random.nextBytes(bytes)
+        val codeVerifier = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes)
+        return codeVerifier
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun generateCodeChallenge(codeVerifier: String): String {
+        val bytes = codeVerifier.toByteArray(Charsets.US_ASCII)
+        val messageDigest = MessageDigest.getInstance("SHA-256")
+        messageDigest.update(bytes)
+        val digest = messageDigest.digest()
+        val codeChallenge = Base64.getUrlEncoder().withoutPadding().encodeToString(digest)
+        return codeChallenge
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -136,6 +168,7 @@ class LoginActivity : AppCompatActivity() {
                 val account = task.getResult(ApiException::class.java)
                 val idToken = account.idToken
                 val acc =account.serverAuthCode
+
                 if (acc != null) {
                     Log.d("server code",acc)
                 }

@@ -1,6 +1,8 @@
 package com.example.flextube.api
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.flextube.auth.TokenResponse
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.shorts.ShortsApiModel
@@ -16,6 +18,9 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import java.security.MessageDigest
+import java.security.SecureRandom
+import java.util.Base64
 
 interface ApiServices {
 
@@ -71,14 +76,17 @@ interface ApiServices {
 //        @Field("response_type") responseType: String="code",
 //        @Field("scope") scope: String="https://www.googleapis.com/auth/youtube"
 //    ) : Call<ResponseBody>
-    @POST("token")
+
+
+    @POST("token HTTP/1.1")
     @FormUrlEncoded
     fun getToken(
+        @Field("code") code: String,
         @Field("client_id") clientId: String="469398138855-2e433poad55hgnvjhe2l7ljj2b09bkqg.apps.googleusercontent.com",
         @Field("client_secret") clientSecret: String="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",
         @Field("redirect_uri") redirectUri: String="http://localhost:8080",
-        @Field("grant_type") grantType: String = "authorization_code",
-        @Field("code") code: String
+        @Field("code_verifier") codeVerifier: String,
+        @Field("grant_type") grantType: String = "authorization_code"
     ): Call<TokenResponse>
 
 
