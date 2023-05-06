@@ -9,9 +9,15 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.example.flextube.MainActivity
 import com.example.flextube.R
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationResponse
@@ -41,163 +47,170 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        mStateManager = AuthStateManager.getInstance(this)
-        mAuthService = AuthorizationService(this)
 
-        if (mStateManager?.current?.isAuthorized!!) {
-            Log.d("Auth", "Done")
-            mStateManager?.current?.performActionWithFreshTokens(
-                mAuthService!!
-            ) { accessToken, idToken, exception ->
-                Log.d("ACCESS TOKEN", accessToken.toString())
-                Log.d("ACCESS SCOPE", mStateManager?.current?.scope.toString())
-                ProfileTask().execute(accessToken)
-            }
 
-        }
-
-        val google: View = findViewById(R.id.google_area)
-        google.setOnClickListener {
-            if (mStateManager?.current?.isAuthorized!!){
-
-            }else {
-                val serviceConfig = AuthorizationServiceConfiguration(
-                    Uri.parse("https://accounts.google.com/o/oauth2/v2/auth"), // authorization endpoint
-                    Uri.parse("https://www.googleapis.com/oauth2/v4/token") // token endpoint
-                )
-
-                val clientId = "460223798693-7pc3ftjusn904pa7b1faei2ci0r9ko45.apps.googleusercontent.com"
-                val redirectUri = Uri.parse("com.example.flextube:/oauth2callback")
-                val builder = AuthorizationRequest.Builder(
-                    serviceConfig,
-                    clientId,
-                    ResponseTypeValues.CODE,
-                    redirectUri
-                )
-                builder.setScopes("profile")
-
-                val authRequest = builder.build()
-                val authService = AuthorizationService(this)
-                val authIntent = authService.getAuthorizationRequestIntent(authRequest)
-                startActivityForResult(authIntent, RC_SIGN_IN)
-            }
-        }
-
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            val resp = AuthorizationResponse.fromIntent(data!!)
-            val ex = AuthorizationException.fromIntent(data)
-
-            if (resp != null) {
-                mAuthService = AuthorizationService(this)
-                mStateManager?.updateAfterAuthorization(resp, ex)
-
-                mAuthService?.performTokenRequest(
-                    resp.createTokenExchangeRequest()
-                ) { resp, ex ->
-                    if (resp != null) {
-                        mStateManager?.updateAfterTokenResponse(resp, ex)
-                        Log.d("accessToken", resp.accessToken.toString())
-                        ProfileTask().execute(resp.accessToken)
-                    } else {
-                        // authorization failed, check ex for more details
-                    }
-                }
-
-                //Log.d("res",resp.accessToken)
-                // authorization completed
-            } else {
-                // authorization failed, check ex for more details
-            }
-            // ... process the response or exception ...
-        } else {
-            // ...
-        }
-        if (mStateManager?.current?.isAuthorized!!) {
-            Log.d("Auth", "Done")
-            mStateManager?.current?.performActionWithFreshTokens(
-                mAuthService!!
-            ) { accessToken, idToken, exception ->
-                ProfileTask().execute(accessToken)
-            }
-
-        }
-    }
-//        mAuth = FirebaseAuth.getInstance()
-//        val user = mAuth.currentUser
+//        mStateManager = AuthStateManager.getInstance(this)
+//        mAuthService = AuthorizationService(this)
 //
-//        if (user != null){
-//            val homeIntent = Intent(this, MainActivity::class.java)
-//            startActivity(homeIntent)
-//        } else {
-//            val signInRequest = BeginSignInRequest.builder()
-//                .setGoogleIdTokenRequestOptions(
-//                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-//                        .setSupported(true)
-//                        // Your server's client ID, not your Android client ID.
-//                        .setServerClientId(getString(R.string.default_web_client_id))
-//                        // Only show accounts previously used to sign in.
-//                        .setFilterByAuthorizedAccounts(true)
-//                        .build())
-//                .build()
-//            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id))
-//                .requestEmail()
-//                .build()
-//            googleSignInClient = GoogleSignIn.getClient(this, gso)
-//
-//            mAuth = FirebaseAuth.getInstance()
+//        if (mStateManager?.current?.isAuthorized!!) {
+//            Log.d("Auth", "Done")
+//            mStateManager?.current?.performActionWithFreshTokens(
+//                mAuthService!!
+//            ) { accessToken, idToken, exception ->
+//                Log.d("ACCESS TOKEN", accessToken.toString())
+//                Log.d("ACCESS SCOPE", mStateManager?.current?.scope.toString())
+//                ProfileTask().execute(accessToken)
+//            }
 //
 //        }
-//        val google: View = findViewById(R.id.google_area);
+//
+//        val google: View = findViewById(R.id.google_area)
 //        google.setOnClickListener {
-//            signIn()
+//            if (mStateManager?.current?.isAuthorized!!){
+//
+//            }else {
+//                val serviceConfig = AuthorizationServiceConfiguration(
+//                    Uri.parse("https://accounts.google.com/o/oauth2/v2/auth"), // authorization endpoint
+////                    Uri.parse("https://accounts.google.com/o/oauth2/v2/auth"), // authorization endpoint
+//                    Uri.parse("https://www.googleapis.com/oauth2/v4/token") // token endpoint
+//                )
+//
+//                val clientId = "460223798693-7pc3ftjusn904pa7b1faei2ci0r9ko45.apps.googleusercontent.com"
+//                val redirectUri = Uri.parse("com.example.flextube:/oauth2callback")
+//                val builder = AuthorizationRequest.Builder(
+//                    serviceConfig,
+//                    clientId,
+//                    ResponseTypeValues.CODE,
+//                    redirectUri
+//                )
+////                builder.setScopes("profile")
+//
+//                val authRequest = builder.build()
+//                val authService = AuthorizationService(this)
+//                val authIntent = authService.getAuthorizationRequestIntent(authRequest)
+//                startActivityForResult(authIntent, RC_SIGN_IN)
+//            }
 //        }
-//    }
-//    private fun signIn() {
-//        val signInIntent: Intent = googleSignInClient.signInIntent
-//        startActivityForResult(signInIntent, RC_SIGN_IN)
+//        val guestLogOut: View = findViewById(R.id.guest_area)
+//        guestLogOut.setOnClickListener {
+////            mStateManager.current.
+//        }
 //
 //    }
-//
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == RC_SIGN_IN) {
+//            val resp = AuthorizationResponse.fromIntent(data!!)
+//            val ex = AuthorizationException.fromIntent(data)
 //
-//        if (requestCode == RC_SIGN_IN){
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-//            val exception = task.exception
-//            if (task.isSuccessful){
-//                try {
-//                    val account = task.getResult(ApiException::class.java)!!
-//                    Log.w("FirebaseAuthSuccess", account.id!!)
-//                    firebaseAuthWithGoogle(account.idToken!!)
-//                }catch (e: ApiException){
-//                    Log.w("FirebaseAuthInSuccess", e)
+//            if (resp != null) {
+//                mAuthService = AuthorizationService(this)
+//                mStateManager?.updateAfterAuthorization(resp, ex)
+//
+//                mAuthService?.performTokenRequest(
+//                    resp.createTokenExchangeRequest()
+//                ) { resp, ex ->
+//                    if (resp != null) {
+//                        mStateManager?.updateAfterTokenResponse(resp, ex)
+//                        Log.d("accessToken", resp.accessToken.toString())
+//                        ProfileTask().execute(resp.accessToken)
+//                    } else {
+//                        // authorization failed, check ex for more details
+//                    }
 //                }
-//            }else{
-//                Log.w("FirebaseAuth", exception.toString())
+//
+//                //Log.d("res",resp.accessToken)
+//                // authorization completed
+//            } else {
+//                // authorization failed, check ex for more details
+//            }
+//            // ... process the response or exception ...
+//        } else {
+//            // ...
+//        }
+//        if (mStateManager?.current?.isAuthorized!!) {
+//            Log.d("Auth", "Done")
+//            mStateManager?.current?.performActionWithFreshTokens(
+//                mAuthService!!
+//            ) { accessToken, idToken, exception ->
+//                ProfileTask().execute(accessToken)
 //            }
 //
 //        }
 //    }
-//
-//    private fun firebaseAuthWithGoogle(idToken: String){
-//        val credential = GoogleAuthProvider.getCredential(idToken,null)
-//        mAuth.signInWithCredential(credential)
-//            .addOnCompleteListener(this){ task ->
-//                if (task.isSuccessful){
-//                    Log.w("firebaseAuthWithGoogle", "success")
-//                    val user = mAuth.currentUser
-//                    val intent = Intent(this, MainActivity::class.java)
-//                    startActivity(intent)
-//                    finish()
-//                } else{
-//                    Log.w("firebaseAuthWithGoogle", "not success/", task.exception)
-//                }
-//            }
-//    }
+        mAuth = FirebaseAuth.getInstance()
+        val user = mAuth.currentUser
+
+        if (user != null){
+            val homeIntent = Intent(this, MainActivity::class.java)
+            startActivity(homeIntent)
+        } else {
+            val signInRequest = BeginSignInRequest.builder()
+                .setGoogleIdTokenRequestOptions(
+                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                        .setSupported(true)
+                        // Your server's client ID, not your Android client ID.
+                        .setServerClientId(getString(R.string.default_web_client_id))
+                        // Only show accounts previously used to sign in.
+                        .setFilterByAuthorizedAccounts(true)
+                        .build())
+                .build()
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+            googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+            mAuth = FirebaseAuth.getInstance()
+
+        }
+        val google: View = findViewById(R.id.google_area);
+        google.setOnClickListener {
+            signIn()
+        }
+    }
+    private fun signIn() {
+        val signInIntent: Intent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN){
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val exception = task.exception
+            if (task.isSuccessful){
+                try {
+                    val account = task.getResult(ApiException::class.java)!!
+                    Log.w("FirebaseAuthSuccess", account.id!!)
+                    firebaseAuthWithGoogle(account.idToken!!)
+                }catch (e: ApiException){
+                    Log.w("FirebaseAuthInSuccess", e)
+                }
+            }else{
+                Log.w("FirebaseAuth", exception.toString())
+            }
+
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String){
+        val credential = GoogleAuthProvider.getCredential(idToken,null)
+        mAuth.signInWithCredential(credential)
+            .addOnCompleteListener(this){ task ->
+                if (task.isSuccessful){
+                    Log.w("firebaseAuthWithGoogle", "success")
+                    val user = mAuth.currentUser
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else{
+                    Log.w("firebaseAuthWithGoogle", "not success/", task.exception)
+                }
+            }
+    }
 
 
 
