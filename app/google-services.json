@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "469398138855",
+    "project_id": "youtube-na-urzadzenia-mobilne",
+    "storage_bucket": "youtube-na-urzadzenia-mobilne.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:469398138855:android:d0eb00ca5a12e37a411742",
+        "android_client_info": {
+          "package_name": "com.example.flextube"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "469398138855-24sgcang7c29jall87o37m61jopoiuh2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.flextube",
+            "certificate_hash": "4a1d695b098f9adcb58f8095203845636ab01a29"
+          }
+        },
+        {
+          "client_id": "469398138855-hjjcqd9eeh8u7sm9digtvinun1k157mj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-YVltn6eqtjPASNLNn8wqsBA_i16BLnA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "469398138855-2e433poad55hgnvjhe2l7ljj2b09bkqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

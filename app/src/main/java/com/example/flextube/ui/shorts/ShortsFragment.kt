@@ -5,24 +5,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flextube.R
 import com.example.flextube.api.ApiServices
 import com.example.flextube.databinding.FragmentShortsBinding
 import com.example.flextube.shorts.Shorts
 import com.example.flextube.shorts.ShortsAdapter
 import com.example.flextube.video.AuthorVideo
 import com.example.flextube.shorts.ShortsApiModel
-import com.example.flextube.video.Video
 import com.example.flextube.video.VideoIdsApiModel
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,14 +27,20 @@ class ShortsFragment : Fragment() {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: RecyclerView.Adapter<ShortsAdapter.ShortsViewHolder>
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
-    var Shortlist: ArrayList<Shorts> = ArrayList<Shorts>()
-    public var videosList: ArrayList<Video> = ArrayList<Video>()
+    var shortList: ArrayList<Shorts> = ArrayList<Shorts>()
     var idVideos: ArrayList<String> = ArrayList()
     var authorList: ArrayList<AuthorVideo> = ArrayList<AuthorVideo>()
     var idAuthors: ArrayList<String> = ArrayList()
     val titleList : ArrayList<String> = ArrayList()
-    lateinit var youtube: YouTubePlayerView
-    val ide: String = "https://www.youtube.com/shorts/hGRHvqNUkaE"
+
+
+
+
+
+
+
+
+
 
 
 
@@ -65,10 +65,40 @@ class ShortsFragment : Fragment() {
         mRecyclerView = _binding!!.shortsRecyclerview
         mRecyclerView.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
-        val snapHelper = LinearSnapHelper()
-
+        Log.d("dd",ApiServices.authToken)
+        val snapHelper: LinearSnapHelper = object : LinearSnapHelper() {
+            override fun findTargetSnapPosition(
+                layoutManager: RecyclerView.LayoutManager,
+                velocityX: Int,
+                velocityY: Int
+            ): Int {
+                val centerView = findSnapView(layoutManager) ?: return RecyclerView.NO_POSITION
+                val position = layoutManager.getPosition(centerView)
+                var targetPosition = -1
+                if (layoutManager.canScrollHorizontally()) {
+                    targetPosition = if (velocityX < 0) {
+                        position - 1
+                    } else {
+                        position + 1
+                    }
+                }
+                if (layoutManager.canScrollVertically()) {
+                    targetPosition = if (velocityY < 0) {
+                        position - 1
+                    } else {
+                        position + 1
+                    }
+                }
+                val firstItem = 0
+                val lastItem = layoutManager.itemCount - 1
+                targetPosition = Math.min(lastItem, Math.max(targetPosition, firstItem))
+                return targetPosition
+            }
+        }
         snapHelper.attachToRecyclerView(mRecyclerView)
         mRecyclerView.layoutManager = mLayoutManager
+
+
 
 
         ///endless recycler view endless scrolling
@@ -82,8 +112,6 @@ class ShortsFragment : Fragment() {
 //
 //        val sh3= ShortsItem("https://www.malopolska.pl/_cache/councilors/790-790/fit/DudaJ.jpg","Old dudu","34","34")
 //        Shortlist.add(sh3)
-
-
 
 
         getIDsOfVideos()
@@ -144,7 +172,8 @@ class ShortsFragment : Fragment() {
                     if (vid != null) {
                         for ( i in vid.items){
                             
-                            Shortlist.add(Shorts(
+                            shortList.add(Shorts(
+                                i.player.embedHtml,
                                 i.id,
                                 i.snippet.title,
                                 i.snippet.channelTitle,
@@ -154,12 +183,13 @@ class ShortsFragment : Fragment() {
                             ))
 
                         Log.i("tak",i.snippet.title)
+                        Log.i("tak",i.player.embedHtml)
                         Log.i("tak", i.statistics.likeCount.toString())
                         Log.i("tak",i.snippet.channelTitle)
                         }
                     }
                     mRecyclerView.setHasFixedSize(true)
-                    mAdapter = ShortsAdapter(Shortlist)
+                    mAdapter = ShortsAdapter(shortList)
                     mRecyclerView.layoutManager=mLayoutManager
                     mRecyclerView.adapter = mAdapter
                     mAdapter.notifyDataSetChanged()
@@ -177,6 +207,7 @@ class ShortsFragment : Fragment() {
 
 
     }
+
 
 
     override fun onDestroyView() {
