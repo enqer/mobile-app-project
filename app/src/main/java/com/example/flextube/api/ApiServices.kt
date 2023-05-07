@@ -30,7 +30,8 @@ interface ApiServices {
     @GET("search")
     fun getVideos(
         @Query("part") part: String = "snippet",
-        @Query("maxResults") results: Int = 10  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
+        @Query("maxResults") results: Int = 10,  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
+        @Query("key") key: String = KEY3
     ): Call<VideoIdsApiModel>
 
     // return views depends on id
@@ -40,7 +41,7 @@ interface ApiServices {
         @Query("part") part2: String = "statistics",
         @Query("part") part3: String = "snippet",
         @Query("id") id: String,
-        //@Query("key") key: String = KEY3
+        @Query("key") key: String = KEY3
     ): Call<VideoApiModel>
 
     @GET("channels")
@@ -48,15 +49,16 @@ interface ApiServices {
         @Query("part") part: String = "snippet",
         @Query("part") part2: String = "statistics",
         @Query("id") id: String,
-        //@Query("key") key: String = KEY2
+        @Query("key") key: String = KEY2
     ): Call<AuthorApiModel>
 
     @GET("search")
     fun getShorts(
         @Query("part") part: String = "snippet",
         //@Query("access_token") accessToken: String = "ya29.a0AWY7CklEBcM5A88zJklG4Iu_3PyfMUBt3UVBycQS5mERrwP1B2ygyGYlF2zu3ycJLBbB6tC103CtRq_RLxBtk2RdLoNoNlEukfLY48uXP-d9IzIb0F_fj6OZBREN9bTzKWAUYl7zeM48A9A90C3nR3-3P0O_aCgYKATQSARESFQG1tDrpcG0tbonRQNnt7qPXVy1wLQ0163",
-        @Query("videoDuration") videoDuration: String = "short",
         @Query("type") type: String = "video",
+        @Query("key") key: String = KEY3,
+        @Query("maxResults") results: Int = 15,
         @Query("videoCategoryId") videoCategoryId: String = "17"
     ): Call<VideoIdsApiModel>
 
@@ -67,7 +69,7 @@ interface ApiServices {
         @Query("part") part3: String = "snippet",
         @Query("part") part4: String = "player",
         @Query("id") id: String,
-        // @Query("key") key: String = KEY
+        @Query("key") key: String = KEY3
     ): Call<ShortsApiModel>
 //    @POST("https://accounts.google.com/o/oauth2/v2/auth")
 //    @FormUrlEncoded
@@ -135,7 +137,7 @@ interface ApiServices {
                 .addInterceptor { chain ->
                     val request: Request = chain.request()
                         .newBuilder()
-                        .addHeader("Authorization", "Bearer ya29.a0AWY7CknCHtTWjt1wwAYnt9cFtZM-JmH0l3w3saEiumEcor8MBUYAGvGp6JmtACMZYlECZV0F4D15ZSrS-QCdmHfnhcg9TSw-wAoCDt06IIhOl1bSeKeEOB8v4SQf3PyrbjGrIh2fsTJLM5AF-JvUN3IGRctFaCgYKAe4SARISFQG1tDrpTKIizmtWMNDWj6R8UBkD2w0163")
+                        .addHeader("Authorization", "Bearer $authToken")
                         .build()
                     chain.proceed(request)
                 }
