@@ -1,11 +1,10 @@
 package com.example.flextube.shorts
 
 import android.content.Context
-import android.util.DisplayMetrics
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -14,14 +13,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
+import com.example.flextube.api.ApiServices
 import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 data class ShortsAdapter(
     private val mShorts: ArrayList<Shorts>
 ) : RecyclerView.Adapter<ShortsAdapter.ShortsViewHolder>()
 {
-
 
     class ShortsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
@@ -65,13 +67,8 @@ data class ShortsAdapter(
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
         webView.settings.userAgentString = useragent
-
-
-
-
     }
 }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShortsAdapter.ShortsViewHolder {
         val v: View =
@@ -94,9 +91,6 @@ data class ShortsAdapter(
 
              "</body> </html> "
 
-
-
-
         //holder.webView.loadUrl("$data_html?autoplay=1")
         holder.webView.loadDataWithBaseURL("https://www.youtube.com", data_html, "text/html", "UTF-8", null);
         //holder.webView.loadUrl("youtube.com/shorts/"+currentShorts.id_shorts)
@@ -105,8 +99,6 @@ data class ShortsAdapter(
         holder.likes.text = currentShorts.likeCount.toString()
         holder.dislikes.text = currentShorts.dislikeCount.toString()
         holder.title.text = currentShorts.title_shorts
-
-
     }
 
 

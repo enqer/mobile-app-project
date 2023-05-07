@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.api.ApiServices
 import com.example.flextube.databinding.FragmentShortsBinding
+import com.example.flextube.shorts.Author
 import com.example.flextube.shorts.Shorts
 import com.example.flextube.shorts.ShortsAdapter
-import com.example.flextube.video.AuthorVideo
 import com.example.flextube.shorts.ShortsApiModel
+import com.example.flextube.shorts.ShortsAuthor
+import com.example.flextube.shorts.ShortsAuthorApiModel
 import com.example.flextube.video.VideoIdsApiModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,9 +31,10 @@ class ShortsFragment : Fragment() {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     var shortList: ArrayList<Shorts> = ArrayList<Shorts>()
     var idVideos: ArrayList<String> = ArrayList()
-    var authorList: ArrayList<AuthorVideo> = ArrayList<AuthorVideo>()
+    var authorList: ArrayList<ShortsAuthor> = ArrayList<ShortsAuthor>()
     var idAuthors: ArrayList<String> = ArrayList()
-    val titleList : ArrayList<String> = ArrayList()
+    val authorsLogosList : ArrayList<String> = ArrayList()
+    var index = 0
 
 
 
@@ -99,22 +102,9 @@ class ShortsFragment : Fragment() {
         mRecyclerView.layoutManager = mLayoutManager
 
 
-
-
-        ///endless recycler view endless scrolling
-//        val sh= ShortsItem("https://pbs.twimg.com/profile_images/556495456805453826/wKEOCDN0_400x400.png","Dudu","34","34")
-//        Shortlist.add(sh)
-//
-//        val sh1= ShortsItem("https://upload.wikimedia.org/wikipedia/commons/c/c3/Jaros%C5%82aw_Kaczy%C5%84ski%2C_wicepremier_%28cropped%29.png","Kaczor","34","34")
-//        Shortlist.add(sh1)
-//        val sh2= ShortsItem("https://upload.wikimedia.org/wikipedia/commons/5/5d/Mateusz_Morawiecki_Prezes_Rady_Ministr%C3%B3w_%28cropped%29.jpg","Mati","34","34")
-//        Shortlist.add(sh2)
-//
-//        val sh3= ShortsItem("https://www.malopolska.pl/_cache/councilors/790-790/fit/DudaJ.jpg","Old dudu","34","34")
-//        Shortlist.add(sh3)
-
-
         getIDsOfVideos()
+        Log.i("lista short", shortList.size.toString())
+        Log.i("lista title", authorsLogosList.size.toString())
 
 
         //val shs = Shorts("https://www.youtube.com/shorts/c3rnBab80Z4","shorts","t","dfd",3,4)
@@ -144,8 +134,6 @@ class ShortsFragment : Fragment() {
                         for (i in body.items){
                             idVideos.add(i.id.videoId)
                             idAuthors.add(i.snippet.channelId)
-                            Log.i("video id", i.id.videoId)
-                            Log.i("channel id", i.snippet.channelId)
                         }
                         viewVideos()
                     }
@@ -157,45 +145,73 @@ class ShortsFragment : Fragment() {
         })
         Log.i("dziala","dfd")
     }
+    private fun getAuthors(id:String){
+        val api = ApiServices.getRetrofit()
+        val channel: Call<ShortsAuthorApiModel> = api.getShortsChannel(id =id)
+        channel.enqueue(object : Callback<ShortsAuthorApiModel>{
+            override fun onResponse(
+                call: Call<ShortsAuthorApiModel>,
+                response: Response<ShortsAuthorApiModel>
+            ) {
+                if (response.isSuccessful){
+                    val chan = response.body()
+                    if (chan != null) {
+                        for (i in chan.items){
+                            authorsLogosList.add(
+                                    i.snippet.thumbnails.picture.url,
+                            )
+                            Log.i("logo", i.snippet.thumbnails.picture.url)
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ShortsAuthorApiModel>, t: Throwable) {
+                Log.i("Retrofit/IdChannel", t.stackTraceToString())
+            }
+        })
+    }
 
     private fun viewVideos() {
+
+            for (i in idAuthors) {
+                getAuthors(i)
+            }
             for (i in idVideos)
                 getVideos(i)
-    }
+
+        }
     private fun getVideos(id: String){
         val api = ApiServices.getRetrofit()
         val videos: Call<ShortsApiModel> = api.getStatsShorts(id=id)
         videos.enqueue(object: Callback<ShortsApiModel>{
             override fun onResponse(call: Call<ShortsApiModel>, response: Response<ShortsApiModel>) {
-                if(response.isSuccessful){
+                if (response.isSuccessful) {
                     val vid = response.body()
                     if (vid != null) {
-                        for ( i in vid.items){
-                            
-                            shortList.add(Shorts(
-                                i.player.embedHtml,
-                                i.id,
-                                i.snippet.title,
-                                i.snippet.channelTitle,
-                                i.snippet.thumbnails.photoVideo.urlPhoto,
-                                i.statistics.likeCount,
-                                i.statistics.dislikeCount
-                            ))
+                            for (i in vid.items) {
+                                shortList.add(
+                                    Shorts(
+                                        i.player.embedHtml,
+                                        i.id,
+                                        i.snippet.title,
+                                        i.snippet.channelTitle,
+                                        authorsLogosList[index],
+                                        i.statistics.likeCount,
+                                        i.statistics.dislikeCount
 
-                        Log.i("tak",i.snippet.title)
-                        Log.i("tak",i.player.embedHtml)
-                        Log.i("tak", i.statistics.likeCount.toString())
-                        Log.i("tak",i.snippet.channelTitle)
-                        }
+                                    )
+                                )
+                                Log.i("t",authorsLogosList[index])
+                                index++
+                            }
                     }
+                }
                     mRecyclerView.setHasFixedSize(true)
                     mAdapter = ShortsAdapter(shortList)
                     mRecyclerView.layoutManager=mLayoutManager
                     mRecyclerView.adapter = mAdapter
                     mAdapter.notifyDataSetChanged()
                 }
-            }
-
 
             override fun onFailure(call: Call<ShortsApiModel>, t: Throwable) {
                 Log.i("onFailure","błąd")

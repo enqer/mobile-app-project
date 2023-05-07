@@ -48,16 +48,17 @@ data class ShortsApiModel(
             val thumbnails: Thumbnails,
 
             @SerializedName("title")
-            val title: String
+            val title: String,
         ) {
             data class Thumbnails(
                 @SerializedName("medium")
-                val photoVideo: PhotoVideo
+                val picture: Picture
             ){
-                data class PhotoVideo(
+                data class Picture(
                     @SerializedName("url")
-                    val urlPhoto: String
+                    val url: String
                 ) {}
+
             }
 
         }

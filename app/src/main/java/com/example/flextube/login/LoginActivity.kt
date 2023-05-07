@@ -99,11 +99,9 @@ class LoginActivity : AppCompatActivity() {
                 super.onPageFinished(view, url)
                 Log.d("url", webView.url.toString())
                 if (url.contains("code=")) {
-                    // Wyciągamy kod autoryzacyjny z URL-a
                     val code = url.substringAfter("code=").substringBefore("&")
                     Log.d("kod autoryzacyjny", code.toString())
-                    Log.d("kod autoryzacyjny", url)
-                    authToken(code,codeVerifier)
+                    getAuthToken(code,codeVerifier)
 
                 }
             }
@@ -113,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
         alertDialogBuilder.setView(webView)
         alertDialogBuilder.create().show()
     }
-    fun authToken(code:String,codeVerifier: String){
+    fun getAuthToken(code:String,codeVerifier: String){
         val apiService = ApiServices.getClient()
         Log.i("verifier",codeVerifier)
         val call = apiService.getToken(code=code, codeVerifier = codeVerifier)

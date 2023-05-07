@@ -1,12 +1,10 @@
 package com.example.flextube.api
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
-import androidx.browser.customtabs.CustomTabsService.FilePurpose
 import com.example.flextube.auth.TokenResponse
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.shorts.ShortsApiModel
+import com.example.flextube.shorts.ShortsAuthorApiModel
 import com.example.flextube.video.VideoApiModel
 import com.example.flextube.video.VideoIdsApiModel
 import okhttp3.OkHttpClient
@@ -20,9 +18,6 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
-import java.security.MessageDigest
-import java.security.SecureRandom
-import java.util.Base64
 
 interface ApiServices {
 
@@ -31,7 +26,7 @@ interface ApiServices {
     fun getVideos(
         @Query("part") part: String = "snippet",
         @Query("maxResults") results: Int = 10,  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
-        @Query("key") key: String = KEY3
+        @Query("key") key: String = KEY
     ): Call<VideoIdsApiModel>
 
     // return views depends on id
@@ -41,7 +36,7 @@ interface ApiServices {
         @Query("part") part2: String = "statistics",
         @Query("part") part3: String = "snippet",
         @Query("id") id: String,
-        @Query("key") key: String = KEY3
+        @Query("key") key: String = KEY
     ): Call<VideoApiModel>
 
     @GET("channels")
@@ -49,16 +44,16 @@ interface ApiServices {
         @Query("part") part: String = "snippet",
         @Query("part") part2: String = "statistics",
         @Query("id") id: String,
-        @Query("key") key: String = KEY2
+        @Query("key") key: String = KEY3
     ): Call<AuthorApiModel>
 
     @GET("search")
     fun getShorts(
         @Query("part") part: String = "snippet",
-        //@Query("access_token") accessToken: String = "ya29.a0AWY7CklEBcM5A88zJklG4Iu_3PyfMUBt3UVBycQS5mERrwP1B2ygyGYlF2zu3ycJLBbB6tC103CtRq_RLxBtk2RdLoNoNlEukfLY48uXP-d9IzIb0F_fj6OZBREN9bTzKWAUYl7zeM48A9A90C3nR3-3P0O_aCgYKATQSARESFQG1tDrpcG0tbonRQNnt7qPXVy1wLQ0163",
         @Query("type") type: String = "video",
+        @Query("videoDuration") videoDuration: String = "short",
         @Query("key") key: String = KEY3,
-        @Query("maxResults") results: Int = 15,
+        @Query("maxResults") results: Int = 5,
         @Query("videoCategoryId") videoCategoryId: String = "17"
     ): Call<VideoIdsApiModel>
 
@@ -71,6 +66,14 @@ interface ApiServices {
         @Query("id") id: String,
         @Query("key") key: String = KEY3
     ): Call<ShortsApiModel>
+    @GET("channels")
+    fun getShortsChannel(
+        @Query("part") part: String = "snippet",
+        @Query("part") part2: String = "statistics",
+        @Query("id") id: String,
+        @Query("key") key: String = KEY3
+    ): Call<ShortsAuthorApiModel>
+
 //    @POST("https://accounts.google.com/o/oauth2/v2/auth")
 //    @FormUrlEncoded
 //    fun getAuthorization(
@@ -105,7 +108,7 @@ interface ApiServices {
     companion object {
         private final const val KEY = "AIzaSyDrvd66oJPdfjmm8c93lOSupl0ls71uDB8"
         private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
-        private final const val KEY3 = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
+        private final const val KEY3 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
         var authToken: String = ""
 
 
