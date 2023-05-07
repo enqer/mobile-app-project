@@ -43,7 +43,6 @@ class LibraryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -55,6 +54,8 @@ class LibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.d(TAG,"LibraryFragment/onViewCreated -> Start thinking, apes together strong")
+
 //        val imageView = view.findViewById<ImageView>(R.id.person_icon)
 //
 //        // Start new activity (SettingsActivity)
@@ -65,14 +66,58 @@ class LibraryFragment : Fragment() {
 //            startActivity(intent)
 //        }
 
+        readDatabase()
         getPlaylist()
+
+    }
+
+    private fun readDatabase(){
+        val dbHelper = context?.let { DatabaseHelper(it) }
+        val db = dbHelper?.writableDatabase
+
+        val selectQuery = "SELECT video_id, urlPhotoValue, authorVideo, titleValue FROM my_table8"
+
+        val cursor = db?.rawQuery(selectQuery, null)
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                if (cursor != null) {
+                    do {
+                        val idIndex = cursor.getColumnIndex("video_id")
+                        val idValue = cursor.getString(idIndex)
+
+                        val urlPhotoValueIndex = cursor.getColumnIndex("urlPhotoValue")
+                        val urlPhotoValue = cursor.getString(urlPhotoValueIndex)
+
+                        val titleValueIndex = cursor.getColumnIndex("titleValue")
+                        val titleValue = cursor.getString(titleValueIndex)
+
+                        val authorVideoIndex = cursor.getColumnIndex("authorVideo")
+                        val authorVideoValue = cursor.getString(authorVideoIndex)
+                        Log.d(
+                            "MyApp",
+                            "Pobrana wartość: $idValue, $urlPhotoValue, $titleValue, $authorVideoValue"
+                        )
+                    } while (cursor.moveToNext())
+                }
+            }
+        }
+
+        if (cursor != null) {
+            cursor.close()
+        }
+//        if (dbHelper != null) {
+//            dbHelper.close()
+//        }
+
+
     }
 
     // Search available playlist on channel using channelId then show them
     private fun getPlaylist() {
         // Variables used in SQLite stuff
-        val dbHelper = context?.let { DatabaseHelper(it) }
-        val db = dbHelper?.writableDatabase
+        //val dbHelper = context?.let { DatabaseHelper(it) }
+        //val db = dbHelper?.writableDatabase
 
         val apiServices = ApiServices.getRetrofit()
         val channelId = "UCOyHGlRFb30g-h76XiBW_pw"
@@ -120,44 +165,44 @@ class LibraryFragment : Fragment() {
                                 override fun onItemClick(playlist: Playlist) {
                                     Log.d(TAG, "LibraryFragment/getPlaylist/onItemClick -> Item clicked")
 
-                                    // Save and store data in SQLite
-                                    val dataValue = playlist.id
-
-                                    val insertQuery = "INSERT INTO my_table (data) VALUES ('$dataValue')"
-                                    if (db != null) {
-                                        db.execSQL(insertQuery)
-                                    }
-
-                                    val selectQuery = "SELECT data FROM my_table"
-                                    val cursor = db?.rawQuery(selectQuery, null)
-
-                                    if (cursor != null) {
-                                        if (cursor.moveToFirst()) {
-                                            if (cursor != null) {
-                                                do {
-                                                    val columnIndex = cursor.getColumnIndex("data")
-                                                    val dataValue = cursor.getString(columnIndex)
-                                                    Log.d("MyApp", "Pobrana wartość: $dataValue")
-                                                } while (cursor.moveToNext())
-                                            }
-                                        }
-                                    }
-
-                                    // CODE REQUIRED TO RESET ALL ITEMS IN DATABASE
-                                    // UNCOMMENT THAT LINES AND CLICK THE BUTTON
-                                    // THEN SHUT DOWN YOUR APP AND COMMENT THAT LINES AGAIN
-
-//                                    val deleteQuery = "DELETE FROM my_table"
+//                                    // Save and store data in SQLite
+//                                    val dataValue = playlist.id
+//
+//                                    val insertQuery = "INSERT INTO my_table8 (data) VALUES ('$dataValue')"
 //                                    if (db != null) {
-//                                        db.execSQL(deleteQuery)
+//                                        db.execSQL(insertQuery)
 //                                    }
-
-                                    // END OF RESTARTING DATABASE CODE
-
-                                    if (cursor != null) {
-                                        cursor.close()
-                                    }
-                                    // End of SQLite
+//
+//                                    val selectQuery = "SELECT data FROM my_table8"
+//                                    val cursor = db?.rawQuery(selectQuery, null)
+//
+//                                    if (cursor != null) {
+//                                        if (cursor.moveToFirst()) {
+//                                            if (cursor != null) {
+//                                                do {
+//                                                    val columnIndex = cursor.getColumnIndex("data")
+//                                                    val dataValue = cursor.getString(columnIndex)
+//                                                    Log.d("MyApp", "Pobrana wartość: $dataValue")
+//                                                } while (cursor.moveToNext())
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    // CODE REQUIRED TO RESET ALL ITEMS IN DATABASE
+//                                    // UNCOMMENT THAT LINES AND CLICK THE BUTTON
+//                                    // THEN SHUT DOWN YOUR APP AND COMMENT THAT LINES AGAIN
+//
+////                                    val deleteQuery = "DELETE FROM my_table"
+////                                    if (db != null) {
+////                                        db.execSQL(deleteQuery)
+////                                    }
+//
+//                                    // END OF RESTARTING DATABASE CODE
+//
+//                                    if (cursor != null) {
+//                                        cursor.close()
+//                                    }
+//                                    // End of SQLite
 
                                     // Starts new activity
                                     val startNew = Intent(context, PlaylistActivity::class.java)
