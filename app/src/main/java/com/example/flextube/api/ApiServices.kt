@@ -72,13 +72,14 @@ interface ApiServices {
         //final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
         //final const val KEY2 = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
         //final const val KEY2 = "AIzaSyD-YVltn6eqtjPASNLNn8wqsBA_i16BLnA"
-        final const val KEY2 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
+        final const val KEY2 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
 
         //private const val KEY = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
-        private const val KEY = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
+        private const val KEY = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
         //private const val KEY3 = "AIzaSyCjW8nV6QzOMQQt5PlYdzZlgTR63jB6dQU"
         //private const val KEY3 = "AIzaSyChDXUbavQGMp0QHKvTzwKd5re7kM4SQKA"
-        private const val KEY3 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
+        //private const val KEY3 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
+        private const val KEY3 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
         //private const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
 
         fun getRetrofit(): ApiServices {
