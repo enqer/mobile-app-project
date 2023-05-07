@@ -1,5 +1,6 @@
 package com.example.flextube.shorts
 
 class ShortsAuthor (
-    val urlLogo: String,
+    val id: String,
+    val urlLogo: String
         )

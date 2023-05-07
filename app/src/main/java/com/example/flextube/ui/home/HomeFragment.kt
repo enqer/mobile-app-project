@@ -34,8 +34,6 @@ class HomeFragment : Fragment() {
     var idAuthorsVideos: HashMap<String, String> = HashMap<String, String>()
 
 
-
-
     var iterator = 0
 
     private var _binding: FragmentHomeBinding? = null
@@ -148,7 +146,6 @@ class HomeFragment : Fragment() {
             }
         })
     }
-
 
 
     // pobiera dane o filmie pojedynczo, fajnie by to było zmienić z multiple id but idk jak zrobić

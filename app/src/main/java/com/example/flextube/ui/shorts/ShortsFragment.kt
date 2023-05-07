@@ -34,17 +34,8 @@ class ShortsFragment : Fragment() {
     var authorList: ArrayList<ShortsAuthor> = ArrayList<ShortsAuthor>()
     var idAuthors: ArrayList<String> = ArrayList()
     val authorsLogosList : ArrayList<String> = ArrayList()
+    var idAuthorsVideos: HashMap<String, String> = HashMap<String, String>()
     var index = 0
-
-
-
-
-
-
-
-
-
-
 
 
     private var _binding: FragmentShortsBinding? = null
@@ -101,23 +92,9 @@ class ShortsFragment : Fragment() {
         snapHelper.attachToRecyclerView(mRecyclerView)
         mRecyclerView.layoutManager = mLayoutManager
 
-
         getIDsOfVideos()
         Log.i("lista short", shortList.size.toString())
         Log.i("lista title", authorsLogosList.size.toString())
-
-
-        //val shs = Shorts("https://www.youtube.com/shorts/c3rnBab80Z4","shorts","t","dfd",3,4)
-//        Shortlist.add(shs)
-//        mRecyclerView.setHasFixedSize(true)
-//        mAdapter = ShortsAdapter(Shortlist)
-//        mRecyclerView.layoutManager=mLayoutManager
-//        mRecyclerView.adapter = mAdapter
-//        mAdapter.notifyDataSetChanged()
-        //        mAdapter = ShortsAdapter(Short)
-//
-        //mRecyclerView.adapter = mAdapter
-//        mAdapter.notifyDataSetChanged()
 
         return root
     }
@@ -134,6 +111,7 @@ class ShortsFragment : Fragment() {
                         for (i in body.items){
                             idVideos.add(i.id.videoId)
                             idAuthors.add(i.snippet.channelId)
+                            idAuthorsVideos[i.id.videoId] = i.snippet.channelId
                         }
                         viewVideos()
                     }
@@ -157,8 +135,11 @@ class ShortsFragment : Fragment() {
                     val chan = response.body()
                     if (chan != null) {
                         for (i in chan.items){
-                            authorsLogosList.add(
-                                    i.snippet.thumbnails.picture.url,
+                            authorList.add(ShortsAuthor(
+                                i.id,
+                                i.snippet.thumbnails.picture.url
+                            )
+
                             )
                             Log.i("logo", i.snippet.thumbnails.picture.url)
                         }
@@ -187,21 +168,30 @@ class ShortsFragment : Fragment() {
             override fun onResponse(call: Call<ShortsApiModel>, response: Response<ShortsApiModel>) {
                 if (response.isSuccessful) {
                     val vid = response.body()
-                    if (vid != null) {
+                    if (vid != null && authorList.size > 0) {
+                        Log.i("RETROFIT/ID", vid.items[0].id)
+                        Log.i("RETROFIT/CHANNELID", authorList[index].id)
+                        var author = authorList[index]
                             for (i in vid.items) {
+                                for (j in authorList)
+                                {
+                                    if (j.id == idAuthorsVideos[i.id]){
+                                        author = j
+                                    }
+                                }
                                 shortList.add(
                                     Shorts(
                                         i.player.embedHtml,
                                         i.id,
                                         i.snippet.title,
                                         i.snippet.channelTitle,
-                                        authorsLogosList[index],
+                                        i.snippet.channelId,
+                                        author.urlLogo,
                                         i.statistics.likeCount,
                                         i.statistics.dislikeCount
-
                                     )
                                 )
-                                Log.i("t",authorsLogosList[index])
+                                //Log.i("t",authorsLogosList[index])
                                 index++
                             }
                     }
@@ -219,13 +209,7 @@ class ShortsFragment : Fragment() {
         })
         return
     }
-    private fun startShorts(){
-
-
-    }
-
-
-
+    
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -44,6 +44,9 @@ data class ShortsApiModel(
             @SerializedName("channelTitle")
             val channelTitle: String,
 
+            @SerializedName("channelId")
+            val channelId: String,
+
             @SerializedName("thumbnails")
             val thumbnails: Thumbnails,
 

@@ -91,6 +91,7 @@ data class ShortsAdapter(
 
              "</body> </html> "
 
+
         //holder.webView.loadUrl("$data_html?autoplay=1")
         holder.webView.loadDataWithBaseURL("https://www.youtube.com", data_html, "text/html", "UTF-8", null);
         //holder.webView.loadUrl("youtube.com/shorts/"+currentShorts.id_shorts)
@@ -99,6 +100,31 @@ data class ShortsAdapter(
         holder.likes.text = currentShorts.likeCount.toString()
         holder.dislikes.text = currentShorts.dislikeCount.toString()
         holder.title.text = currentShorts.title_shorts
+    }
+    private fun getAuthors(id:String): String{
+        var x: String = ""
+        val api = ApiServices.getRetrofit()
+        val channel: Call<ShortsAuthorApiModel> = api.getShortsChannel(id = id)
+        channel.enqueue(object : Callback<ShortsAuthorApiModel>{
+            override fun onResponse(
+                call: Call<ShortsAuthorApiModel>,
+                response: Response<ShortsAuthorApiModel>
+            ) {
+                if (response.isSuccessful){
+                    val chan = response.body()
+                    if (chan != null) {
+                        for (i in chan.items){
+                             x=i.snippet.thumbnails.picture.url
+                            Log.i("logo23",x)
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call<ShortsAuthorApiModel>, t: Throwable) {
+                Log.i("Retrofit/IdChannel", t.stackTraceToString())
+            }
+        })
+        return x
     }
 
 
