@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FlexTube</string>
-    <string name="title_home">Początek</string>
-    <string name="title_dashboard">Panel</string>
-    <string name="title_notifications">Powiadomienia</string>
+    <string name="title_home">Ekran główny</string>
+    <string name="title_shorts">Shorts</string>
+    <string name="title_library">Biblioteka</string>
     <string name="how_it_works">Jak to działa?</string>
     <string name="help">Pomoc</string>
     <string name="settings">Ustawienia</string>
@@ -19,4 +19,5 @@
     <string name="num1000">tys.</string>
     <string name="num1000000">mln</string>
     <string name="num1000000000">mld</string>
+    <string name="noComments">Komentarze są wyłączone.</string>
 </resources>

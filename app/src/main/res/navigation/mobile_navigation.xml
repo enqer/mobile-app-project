@@ -14,12 +14,12 @@
     <fragment
         android:id="@+id/navigation_shorts"
         android:name="com.example.flextube.ui.shorts.shortsFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_shorts"
         tools:layout="@layout/fragment_shorts" />
 
     <fragment
         android:id="@+id/navigation_library"
         android:name="com.example.flextube.ui.library.LibraryFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_library"
         tools:layout="@layout/fragment_library" />
 </navigation>

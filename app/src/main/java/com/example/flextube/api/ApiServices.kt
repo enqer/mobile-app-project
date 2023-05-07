@@ -46,7 +46,7 @@ interface ApiServices {
     @GET("commentThreads")
     fun getCommentsOfVideo(
         @Query("part") part: String ="snippet",
-        @Query("order") order: String = "relevance", // najpopularniejsze
+        @Query("order") order: String = "relevance",
         @Query("videoId") videoId: String,
         @Query("maxResults") results: Int = 40,
         @Query("key") key: String = KEY,

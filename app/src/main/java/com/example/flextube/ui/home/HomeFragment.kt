@@ -1,5 +1,6 @@
 package com.example.flextube.ui.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -59,7 +60,8 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        mRecyclerView = _binding!!.homeRecyclerview
+
+        mRecyclerView = binding.homeRecyclerview
         mRecyclerView.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
 
@@ -93,9 +95,9 @@ class HomeFragment : Fragment() {
                                 i.snippet.thumbnails.photoVideo.urlPhoto,
                                 i.contentDetails.duration,
                                 i.snippet.title,
-                                convertNumbers(i.statistics.viewCount),
-                                convertNumbers(i.statistics.likeCount),
-                                convertNumbers(i.statistics.commentCount),
+                                formatNumber(i.statistics.viewCount),
+                                formatNumber(i.statistics.likeCount),
+                                formatNumber(i.statistics.commentCount),
                                 i.snippet.publishedAt,
                                 i.player.embedHtml,
                                 i.player.embedHeight,
@@ -128,7 +130,6 @@ class HomeFragment : Fragment() {
                 Log.i("RETROFIT/VIDEOS", t.message.toString())
             }
         })
-        return
     }
 
     // getting id channels and videos (after that we can searching for full data of video)
@@ -154,8 +155,6 @@ class HomeFragment : Fragment() {
             }
         })
     }
-
-
 
     // view videos with authors (multiple ids to getvideos??)
     private fun viewVideos() {
@@ -185,7 +184,7 @@ class HomeFragment : Fragment() {
                                     i.id,
                                     i.snippet.title,
                                     i.snippet.thumbnails.picture.url,
-                                    convertNumbers(i.statistics.subscriberCount)
+                                    formatNumber(i.statistics.subscriberCount)
                                 )
                             )
                         }
@@ -198,45 +197,32 @@ class HomeFragment : Fragment() {
         })
     }
 
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-    private fun convertNumbers(num: String) : String{
-        var s = num.reversed()
-        var new = ""
-        var count = 0
-        for (i in s){
-            if (count == 3){
-                new += "."
-                count = 0
-            }
-            new += i
-            count++
+    // returns -1 if the numer is disabled otherwise returns formatted number as string
+    fun formatNumber(number: String?): String {
+        if (number == null)
+            return "-1"
+        val suffixes = listOf(
+            "",
+            requireContext().resources.getString(R.string.num1000),
+            requireContext().resources.getString(R.string.num1000000),
+            requireContext().resources.getString(R.string.num1000000000)
+        )
+        var i = 0
+        var n = number.toDouble()
+        while (n >= 1000 && i < suffixes.size - 1) {
+            n /= 1000
+            i++
         }
-        var indexStart = 0
-        var amount = ""
-        if (new.length >= 12){
-            indexStart = 12
-            amount = requireContext().resources.getString(R.string.num1000000000)
-        }else if (new.length > 10){
-            indexStart = 8
-            amount = requireContext().resources.getString(R.string.num1000000)
-        } else if (new.length >= 9){
-            indexStart = 6
-            amount = requireContext().resources.getString(R.string.num1000000)
-        } else if (new.length > 4){
-            indexStart = 4
-            amount = requireContext().resources.getString(R.string.num1000)
-        } else if (new.length == 4){
-            indexStart = 2
-            amount = requireContext().resources.getString(R.string.num1000)
+        val formattedNumber = "%.1f".format(n)
+        return if (formattedNumber.endsWith(".0")) {
+            formattedNumber.substringBefore(".")
+        } else {
+            "$formattedNumber ${suffixes[i]}"
         }
-        s = new.subSequence(indexStart, new.length).toString()
-        if ((indexStart == 4 || indexStart == 6) && s[0] == '0')
-            s = s.subSequence(2,s.length).toString()
-        return s.reversed() + amount
     }
+
 }

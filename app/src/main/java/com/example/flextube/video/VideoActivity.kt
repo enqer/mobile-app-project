@@ -2,10 +2,12 @@ package com.example.flextube.video
 
 
 import android.annotation.SuppressLint
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
@@ -47,6 +49,10 @@ class VideoActivity : AppCompatActivity() {
 //        setContentView(R.layout.activity_video)
         setContentView(binding.root)
 
+        mRecyclerView = binding.videoRecycleview
+        mRecyclerView.setHasFixedSize(true)
+        mLayoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false)
+
         // getting object of video
         val intent = intent
         val gson = Gson()
@@ -56,13 +62,30 @@ class VideoActivity : AppCompatActivity() {
         // sets a data of video object
         binding.itemVideoTitle.text = video.title
         binding.itemVideoInfo.text = "${video.viewCount} ${baseContext.resources.getString(R.string.views)} ∙ ${video.publishedDate}"
-        binding.itemVideoLike.text = video.likeCount
+        // if likes are off then showing nothing
+        if (video.likeCount != "-1")
+            binding.itemVideoLike.text = video.likeCount
         binding.itemVideoChannelName.text = video.authorVideo.name
-        binding.itemVideoChannelSubs.text = "${video.authorVideo.subscriberCount} ${baseContext.resources.getString(
-            R.string.channelSubs
-        )}"
+
+        if (video.authorVideo.subscriberCount != "-1")
+            binding.itemVideoChannelSubs.text = "${video.authorVideo.subscriberCount} ${baseContext.resources.getString(
+                R.string.channelSubs
+            )}"
         Picasso.get().load(video.authorVideo.urlLogo).into(binding.itemVideoChannelLogo)
-        binding.itemVideoCommentCount.text = video.commentCount
+//        binding.itemVideoCommentCount.text = video.commentCount
+        if (video.commentCount != "-1"){
+            binding.itemVideoCommentCount.text = video.commentCount
+            // getting comments by id of video
+            getComments(video.id)
+        } else {    // comments are off
+            binding.noComments.visibility = View.VISIBLE
+            binding.swipeBelow.visibility = View.GONE
+            binding.itemVideoCommentCount.visibility = View.GONE
+            binding.commentText.visibility = View.GONE
+            binding.addCommentLayout.visibility = View.GONE
+            binding.videoRecycleview.visibility = View.GONE
+        }
+
 
         // webview settings
         val useragent: String = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"
@@ -99,12 +122,7 @@ class VideoActivity : AppCompatActivity() {
 //        webView.loadUrl("$data_html?autoplay=1")
         webView.loadDataWithBaseURL("https://www.youtube.com", data_html, "text/html", "UTF-8", null);
 
-        mRecyclerView = binding.videoRecycleview
-        mRecyclerView.setHasFixedSize(true)
-        mLayoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false)
 
-        // getting comments by id of video
-        getComments(video.id)
 
         // increase and decrease comment section (swipe and click version to choose)
         val changeBelowComment = binding.changeBelow

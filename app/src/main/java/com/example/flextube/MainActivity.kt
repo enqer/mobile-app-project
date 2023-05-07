@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
                     val bundle = Bundle()
                     bundle.putString("q", query)
                     navController.navigate(R.id.navigation_home,bundle)
+//                    finish()
                     return true
                 }
                 return false

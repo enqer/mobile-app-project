@@ -56,13 +56,14 @@ class VideoAdapter(
 
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         val currentItem: Video = mVideo[position]
-        val c = holder.authorLogo.context // getting context
-        
+        val con = holder.authorLogo.context // getting context
+
+
         // create picture by url
         Picasso.get().load(currentItem.urlPhoto).into(holder.videoPicture);
 
         holder.title.text = currentItem.title
-        holder.videoInfo.text = "${currentItem.authorVideo.name} ∙ ${currentItem.viewCount} ${c.resources.getString(R.string.views)} ∙ ${currentItem.publishedDate}"
+        holder.videoInfo.text = "${currentItem.authorVideo.name} ∙ ${currentItem.viewCount} ∙ ${con.resources.getString(R.string.views)} ∙ ${currentItem.publishedDate}"
         holder.duration.text = currentItem.duration
         Picasso.get().load(currentItem.authorVideo.urlLogo).into(holder.authorLogo)
         holder.itemView.setOnClickListener {
@@ -73,5 +74,4 @@ class VideoAdapter(
     public interface ItemClickListener{
         fun onItemClick(video: Video)
     }
-
 }
