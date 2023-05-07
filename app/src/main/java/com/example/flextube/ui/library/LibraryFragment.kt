@@ -55,15 +55,15 @@ class LibraryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val imageView = view.findViewById<ImageView>(R.id.person_icon)
-
-        // Start new activity (SettingsActivity)
-        imageView.setOnClickListener {
-            Log.d(TAG,"LibraryFragment/onViewCreated/imageView.setOnClickListener -> Start new activity")
-
-            val intent = Intent(activity, SettingsActivity::class.java)
-            startActivity(intent)
-        }
+//        val imageView = view.findViewById<ImageView>(R.id.person_icon)
+//
+//        // Start new activity (SettingsActivity)
+//        imageView.setOnClickListener {
+//            Log.d(TAG,"LibraryFragment/onViewCreated/imageView.setOnClickListener -> Start new activity")
+//
+//            val intent = Intent(activity, SettingsActivity::class.java)
+//            startActivity(intent)
+//        }
 
         getPlaylist()
     }
