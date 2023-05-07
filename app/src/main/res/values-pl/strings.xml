@@ -1,17 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FlexTube</string>
-    <string name="title_home">Początek</string>
-    <string name="title_dashboard">Panel</string>
-    <string name="title_notifications">Powiadomienia</string>
+    <string name="title_home">Ekran główny</string>
+    <string name="title_shorts">Shorts</string>
+    <string name="title_library">Biblioteka</string>
     <string name="how_it_works">Jak to działa?</string>
     <string name="help">Pomoc</string>
     <string name="settings">Ustawienia</string>
     <string name="dark_mode">Tryb ciemny</string>
+
     <string name="language">Język: Polski</string>
     <string name="playlist">Lista odtwarzania</string>
     <string name="history">Historia</string>
     <string name="video_thumbnail">Miniaturka wideo</string>
     <string name="playlist_name">Nazwa playlisty:</string>
     <string name="like">Wideo które lubię</string>
+
+    <string name="language_en">Language: %1$s</string>
+    <string name="language_pl">Język: %1$s</string>
+
+    <string name="live">Na żywo</string>
+    <string name="comments">Komentarze:</string>
+    <string name="channelSubs">subskrypcji</string>
+    <string name="sub">Subskrybuj</string>
+    <string name="views">wyświetleń</string>
+    <string name="num1000">tys.</string>
+    <string name="num1000000">mln</string>
+    <string name="num1000000000">mld</string>
+    <string name="noComments">Komentarze są wyłączone.</string>
+
 </resources>

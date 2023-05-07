@@ -1,7 +1,9 @@
 package com.example.flextube.video
 
+import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import java.time.Duration
 
 
 class Video(
@@ -9,33 +11,44 @@ class Video(
     val urlPhoto: String,
     var duration: String,
     val title: String,
-    val viewCount: String,
-    val likeCount: String,
+    var viewCount: String,
+    var likeCount: String,
     val commentCount: String,
     var publishedDate: String,
+    val playerHtml: String,
+    val playerHeight: Long,
+    val playerWidth: Long,
     val authorVideo: AuthorVideo
     ) {
+
     // Przekształcanie na normalne formaty
     init {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            convertDuration()
+            duration = convertTime(duration)
         }
         convertPublishedAt()
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun convertDuration(){
+    fun convertTime(time: String): String {
+        val duration = Duration.parse(time)
+        val hours = duration.toHours()
 
-        duration = humanReadableDuration(duration)
-
+        val minutes = duration.minusHours(hours).toMinutes()
+        val seconds = duration.minusHours(hours).minusMinutes(minutes).seconds
+        return if (hours > 0) {
+            String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        } else if (hours.toInt() == 0 && minutes.toInt() == 0 && seconds.toInt() == 0) {
+            "\uD83D\uDD34 Live"
+        } else {
+            if (minutes < 10) {
+                String.format("%01d:%02d", minutes, seconds)
+            } else {
+                String.format("%02d:%02d", minutes, seconds)
+            }
+        }
     }
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun humanReadableDuration(s: String): String = java.time.Duration.parse(s).toString()
-        .substring(2).toLowerCase().replace(Regex("[hms](?!\$)")) { "${it.value} " }
-
     private fun convertPublishedAt(){
         publishedDate = publishedDate.subSequence(0,publishedDate.indexOf('T')).toString()
     }
-
 }

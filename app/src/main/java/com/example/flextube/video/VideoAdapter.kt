@@ -1,6 +1,7 @@
 package com.example.flextube.video
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,24 +35,18 @@ class VideoAdapter(
 
         init {
             super.itemView
-
             videoPicture = itemView.findViewById(R.id.video)
             duration = itemView.findViewById(R.id.duration)
             videoInfo = itemView.findViewById(R.id.videoInfo)
             title = itemView.findViewById(R.id.videoTitle)
             authorLogo = itemView.findViewById(R.id.accountLogo)
-
             context = itemView.context
-
-
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
         val v: View =
             LayoutInflater.from(parent.context).inflate(R.layout.home_video_item, parent, false)
-
         return VideoViewHolder(v)
     }
 
@@ -61,22 +56,19 @@ class VideoAdapter(
 
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         val currentItem: Video = mVideo[position]
+        val con = holder.authorLogo.context // getting context
 
-//        val linkUrl = currentItem.urlPhoto
 
         // create picture by url
         Picasso.get().load(currentItem.urlPhoto).into(holder.videoPicture);
 
         holder.title.text = currentItem.title
-        holder.videoInfo.text = currentItem.authorVideo.name + " ∙ " + currentItem.viewCount + " views" + " ∙ " + currentItem.publishedDate
+        holder.videoInfo.text = "${currentItem.authorVideo.name} ∙ ${currentItem.viewCount} ∙ ${con.resources.getString(R.string.views)} ∙ ${currentItem.publishedDate}"
         holder.duration.text = currentItem.duration
-
         Picasso.get().load(currentItem.authorVideo.urlLogo).into(holder.authorLogo)
-
         holder.itemView.setOnClickListener {
             mItemListener.onItemClick(mVideo[position])
         }
-
     }
 
     public interface ItemClickListener{

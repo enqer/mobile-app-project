@@ -1,5 +1,6 @@
 package com.example.flextube.video
 
+import android.text.Html
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
@@ -19,10 +20,22 @@ data class VideoApiModel(
         val contentDetails: ContentDetails,
 
         @SerializedName("statistics")
-        val statistics: Statistics
+        val statistics: Statistics,
+
+        @SerializedName("player")
+        val player: Player
 
 
     ) {
+        data class Player(
+            @SerializedName("embedHtml")
+            val embedHtml: String,
+            @SerializedName("embedHeight")
+            val embedHeight: Long,
+            @SerializedName("embedWidth")
+            val embedWidth: Long
+
+        ){}
         data class ContentDetails(
             @SerializedName("duration")
             val duration: String
