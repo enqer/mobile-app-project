@@ -24,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,6 +32,12 @@ import java.security.MessageDigest
 import java.security.SecureRandom
 import java.security.spec.MGF1ParameterSpec.SHA256
 import java.util.Base64
+
+
+import com.example.flextube.settings.SettingsActivity
+import com.example.flextube.ui.library.LibraryFragment
+import com.example.flextube.ui.library.LibraryViewModel
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -72,6 +79,7 @@ class LoginActivity : AppCompatActivity() {
         guest.setOnClickListener {
            // signOut()
             val signInIntent = Intent(this, MainActivity::class.java)
+            //val signInIntent = Intent(this, SettingsActivity::class.java)
             startActivity(signInIntent)
         }
 //            val button: Button = findViewById(R.id.switch_to_main)

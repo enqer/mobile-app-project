@@ -2,19 +2,29 @@ package com.example.flextube
 
 import android.content.Intent
 import android.os.Bundle
+
+
 import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.example.flextube.databinding.ActivityMainBinding
+
+
 import com.example.flextube.settings.SettingsActivity
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+
+import com.example.flextube.ui.home.HomeFragment
+
+
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.Picasso
 
@@ -49,6 +59,8 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
+
+
         // searching videos by words
         val searchQuery = binding.searchQ
         searchQuery.setOnEditorActionListener(object : TextView.OnEditorActionListener{
@@ -72,6 +84,7 @@ class MainActivity : AppCompatActivity() {
             searchQuery.text.clear()
             navController.navigate(R.id.navigation_home)
         }
+
 
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

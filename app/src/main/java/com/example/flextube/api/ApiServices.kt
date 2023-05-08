@@ -1,8 +1,15 @@
 package com.example.flextube.api
 
+
 import android.util.Log
 import com.example.flextube.auth.TokenResponse
+
+
+import com.example.flextube.playlist.PlaylistApiModel
+
+
 import com.example.flextube.comment.CommentApiModel
+
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.shorts.ShortsApiModel
 import com.example.flextube.shorts.ShortsAuthorApiModel
@@ -60,6 +67,14 @@ interface ApiServices {
         @Query("key") key: String = KEY3,
         @Query("textFormat") textFormat: String = "plainText"
     ) : Call<CommentApiModel>
+    @GET("playlists")
+    fun getPlaylist(
+        @Query("part") part: String,
+        @Query("channelId") channelId: String,
+        @Query("key") key: String = KEY2,
+        @Query("pageToken") pageToken: String?,
+        @Query("maxResults") maxResults: Int
+
 
     @GET("search")
     fun getShorts(
@@ -170,6 +185,29 @@ interface ApiServices {
             return retrofit.create(ApiServices::class.java)
         }
         fun getRetrofit2(): ApiServices {
+
+    ): Call<PlaylistApiModel>
+
+
+    companion object {
+
+        //private final const val KEY = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"
+        //private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+        //final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+        //final const val KEY2 = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
+        //final const val KEY2 = "AIzaSyD-YVltn6eqtjPASNLNn8wqsBA_i16BLnA"
+        final const val KEY2 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
+
+        //private const val KEY = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
+        private const val KEY = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
+        //private const val KEY3 = "AIzaSyCjW8nV6QzOMQQt5PlYdzZlgTR63jB6dQU"
+        //private const val KEY3 = "AIzaSyChDXUbavQGMp0QHKvTzwKd5re7kM4SQKA"
+        //private const val KEY3 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
+        private const val KEY3 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
+        //private const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+
+        fun getRetrofit(): ApiServices {
+
             val retrofit: Retrofit =
                 Retrofit.Builder().baseUrl("https://oauth2.googleapis.com/")
                     .addConverterFactory(GsonConverterFactory.create())

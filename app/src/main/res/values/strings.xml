@@ -8,6 +8,14 @@
     <string name="id_client" translatable="false">469398138855-2qgn9emqks2dv1ou3mfcoo1upenj854e.apps.googleusercontent.com</string>
     <string name="settings">Settings</string>
     <string name="dark_mode">Dark mode</string>
+
+    <string name="language">Language: English</string>
+    <string name="playlist">Playlist</string>
+    <string name="history">History</string>
+    <string name="video_thumbnail">Video Thumbnail</string>
+    <string name="playlist_name">Playlist name:</string>
+    <string name="like">Videos I like</string>
+
     <string name="language_en">Language: %1$s</string>
     <string name="language_pl">Język: %1$s</string>
 
@@ -21,4 +29,5 @@
     <string name="num1000000">M</string>
     <string name="num1000000000">B</string>
     <string name="noComments">Comments are disabled.</string>
+
 </resources>
