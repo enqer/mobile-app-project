@@ -83,7 +83,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val closeButtonIcon = findViewById<ImageView>(R.id.close_button)
+        //val closeButtonIcon = findViewById<ImageView>(R.id.close_button)
         val languageTv = findViewById<TextView>(R.id.language_TV)
 
 

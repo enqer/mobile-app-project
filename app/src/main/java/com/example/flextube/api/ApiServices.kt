@@ -74,6 +74,7 @@ interface ApiServices {
         @Query("key") key: String = KEY2,
         @Query("pageToken") pageToken: String?,
         @Query("maxResults") maxResults: Int
+    ): Call<PlaylistApiModel>
 
 
     @GET("search")
@@ -136,20 +137,21 @@ interface ApiServices {
 
     companion object {
         private final const val KEY = "AIzaSyDrvd66oJPdfjmm8c93lOSupl0ls71uDB8"
-        private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+        //private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
         private final const val KEY3 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
+        const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
         var authToken: String = ""
 
 
         fun getClient(): ApiServices {
             val httpClient = OkHttpClient.Builder()
-            .addInterceptor { chain ->
-                val original = chain.request()
-                val requestBuilder = original.newBuilder()
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                val request = requestBuilder.build()
-                chain.proceed(request)
-            }
+                .addInterceptor { chain ->
+                    val original = chain.request()
+                    val requestBuilder = original.newBuilder()
+                        .header("Content-Type", "application/x-www-form-urlencoded")
+                    val request = requestBuilder.build()
+                    chain.proceed(request)
+                }
                 .build()
 
             val retrofit: Retrofit = Retrofit.Builder()
@@ -162,8 +164,7 @@ interface ApiServices {
         }
 
 
-
-    fun getRetrofit(): ApiServices {
+        fun getRetrofit(): ApiServices {
             Log.i("tok", authToken)
             val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
@@ -184,39 +185,41 @@ interface ApiServices {
             Log.i("ret", authToken)
             return retrofit.create(ApiServices::class.java)
         }
-        fun getRetrofit2(): ApiServices {
-
-    ): Call<PlaylistApiModel>
-
-
-    companion object {
-
-        //private final const val KEY = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"
-        //private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
-        //final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
-        //final const val KEY2 = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
-        //final const val KEY2 = "AIzaSyD-YVltn6eqtjPASNLNn8wqsBA_i16BLnA"
-        final const val KEY2 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
-
-        //private const val KEY = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
-        private const val KEY = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
-        //private const val KEY3 = "AIzaSyCjW8nV6QzOMQQt5PlYdzZlgTR63jB6dQU"
-        //private const val KEY3 = "AIzaSyChDXUbavQGMp0QHKvTzwKd5re7kM4SQKA"
-        //private const val KEY3 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
-        private const val KEY3 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
-        //private const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
-
-        fun getRetrofit(): ApiServices {
-
-            val retrofit: Retrofit =
-                Retrofit.Builder().baseUrl("https://oauth2.googleapis.com/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-            return retrofit.create(ApiServices::class.java)
-
-        }
-
+//        fun getRetrofit2(): ApiServices {
+//
+//    //: Call<PlaylistApiModel>
+//
+//
+//    companion object {
+//
+//        //private final const val KEY = "AIzaSyBaUPRMqZMOs8drD14sw25bCDD5QFHi6Cw"
+//        //private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+//        //final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+//        //final const val KEY2 = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
+//        //final const val KEY2 = "AIzaSyD-YVltn6eqtjPASNLNn8wqsBA_i16BLnA"
+//        final const val KEY2 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
+//
+//        //private const val KEY = "AIzaSyAYfqcFg2Vu9Nkrb-buFPy-zbqPbrmNoWE"
+//        private const val KEY = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
+//        //private const val KEY3 = "AIzaSyCjW8nV6QzOMQQt5PlYdzZlgTR63jB6dQU"
+//        //private const val KEY3 = "AIzaSyChDXUbavQGMp0QHKvTzwKd5re7kM4SQKA"
+//        //private const val KEY3 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
+//        private const val KEY3 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
+//        //private const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+//
+//        fun getRetrofit(): ApiServices {
+//
+//            val retrofit: Retrofit =
+//                Retrofit.Builder().baseUrl("https://oauth2.googleapis.com/")
+//                    .addConverterFactory(GsonConverterFactory.create())
+//                    .build()
+//            return retrofit.create(ApiServices::class.java)
+//
+//        }
+//
+//    }
+//
+//
+//}
     }
-
-
 }

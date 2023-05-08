@@ -186,6 +186,7 @@ class LoginActivity : AppCompatActivity() {
                 intent.putExtra("email", userEmail)
                 startActivity(intent)
             } catch (e: ApiException) {
+                Log.d("test", e.message.toString())
                 Toast.makeText(this, "Something went wrong: ${e.message}", Toast.LENGTH_SHORT)
                     .show()
             }
