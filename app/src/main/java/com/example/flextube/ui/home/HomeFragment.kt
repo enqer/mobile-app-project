@@ -120,24 +120,6 @@ class HomeFragment : Fragment() {
                                 i.player.embedWidth,
                                 author
                             ))
-
-                            videosList.add(
-                                Video(
-                                    i.id,
-                                    i.snippet.thumbnails.photoVideo.urlPhoto,
-                                    i.contentDetails.duration,
-                                    i.snippet.title,
-                                    formatNumber(i.statistics.viewCount),
-                                    formatNumber(i.statistics.likeCount),
-                                    formatNumber(i.statistics.commentCount),
-                                    i.snippet.publishedAt,
-                                    i.player.embedHtml,
-                                    i.player.embedHeight,
-                                    i.player.embedWidth,
-                                    author
-                                )
-                            )
-
                             iterator++
                         }
                     }
