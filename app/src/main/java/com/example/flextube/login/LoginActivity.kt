@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.flextube.MainActivity
 import com.example.flextube.api.ApiServices
 import com.example.flextube.auth.TokenResponse
+import com.example.flextube.interfaces.GoogleLogin
+import com.example.flextube.interfaces.GoogleLogin.Companion.gso
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -33,8 +35,8 @@ import java.util.Base64
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var gso: GoogleSignInOptions
-    lateinit var gsc: GoogleSignInClient
+    //lateinit var gso: GoogleSignInOptions
+//    lateinit var gsc: GoogleSignInClient
     //val webView: WebView = WebView(this)
     // val webView: WebView = WebView(requireNotNull(this).applicationContext)
     lateinit var codeVerifier: String
@@ -49,11 +51,12 @@ class LoginActivity : AppCompatActivity() {
         val google: View = findViewById(com.example.flextube.R.id.google_area)
         val guest: View = findViewById(com.example.flextube.R.id.guest_area)
         val serverClientId = getString(com.example.flextube.R.string.id_client)
-        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleLogin.gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(serverClientId)
             .requestEmail()
             .build()
-        gsc = GoogleSignIn.getClient(this, gso)
+        GoogleLogin.gsc = GoogleSignIn.getClient(this, gso)
+
 
         codeVerifier=generateCodeChallenge(generateCodeVerifier())
 
@@ -80,13 +83,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun signIn() {
-        val signInIntent: Intent = gsc.signInIntent
+        val signInIntent: Intent = GoogleLogin.gsc.signInIntent
 
         startActivityForResult(signInIntent, 1000)
         Log.d("LoginActivity", "Sign-in intent started")
     }
     fun signOut(){
-        gsc.signOut()
+        GoogleLogin.gsc.signOut()
     }
     fun auth(){
         val webView= WebView(this)
@@ -170,7 +173,9 @@ class LoginActivity : AppCompatActivity() {
                     Log.d("server code",acc)
                 }
                 //auth()
+                val userEmail=account.photoUrl
                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                intent.putExtra("email", userEmail)
                 startActivity(intent)
             } catch (e: ApiException) {
                 Toast.makeText(this, "Something went wrong: ${e.message}", Toast.LENGTH_SHORT)

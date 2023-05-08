@@ -260,10 +260,11 @@
                 android:layout_height="60dp"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/imageView6"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    app:shapeAppearanceOverlay="@style/Circular"
                     android:padding="5dp"
                     android:src="@drawable/guest_icon" />
 

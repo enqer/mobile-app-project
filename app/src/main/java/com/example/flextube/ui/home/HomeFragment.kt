@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
 import com.example.flextube.databinding.FragmentHomeBinding
 import com.example.flextube.api.ApiServices
+import com.example.flextube.interfaces.Formatter
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.video.AuthorVideo
 import com.example.flextube.video.Video
@@ -95,9 +96,9 @@ class HomeFragment : Fragment() {
                                 i.snippet.thumbnails.photoVideo.urlPhoto,
                                 i.contentDetails.duration,
                                 i.snippet.title,
-                                formatNumber(i.statistics.viewCount),
-                                formatNumber(i.statistics.likeCount),
-                                formatNumber(i.statistics.commentCount),
+                                Formatter.formatNumber(i.statistics.viewCount,requireContext()),
+                                Formatter.formatNumber(i.statistics.likeCount,requireContext()),
+                                Formatter.formatNumber(i.statistics.commentCount,requireContext()),
                                 i.snippet.publishedAt,
                                 i.player.embedHtml,
                                 i.player.embedHeight,
@@ -184,7 +185,7 @@ class HomeFragment : Fragment() {
                                     i.id,
                                     i.snippet.title,
                                     i.snippet.thumbnails.picture.url,
-                                    formatNumber(i.statistics.subscriberCount)
+                                    Formatter.formatNumber(i.statistics.subscriberCount,requireContext())
                                 )
                             )
                         }
@@ -201,28 +202,4 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    // returns -1 if the numer is disabled otherwise returns formatted number as string
-    fun formatNumber(number: String?): String {
-        if (number == null)
-            return "-1"
-        val suffixes = listOf(
-            "",
-            requireContext().resources.getString(R.string.num1000),
-            requireContext().resources.getString(R.string.num1000000),
-            requireContext().resources.getString(R.string.num1000000000)
-        )
-        var i = 0
-        var n = number.toDouble()
-        while (n >= 1000 && i < suffixes.size - 1) {
-            n /= 1000
-            i++
-        }
-        val formattedNumber = "%.1f".format(n)
-        return if (formattedNumber.endsWith(".0")) {
-            formattedNumber.substringBefore(".")
-        } else {
-            "$formattedNumber ${suffixes[i]}"
-        }
-    }
-
 }

@@ -7,7 +7,7 @@ class Shorts(
     val channelName: String,
     val channelId: String,
     val channelLogoUrl: String,
-    val likeCount: Long,
+    val likeCount: String,
     val dislikeCount: Long
 ) {
 

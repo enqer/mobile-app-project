@@ -1,6 +1,8 @@
 package com.example.flextube.settings
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -10,6 +12,7 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
@@ -18,7 +21,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatTextView
+import com.example.flextube.MainActivity
 import com.example.flextube.R
+import com.example.flextube.interfaces.GoogleLogin
+import com.example.flextube.login.LoginActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.squareup.picasso.Picasso
 import java.util.Locale
 
 
@@ -62,9 +72,23 @@ class SettingsActivity : AppCompatActivity() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener { sharedPreferences, key -> }
     }
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
+
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+        val signOut = findViewById<Button>(R.id.signOut)
+        val logo = findViewById<ImageView>(R.id.person_icon)
+        val author = findViewById<TextView>(R.id.name_TV)
+        Picasso.get().load(account.photoUrl.toString()).into(logo)
+        author.setText(account.displayName)
+
+        signOut.setOnClickListener{
+            GoogleLogin.gsc.signOut()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
         val closeButtonIcon = findViewById<ImageView>(R.id.close_button)
         val languageTv = findViewById<TextView>(R.id.language_TV)

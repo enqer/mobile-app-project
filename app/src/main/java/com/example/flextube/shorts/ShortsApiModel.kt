@@ -31,7 +31,7 @@ data class ShortsApiModel(
         )
         data class Statistics(
             @SerializedName("likeCount")
-            val likeCount: Long,
+            val likeCount: String,
 
             @SerializedName("dislikeCount")
             val dislikeCount: Long,

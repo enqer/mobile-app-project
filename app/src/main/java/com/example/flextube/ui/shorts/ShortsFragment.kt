@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.api.ApiServices
 import com.example.flextube.databinding.FragmentShortsBinding
+import com.example.flextube.interfaces.Formatter
 import com.example.flextube.shorts.Author
 import com.example.flextube.shorts.Shorts
 import com.example.flextube.shorts.ShortsAdapter
@@ -169,8 +170,6 @@ class ShortsFragment : Fragment() {
                 if (response.isSuccessful) {
                     val vid = response.body()
                     if (vid != null && authorList.size > 0) {
-                        Log.i("RETROFIT/ID", vid.items[0].id)
-                        Log.i("RETROFIT/CHANNELID", authorList[index].id)
                         var author = authorList[index]
                             for (i in vid.items) {
                                 for (j in authorList)
@@ -187,7 +186,7 @@ class ShortsFragment : Fragment() {
                                         i.snippet.channelTitle,
                                         i.snippet.channelId,
                                         author.urlLogo,
-                                        i.statistics.likeCount,
+                                        Formatter.formatNumber(i.statistics.likeCount,requireContext()),
                                         i.statistics.dislikeCount
                                     )
                                 )

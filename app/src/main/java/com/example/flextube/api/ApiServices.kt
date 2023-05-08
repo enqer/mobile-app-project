@@ -2,6 +2,7 @@ package com.example.flextube.api
 
 import android.util.Log
 import com.example.flextube.auth.TokenResponse
+import com.example.flextube.comment.CommentApiModel
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.shorts.ShortsApiModel
 import com.example.flextube.shorts.ShortsAuthorApiModel
@@ -23,11 +24,13 @@ interface ApiServices {
 
     // returns image date and name of channel
     @GET("search")
-    fun getVideos(
+    fun getSearchedVideos(
         @Query("part") part: String = "snippet",
-        @Query("maxResults") results: Int = 10,  // 10 filmów się wyświetli na głównej tylko defaultowo jest 5 na api
-        @Query("key") key: String = KEY
-    ): Call<VideoIdsApiModel>
+        @Query("key") key: String = KEY3,
+        @Query("q") q: String,
+        @Query("type") type: String = "video", // musi być ustawione jeśli chcemy videoEmbeddable
+        @Query("maxResults") maxResults: Int = 20  // 10 filmów się wyświetli na głównej tylko, defaultowo jest 5 na api
+    ) : Call<VideoIdsApiModel>
 
     // return views depends on id
     @GET("videos")
@@ -35,9 +38,10 @@ interface ApiServices {
         @Query("part") part: String = "contentDetails",
         @Query("part") part2: String = "statistics",
         @Query("part") part3: String = "snippet",
+        @Query("part") part4: String = "player",
         @Query("id") id: String,
-        @Query("key") key: String = KEY
-    ): Call<VideoApiModel>
+        @Query("key") key: String = KEY3
+    ) : Call<VideoApiModel>
 
     @GET("channels")
     fun getChannel(
@@ -46,6 +50,16 @@ interface ApiServices {
         @Query("id") id: String,
         @Query("key") key: String = KEY3
     ): Call<AuthorApiModel>
+
+    @GET("commentThreads")
+    fun getCommentsOfVideo(
+        @Query("part") part: String ="snippet",
+        @Query("order") order: String = "relevance",
+        @Query("videoId") videoId: String,
+        @Query("maxResults") results: Int = 40,
+        @Query("key") key: String = KEY3,
+        @Query("textFormat") textFormat: String = "plainText"
+    ) : Call<CommentApiModel>
 
     @GET("search")
     fun getShorts(
@@ -108,7 +122,7 @@ interface ApiServices {
     companion object {
         private final const val KEY = "AIzaSyDrvd66oJPdfjmm8c93lOSupl0ls71uDB8"
         private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
-        private final const val KEY3 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
+        private final const val KEY3 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
         var authToken: String = ""
 
 

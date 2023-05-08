@@ -13,9 +13,11 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Button
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
@@ -24,6 +26,8 @@ import com.example.flextube.comment.Comment
 import com.example.flextube.comment.CommentAdapter
 import com.example.flextube.comment.CommentApiModel
 import com.example.flextube.databinding.ActivityVideoBinding
+import com.example.flextube.interfaces.Formatter
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -48,6 +52,10 @@ class VideoActivity : AppCompatActivity() {
         binding = ActivityVideoBinding.inflate(layoutInflater)
 //        setContentView(R.layout.activity_video)
         setContentView(binding.root)
+
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+        val logo = binding.imageView6
+        Picasso.get().load(account.photoUrl.toString()).into(logo)
 
         mRecyclerView = binding.videoRecycleview
         mRecyclerView.setHasFixedSize(true)
@@ -176,7 +184,7 @@ class VideoActivity : AppCompatActivity() {
                                 i.snippet.topLevelComment.snip.textDisplay,
                                 i.snippet.topLevelComment.snip.authorDisplayName,
                                 i.snippet.topLevelComment.snip.authorProfileImageUrl,
-                                convertNumbers(i.snippet.topLevelComment.snip.likeCount.toString()),
+                                Formatter.formatNumber(i.snippet.topLevelComment.snip.likeCount.toString(),baseContext),
                                 i.snippet.topLevelComment.snip.publishedAt
                             )
                         )
@@ -197,40 +205,7 @@ class VideoActivity : AppCompatActivity() {
     }
 
     // converting numbers (example: 2.300 -> 2.3K)
-    private fun convertNumbers(num: String) : String{
-        var s = num.reversed()
-        var new = ""
-        var count = 0
-        for (i in s){
-            if (count == 3){
-                new += "."
-                count = 0
-            }
-            new += i
-            count++
-        }
-        var indexStart = 0
-        var amount = ""
-        if (new.length >= 12){
-            indexStart = 12
-            amount = baseContext.resources.getString(R.string.num1000000000)
-        }else if (new.length > 10){
-            indexStart = 8
-            amount = baseContext.resources.getString(R.string.num1000000)
-        } else if (new.length >= 9){
-            indexStart = 6
-            amount = baseContext.resources.getString(R.string.num1000000)
-        } else if (new.length > 4){
-            indexStart = 4
-            amount = baseContext.resources.getString(R.string.num1000)
-        } else if (new.length == 4){
-            indexStart = 2
-            amount = baseContext.resources.getString(R.string.num1000)
-        }
-        s = new.subSequence(indexStart, new.length).toString()
-        if ((indexStart == 4 || indexStart == 6) && s[0] == '0')
-            s = s.subSequence(2,s.length).toString()
-        return s.reversed() + amount
-    }
+
+
 }
 
