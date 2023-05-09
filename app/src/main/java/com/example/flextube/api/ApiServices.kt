@@ -185,7 +185,7 @@ interface ApiServices {
             Log.i("ret", authToken)
             return retrofit.create(ApiServices::class.java)
         }
-//        fun getRetrofit2(): ApiServices {
+        fun getRetrofit2(): ApiServices {
 //
 //    //: Call<PlaylistApiModel>
 //
@@ -209,13 +209,13 @@ interface ApiServices {
 //
 //        fun getRetrofit(): ApiServices {
 //
-//            val retrofit: Retrofit =
-//                Retrofit.Builder().baseUrl("https://oauth2.googleapis.com/")
-//                    .addConverterFactory(GsonConverterFactory.create())
-//                    .build()
-//            return retrofit.create(ApiServices::class.java)
-//
-//        }
+            val retrofit: Retrofit =
+                Retrofit.Builder().baseUrl("https://oauth2.googleapis.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+            return retrofit.create(ApiServices::class.java)
+
+        }
 //
 //    }
 //
