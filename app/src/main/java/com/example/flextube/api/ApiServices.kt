@@ -33,7 +33,7 @@ interface ApiServices {
     @GET("search")
     fun getSearchedVideos(
         @Query("part") part: String = "snippet",
-        @Query("key") key: String = KEY3,
+        @Query("key") key: String = KEY2,
         @Query("q") q: String,
         @Query("type") type: String = "video", // musi być ustawione jeśli chcemy videoEmbeddable
         @Query("maxResults") maxResults: Int = 20  // 10 filmów się wyświetli na głównej tylko, defaultowo jest 5 na api
@@ -47,7 +47,7 @@ interface ApiServices {
         @Query("part") part3: String = "snippet",
         @Query("part") part4: String = "player",
         @Query("id") id: String,
-        @Query("key") key: String = KEY3
+        @Query("key") key: String = KEY2
     ) : Call<VideoApiModel>
 
     @GET("channels")
@@ -55,7 +55,7 @@ interface ApiServices {
         @Query("part") part: String = "snippet",
         @Query("part") part2: String = "statistics",
         @Query("id") id: String,
-        @Query("key") key: String = KEY3
+        @Query("key") key: String = KEY2
     ): Call<AuthorApiModel>
 
     @GET("commentThreads")
@@ -64,7 +64,7 @@ interface ApiServices {
         @Query("order") order: String = "relevance",
         @Query("videoId") videoId: String,
         @Query("maxResults") results: Int = 40,
-        @Query("key") key: String = KEY3,
+        @Query("key") key: String = KEY2,
         @Query("textFormat") textFormat: String = "plainText"
     ) : Call<CommentApiModel>
     @GET("playlists")
@@ -82,9 +82,9 @@ interface ApiServices {
         @Query("part") part: String = "snippet",
         @Query("type") type: String = "video",
         @Query("videoDuration") videoDuration: String = "short",
-        @Query("key") key: String = KEY3,
+        @Query("key") key: String = KEY2,
         @Query("maxResults") results: Int = 5,
-        @Query("videoCategoryId") videoCategoryId: String = "17"
+        //@Query("videoCategoryId") videoCategoryId: String = "12"
     ): Call<VideoIdsApiModel>
 
     @GET("videos")
@@ -94,14 +94,14 @@ interface ApiServices {
         @Query("part") part3: String = "snippet",
         @Query("part") part4: String = "player",
         @Query("id") id: String,
-        @Query("key") key: String = KEY3
+        @Query("key") key: String = KEY2
     ): Call<ShortsApiModel>
     @GET("channels")
     fun getShortsChannel(
         @Query("part") part: String = "snippet",
         @Query("part") part2: String = "statistics",
         @Query("id") id: String,
-        @Query("key") key: String = KEY3
+        @Query("key") key: String = KEY2
     ): Call<ShortsAuthorApiModel>
 
 //    @POST("https://accounts.google.com/o/oauth2/v2/auth")
@@ -139,7 +139,7 @@ interface ApiServices {
         private final const val KEY = "AIzaSyDrvd66oJPdfjmm8c93lOSupl0ls71uDB8"
         //private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
         private final const val KEY3 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
-        const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
+        const val KEY2 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
         var authToken: String = ""
 
 
