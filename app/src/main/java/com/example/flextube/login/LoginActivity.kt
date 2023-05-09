@@ -42,8 +42,8 @@ import com.example.flextube.ui.library.LibraryViewModel
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var gso: GoogleSignInOptions
-    lateinit var gsc: GoogleSignInClient
+//    lateinit var gso: GoogleSignInOptions
+//    lateinit var gsc: GoogleSignInClient
     //val webView: WebView = WebView(this)
     // val webView: WebView = WebView(requireNotNull(this).applicationContext)
     lateinit var codeVerifier: String
@@ -58,11 +58,11 @@ class LoginActivity : AppCompatActivity() {
         val google: View = findViewById(com.example.flextube.R.id.google_area)
         val guest: View = findViewById(com.example.flextube.R.id.guest_area)
         val serverClientId = getString(com.example.flextube.R.string.id_client)
-        gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleLogin.gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(serverClientId)
             .requestEmail()
             .build()
-        gsc = GoogleSignIn.getClient(this, gso)
+        GoogleLogin.gsc = GoogleSignIn.getClient(this, gso)
 
 
         codeVerifier=generateCodeChallenge(generateCodeVerifier())
@@ -91,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun signIn() {
-        val signInIntent: Intent = gsc.signInIntent
+        val signInIntent: Intent = GoogleLogin.gsc.signInIntent
 
         startActivityForResult(signInIntent, 1000)
         Log.d("LoginActivity", "Sign-in intent started")
