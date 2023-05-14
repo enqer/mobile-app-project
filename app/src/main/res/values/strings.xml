@@ -25,10 +25,11 @@
     <string name="comments">Comments:</string>
     <string name="channelSubs">subscribers</string>
     <string name="sub">Subscribe</string>
+    <string name="subAdded">Subscribed</string>
     <string name="views">views</string>
     <string name="num1000">K</string>
     <string name="num1000000">M</string>
     <string name="num1000000000">B</string>
     <string name="noComments">Comments are disabled.</string>
-
+    <string name="addComment">Add comment</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.example.flextube.ui.home
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flextube.R
 import com.example.flextube.databinding.FragmentHomeBinding
 import com.example.flextube.api.ApiServices
 
@@ -197,9 +195,7 @@ class HomeFragment : Fragment() {
 
                         // END OF RESTARTING DATABASE CODE
 
-                        if (cursor != null) {
-                            cursor.close()
-                        }
+                        cursor?.close()
                         // End of SQLite
 
 
@@ -296,32 +292,4 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
-
-    // returns -1 if the numer is disabled otherwise returns formatted number as string
-    fun formatNumber(number: String?): String {
-        if (number == null)
-            return "-1"
-        val suffixes = listOf(
-            "",
-            requireContext().resources.getString(R.string.num1000),
-            requireContext().resources.getString(R.string.num1000000),
-            requireContext().resources.getString(R.string.num1000000000)
-        )
-        var i = 0
-        var n = number.toDouble()
-        while (n >= 1000 && i < suffixes.size - 1) {
-            n /= 1000
-            i++
-        }
-        val formattedNumber = "%.1f".format(n)
-        return if (formattedNumber.endsWith(".0")) {
-            formattedNumber.substringBefore(".")
-        } else {
-            "$formattedNumber ${suffixes[i]}"
-        }
-    }
-
-
 }

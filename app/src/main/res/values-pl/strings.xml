@@ -24,10 +24,11 @@
     <string name="comments">Komentarze:</string>
     <string name="channelSubs">subskrypcji</string>
     <string name="sub">Subskrybuj</string>
+    <string name="subAdded">Zasubskrybowany</string>
     <string name="views">wyświetleń</string>
     <string name="num1000">tys.</string>
     <string name="num1000000">mln</string>
     <string name="num1000000000">mld</string>
     <string name="noComments">Komentarze są wyłączone.</string>
-
+    <string name="addComment">Dodaj komentarz</string>
 </resources>
