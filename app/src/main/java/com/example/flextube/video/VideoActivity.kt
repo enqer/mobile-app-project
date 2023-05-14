@@ -226,9 +226,8 @@ class VideoActivity : AppCompatActivity() {
         binding.addComment.setOnClickListener {
             val comment = binding.commentContent.text
             if (comment.isNotEmpty()){
-                val sdf = SimpleDateFormat("yyyy-mm-dd")
+                val sdf = SimpleDateFormat("yyyy-MM-dd")
                 val currentDate = sdf.format(Date())
-//                val logo = binding.userLogo.geti
                 commentList.add(0,
                     Comment(
                         "qw321qwe321",
