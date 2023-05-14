@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
 import com.squareup.picasso.Picasso
@@ -23,6 +24,7 @@ class CommentAdapter(
                 var commmentAuthorLogo: ImageView
                 var commentText: TextView
                 var commentLike: TextView
+                var likeLayout: ConstraintLayout
                 private var context: Context
 
                 init {
@@ -32,6 +34,7 @@ class CommentAdapter(
                     commentText = itemView.findViewById(R.id.item_comment_text)
                     commentLike = itemView.findViewById(R.id.item_comment_like)
                     context = itemView.context
+                    likeLayout = itemView.findViewById(R.id.item_like)
                 }
 
     }
@@ -51,5 +54,6 @@ class CommentAdapter(
         holder.commentAuthorInfo.text = currentItem.author + " ∙ " + currentItem.publishedAt
         holder.commentText.text = currentItem.text
         holder.commentLike.text = currentItem.likeCount.toString()
+
     }
 }
