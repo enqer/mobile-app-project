@@ -58,8 +58,8 @@ class VideoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val account = GoogleSignIn.getLastSignedInAccount(this)
-//        val logo = binding.imageView6
-//        Picasso.get().load(account.photoUrl.toString()).into(logo)
+        val logo = binding.userLogo
+        Picasso.get().load(account?.photoUrl.toString()).into(logo)
 
         mRecyclerView = binding.videoRecycleview
         mRecyclerView.setHasFixedSize(true)
@@ -228,16 +228,19 @@ class VideoActivity : AppCompatActivity() {
             if (comment.isNotEmpty()){
                 val sdf = SimpleDateFormat("yyyy-MM-dd")
                 val currentDate = sdf.format(Date())
-                commentList.add(0,
-                    Comment(
-                        "qw321qwe321",
-                        comment.toString(),
-                        "Hugo",
-                        "https://yt3.ggpht.com/JznZM_24hwJY-38C39RzvL4NjVBPQw9o9PKYz8fkgAGlDIel3R2Xij6Sdkt1HkaSClAFu3Vk=s240-c-k-c0x00ffffff-no-rj",
-                        "0",
-                        currentDate+"T"
+                if (account != null) {
+                    commentList.add(0,
+                        Comment(
+                            "qw321qwe321",
+                            comment.toString(),
+                            account.displayName.toString(),
+            //                        "https://yt3.ggpht.com/JznZM_24hwJY-38C39RzvL4NjVBPQw9o9PKYz8fkgAGlDIel3R2Xij6Sdkt1HkaSClAFu3Vk=s240-c-k-c0x00ffffff-no-rj",
+                            account.photoUrl.toString(),
+                            "0",
+                            currentDate+"T"
+                        )
                     )
-                )
+                }
                 mRecyclerView.setHasFixedSize(true)
                 mAdapter = CommentAdapter(commentList)
                 mRecyclerView.layoutManager = mLayoutManager
