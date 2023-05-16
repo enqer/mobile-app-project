@@ -1,7 +1,7 @@
 package com.example.flextube.ui.home
 
-import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,13 +12,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
-import com.example.flextube.databinding.FragmentHomeBinding
 import com.example.flextube.api.ApiServices
-
-import com.example.flextube.interfaces.Formatter
-
 import com.example.flextube.database.DatabaseHelper
-
+import com.example.flextube.databinding.FragmentHomeBinding
+import com.example.flextube.interfaces.Formatter
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.video.AuthorVideo
 import com.example.flextube.video.Video
@@ -30,6 +27,11 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+
 
 class HomeFragment : Fragment() {
 
@@ -136,69 +138,69 @@ class HomeFragment : Fragment() {
                         // Save and store data in SQLite
                         val idValue = video.id
                         val urlPhotoValue = video.urlPhoto
-
-
+                        val durationValue = video.duration
                         val titleValue = video.title
+                        val viewCountValue = video.viewCount
+                        val likeCountValue = video.likeCount
+                        //val commentCountValue = video.commentCount
+
                         val authorVideoValue = video.authorVideo.name
 
-//                        --val id: String,
-//                        val urlPhoto: String,
-//                        var duration: String,
-//                        --val title: String,
-//                        var viewCount: String,
-//                        var likeCount: String,
+//                        ----val id: String,
+//                        ----val urlPhoto: String,
+//                        ????var duration: String,
+//                        ----val title: String,
+//                        ----var viewCount: String,
+//                        ----var likeCount: String,
 //                        val commentCount: String,
 //                        var publishedDate: String,
 //                        val playerHtml: String,
 //                        val playerHeight: Long,
 //                        val playerWidth: Long,
-//                        --val authorVideo: AuthorVideo
+//                        ----val authorVideo: AuthorVideo
 
+
+                        val databaseVersion: String = "my_table12"
                         val insertQuery =
-                            "INSERT INTO my_table8 (video_id, urlPhotoValue, titleValue, authorVideo) VALUES ('$idValue', '$urlPhotoValue', '$titleValue', '$authorVideoValue')"
+                            "INSERT INTO $databaseVersion (" +
+                                    "video_id, " +
+                                    "urlPhotoValue, " +
+                                    "durationValue, " +
+                                    "titleValue, " +
+                                    "viewCountValue, " +
+                                    "likeCountValue, " +
+                                    "authorVideo" +
+                                    ") VALUES ('" +
+                                    "$idValue', " +
+                                    "'$urlPhotoValue', " +
+                                    "'$durationValue', " +
+                                    "'${titleValue.replace("'", "''").replace("\"", "\"\"")}', " +
+                                    "'$viewCountValue', " +
+                                    "'$likeCountValue'," +
+                                    "'$authorVideoValue')"
                         db?.execSQL(insertQuery)
 
 
-                        val selectQuery = "SELECT video_id, urlPhotoValue, titleValue, authorVideo FROM my_table8"
-                        val cursor = db?.rawQuery(selectQuery, null)
+//                        val selectQuery = "SELECT video_id, urlPhotoValue, durationValue, titleValue, authorVideo FROM "+ databaseVersion
+//                        val cursor = db?.rawQuery(selectQuery, null)
 
-                        if (cursor != null) {
-                            if (cursor.moveToFirst()) {
-                                if (cursor != null) {
-                                    do {
-                                        val idIndex = cursor.getColumnIndex("video_id")
-                                        val idValue = cursor.getString(idIndex)
-
-                                        val urlPhotoValueIndex = cursor.getColumnIndex("urlPhotoValue")
-                                        val urlPhotoValue = cursor.getString(urlPhotoValueIndex)
-
-                                        val titleValueIndex = cursor.getColumnIndex("titleValue")
-                                        val titleValue = cursor.getString(titleValueIndex)
-
-                                        val authorVideoIndex = cursor.getColumnIndex("authorVideo")
-                                        val authorVideoValue = cursor.getString(authorVideoIndex)
-                                        Log.d(
-                                            "MyApp",
-                                            "Pobrana wartość: $idValue, $urlPhotoValue, $titleValue, $authorVideoValue"
-                                        )
-                                    } while (cursor.moveToNext())
-                                }
-                            }
-                        }
 
                         // CODE REQUIRED TO RESET ALL ITEMS IN DATABASE
                         // UNCOMMENT THAT LINES AND CLICK THE BUTTON
                         // THEN SHUT DOWN YOUR APP AND COMMENT THAT LINES AGAIN
 
-//                                    val deleteQuery = "DELETE FROM my_table8"
+//                                    val deleteQuery = "DELETE FROM "+ databaseVersion
 //                                    if (db != null) {
 //                                        db.execSQL(deleteQuery)
 //                                    }
 
                         // END OF RESTARTING DATABASE CODE
 
-                        if (cursor != null) {
-                            cursor.close()
+//                        if (cursor != null) {
+//                            cursor.close()
+//                        }
+                        if (dbHelper != null) {
+                            dbHelper.close()
                         }
                         // End of SQLite
 

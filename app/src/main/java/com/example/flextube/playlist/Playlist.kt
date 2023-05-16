@@ -5,7 +5,5 @@ data class Playlist(
     val title: String,
     val description: String,
     val thumbnailUrl: String,
-    //val name: String,
-    //val elements: Int,
     val itemCount: Int
 )

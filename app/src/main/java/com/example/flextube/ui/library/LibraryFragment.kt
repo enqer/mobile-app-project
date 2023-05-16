@@ -54,33 +54,13 @@ class LibraryFragment : Fragment() {
         return binding.root
     }
 
-//    // Better option to add functions or code to execute
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        Log.d(TAG, "LibraryFragment/onViewCreated -> Start thinking, apes together strong")
-//
-////        val imageView = view.findViewById<ImageView>(R.id.person_icon)
-////
-////        // Start new activity (SettingsActivity)
-////        imageView.setOnClickListener {
-////            Log.d(TAG,"LibraryFragment/onViewCreated/imageView.setOnClickListener -> Start new activity")
-////
-////            val intent = Intent(activity, SettingsActivity::class.java)
-////            startActivity(intent)
-////        }
-//
-//        readDatabase()
-//        //getPlaylist()
-//
-//
-//    }
-
     private fun readDatabase() {
+        val databaseVersion: String = "my_table12"
+
         val dbHelper = context?.let { DatabaseHelper(it) }
         val db = dbHelper?.writableDatabase
 
-        val selectQuery = "SELECT video_id, urlPhotoValue, authorVideo, titleValue FROM my_table8"
+        val selectQuery = "SELECT * FROM $databaseVersion ORDER BY id DESC"
 
         val cursor = db?.rawQuery(selectQuery, null)
 
@@ -94,14 +74,23 @@ class LibraryFragment : Fragment() {
                         val urlPhotoValueIndex = cursor.getColumnIndex("urlPhotoValue")
                         val urlPhotoValue = cursor.getString(urlPhotoValueIndex)
 
+                        val durationIndex = cursor.getColumnIndex("durationValue")
+                        val durationValue = cursor.getString(durationIndex)
+
                         val titleValueIndex = cursor.getColumnIndex("titleValue")
                         val titleValue = cursor.getString(titleValueIndex)
+
+                        val viewCountValueIndex = cursor.getColumnIndex("viewCountValue")
+                        val viewCountValue = cursor.getString(viewCountValueIndex)
+
+                        val likeCountValueIndex = cursor.getColumnIndex("likeCountValue")
+                        val likeCountValue = cursor.getString(likeCountValueIndex)
 
                         val authorVideoIndex = cursor.getColumnIndex("authorVideo")
                         val authorVideoValue = cursor.getString(authorVideoIndex)
                         Log.d(
                             "MyApp",
-                            "Pobrana wartość: $idValue, $urlPhotoValue, $titleValue, $authorVideoValue"
+                            "Pobrana wartość: $idValue, $urlPhotoValue, $durationValue, $titleValue, $viewCountValue, $likeCountValue, $authorVideoValue"
                         )
                         historyList.add(
                             Video(
@@ -109,8 +98,8 @@ class LibraryFragment : Fragment() {
                                 urlPhotoValue,
                                 "PT47S",
                                 titleValue,
-                                "30",
-                                "30",
+                                viewCountValue,
+                                likeCountValue,
                                 "30",
                                 "2023-05-07T08:30:09Z",
                                 "i.player.embedHtml",
