@@ -60,7 +60,6 @@ class ShortsFragment : Fragment() {
         mRecyclerView = _binding!!.shortsRecyclerview
         mRecyclerView.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
-        Log.d("dd",ApiServices.authToken)
         val snapHelper: LinearSnapHelper = object : LinearSnapHelper() {
             override fun findTargetSnapPosition(
                 layoutManager: RecyclerView.LayoutManager,
@@ -94,16 +93,12 @@ class ShortsFragment : Fragment() {
         mRecyclerView.layoutManager = mLayoutManager
 
         getIDsOfVideos()
-        Log.i("lista short", shortList.size.toString())
-        Log.i("lista title", authorsLogosList.size.toString())
-
         return root
     }
 
     private fun getIDsOfVideos(){
         val api = ApiServices.getRetrofit()
         val ids: Call<VideoIdsApiModel> = api.getShorts()
-        Log.i("RETROFIT", "getID")
         ids.enqueue(object : Callback<VideoIdsApiModel>{
             override fun onResponse(call: Call<VideoIdsApiModel>, response: Response<VideoIdsApiModel>) {
                 if (response.isSuccessful){
@@ -119,10 +114,8 @@ class ShortsFragment : Fragment() {
                 }
             }
             override fun onFailure(call: Call<VideoIdsApiModel>, t: Throwable) {
-                Log.i("Retrofit/Id", t.stackTraceToString())
             }
         })
-        Log.i("dziala","dfd")
     }
     private fun getAuthors(id:String){
         val api = ApiServices.getRetrofit()
@@ -142,13 +135,11 @@ class ShortsFragment : Fragment() {
                             )
 
                             )
-                            Log.i("logo", i.snippet.thumbnails.picture.url)
                         }
                     }
                 }
             }
             override fun onFailure(call: Call<ShortsAuthorApiModel>, t: Throwable) {
-                Log.i("Retrofit/IdChannel", t.stackTraceToString())
             }
         })
     }

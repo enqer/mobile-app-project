@@ -134,7 +134,6 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("kod autoryzacyjny",code)
                 if (response.isSuccessful) {
                     val result = response.body()
-                    Log.d("tak","git")
                     if (result != null) {
                          Log.d("token", result.accessToken.toString())
                         //ApiServices.authToken = result.accessToken
