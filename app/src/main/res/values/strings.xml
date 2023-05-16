@@ -30,5 +30,6 @@
     <string name="num1000000">M</string>
     <string name="num1000000000">B</string>
     <string name="noComments">Comments are disabled.</string>
+    <string name="signOut">SIGN OUT</string>
 
 </resources>

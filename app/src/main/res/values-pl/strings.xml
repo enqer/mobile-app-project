@@ -29,5 +29,6 @@
     <string name="num1000000">mln</string>
     <string name="num1000000000">mld</string>
     <string name="noComments">Komentarze są wyłączone.</string>
+    <string name="signOut">WYLOGUJ SIĘ</string>
 
 </resources>

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/white"
     android:minHeight="?attr/actionBarSize"
     android:theme="?attr/actionBarTheme"
     android:padding="5dp"
-
-    >
+    android:background="?attr/customBgColor">
 
     <ImageView
         android:layout_width="80dp"
@@ -17,27 +16,29 @@
         android:layout_gravity="left"
         android:layout_marginRight="30dp"
         />
+
     <EditText
         android:id="@+id/searchQ"
         android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:paddingLeft="10dp"
-        android:hint="Search..."
-        android:maxLines="1"
-        android:lines="1"
-        android:focusable="true"
-        android:inputType="text"
-        android:imeOptions="actionSearch"
+        android:layout_gravity="fill_horizontal"
         android:layout_marginRight="10dp"
         android:background="@drawable/background_search"
-        android:layout_gravity="fill_horizontal"
-        />
+        android:focusable="true"
+        android:hint="Search..."
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLines="1"
+        android:paddingLeft="10dp"
+        tools:ignore="TouchTargetSizeCheck" />
+
     <ImageButton
         android:id="@+id/toSettings"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:src="@drawable/google_icon"
-        android:background="@android:color/transparent"
         android:layout_gravity="right"
-        />
+        android:background="?attr/customBgColor"
+        android:src="@drawable/google_icon"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 </androidx.appcompat.widget.Toolbar>
