@@ -19,5 +19,8 @@
 
         <item name="customBgColor">@color/white</item>
         <item name="customIconColor">@color/black</item>
+        <item name="customBgColorFormatter">@color/lightGrey</item>
+        <item name="customBgColorEditor">@color/greyful</item>
+        <item name="customIconColorBright">@color/black</item>
     </style>
 </resources>

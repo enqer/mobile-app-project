@@ -24,6 +24,7 @@
 
             <TextView
                 android:id="@+id/TV_playlist_name"
+                android:textColor="?attr/customIconColor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="140dp"
@@ -34,6 +35,7 @@
 
             <TextView
                 android:id="@+id/TV_playlist_elements"
+                android:textColor="?attr/customBgColorEditor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="140dp"

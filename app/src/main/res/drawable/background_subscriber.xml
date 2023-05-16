@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/black">
+    android:background="?attr/customIconColorBright">
 <!--    <solid android:background="@color/black"/>-->
 
 <!--    <stroke-->
 <!--        android:width="3dp"-->
 <!--        android:color="@color/black"/>-->
 
-    <gradient android:startColor="@color/blackly"
-            android:endColor="@color/blackly"
+    <gradient android:startColor="?attr/customIconColorBright"
+            android:endColor="?attr/customIconColorBright"
         android:angle="90"/>
 
     <padding

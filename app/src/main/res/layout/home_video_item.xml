@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?attr/customBgColor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,14 +58,15 @@
                 <TextView
                     android:id="@+id/videoTitle"
                     style="@style/fragmentHome_videoInfo_textView"
-                    android:textColor="@color/black"
                     android:textSize="20sp"
                     android:maxLines="2"
                     android:ellipsize="end"
+                    android:textColor="?attr/customIconColor"
                     android:text="Title" />
 
                 <TextView
                     android:id="@+id/videoInfo"
+                    android:textColor="?attr/customBgColorEditor"
                     style="@style/fragmentHome_videoInfo_textView"
                     android:text="Account name @ 300 mln views @ 2 months ago" />
 

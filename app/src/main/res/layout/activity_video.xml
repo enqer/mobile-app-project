@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".video.VideoActivity">
+    tools:context=".video.VideoActivity"
+    android:background="?attr/customBgColor">
 
     <WebView
         android:id="@+id/videoDisplay"
@@ -50,13 +51,14 @@
                 style="@style/activityVideo_videoInfo_textView"
                 android:text="TextView"
                 android:textSize="22sp"
+                android:textColor="?attr/customIconColor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/videoDisplay" />
 
             <TextView
                 android:id="@+id/item_video_info"
                 style="@style/activityVideo_videoInfo_textView"
-                android:textColor="@color/greyful"
+                android:textColor="?attr/customBgColorEditor"
                 android:text="TextView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/item_video_title" />
@@ -103,6 +105,7 @@
                     android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:text="32tyś"
+                    android:textColor="?attr/customIconColor"
                     android:textAlignment="textStart" />
             </LinearLayout>
 
@@ -181,12 +184,13 @@
                     android:layout_weight="1"
                     android:text="TextView"
                     android:textAlignment="textStart"
+                    android:textColor="?attr/customIconColor"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/item_video_channelSubs"
                     style="@style/activityVideo_text_TextView"
-                    android:textColor="@color/greyful"
+                    android:textColor="?attr/customBgColorEditor"
                     android:text="TextView"
                     android:textAlignment="textStart" />
             </LinearLayout>
@@ -228,6 +232,7 @@
                     style="@style/activityVideo_comment_textView"
                     android:text="@string/comments"
                     android:textStyle="bold"
+                    android:textColor="?attr/customIconColor"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -259,6 +264,7 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:visibility="invisible"
+                    android:textColor="?attr/customIconColor"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -284,9 +290,9 @@
                     android:layout_width="0dp"
                     android:layout_height="60dp"
                     android:layout_weight="1"
-                    android:textColorHighlight="@color/blackly"
+                    android:textColorHighlight="?attr/customBgColorEditor"
                     android:hint="@string/addComment"
-                    android:textColorLink="@color/blackly" />
+                    android:textColorLink="?attr/customBgColorEditor" />
 
                 <ImageButton
                     android:id="@+id/addComment"
@@ -304,7 +310,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/videoRecycleview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/customIconColor"
+                    />
             </LinearLayout>
 
         </LinearLayout>

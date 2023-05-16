@@ -47,12 +47,12 @@
 
             <ImageView
                 android:id="@+id/shortsLike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
                 android:background="#00000000"
-                android:src="@drawable/like_30dp"
+                android:src="@drawable/thumbs_up"
                 app:layout_constraintBottom_toTopOf="@+id/likeCount"
                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -70,11 +70,11 @@
                 app:layout_constraintEnd_toEndOf="parent" />
             <ImageView
                 android:id="@+id/shortsDislike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="4dp"
-                android:src="@drawable/dislike_30dp"
+                android:src="@drawable/thumbs_down"
                 app:layout_constraintBottom_toTopOf="@+id/dislikeCount"
                 app:layout_constraintEnd_toEndOf="parent">
 

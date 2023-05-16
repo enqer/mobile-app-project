@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <gradient android:startColor="@color/lightGrey"
-        android:endColor="@color/lightGrey"
+    <gradient android:startColor="?attr/customBgColorFormatter"
+        android:endColor="?attr/customBgColorFormatter"
         android:angle="90"/>
 
     <padding

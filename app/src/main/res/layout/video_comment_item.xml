@@ -34,12 +34,13 @@
             <TextView
                 android:id="@+id/item_comment_info"
                 style="@style/commentItem_commentInfo_textView"
-                android:textColor="@color/grey"
+                android:textColor="?attr/customBgColorEditor"
                 android:text="TextView" />
 
             <TextView
                 android:id="@+id/item_comment_text"
                 style="@style/commentItem_commentInfo_textView"
+                android:textColor="?attr/customIconColor"
                 android:text="TextView" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,6 +65,7 @@
                     android:layout_marginLeft="5dp"
                     android:text="32"
                     android:textSize="18dp"
+                    android:textColor="?attr/customIconColor"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/item_comment_likeIcon"
                     app:layout_constraintTop_toTopOf="parent" />
