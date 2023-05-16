@@ -22,7 +22,7 @@ interface Formatter {
             }
             val formattedNumber = "%.1f".format(n)
             return if (formattedNumber.endsWith(".0")) {
-                formattedNumber.substringBefore(".")
+                formattedNumber.substringBefore(".") + suffixes[i]
             } else {
                 "$formattedNumber ${suffixes[i]}"
             }

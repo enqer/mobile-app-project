@@ -196,12 +196,16 @@ class HomeFragment : Fragment() {
 
                         // END OF RESTARTING DATABASE CODE
 
+/* KONFLIKT
 //                        if (cursor != null) {
 //                            cursor.close()
 //                        }
                         if (dbHelper != null) {
                             dbHelper.close()
                         }
+===
+                        cursor?.close()
+*/
                         // End of SQLite
 
 
@@ -298,32 +302,4 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
-
-    // returns -1 if the numer is disabled otherwise returns formatted number as string
-    fun formatNumber(number: String?): String {
-        if (number == null)
-            return "-1"
-        val suffixes = listOf(
-            "",
-            requireContext().resources.getString(R.string.num1000),
-            requireContext().resources.getString(R.string.num1000000),
-            requireContext().resources.getString(R.string.num1000000000)
-        )
-        var i = 0
-        var n = number.toDouble()
-        while (n >= 1000 && i < suffixes.size - 1) {
-            n /= 1000
-            i++
-        }
-        val formattedNumber = "%.1f".format(n)
-        return if (formattedNumber.endsWith(".0")) {
-            formattedNumber.substringBefore(".")
-        } else {
-            "$formattedNumber ${suffixes[i]}"
-        }
-    }
-
-
 }

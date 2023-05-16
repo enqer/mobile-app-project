@@ -1,8 +1,9 @@
 package com.example.flextube.video
 
 
+
 import android.annotation.SuppressLint
-import android.opengl.Visibility
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -13,11 +14,12 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Button
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
@@ -33,6 +35,8 @@ import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class VideoActivity : AppCompatActivity() {
@@ -46,7 +50,7 @@ class VideoActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("MissingInflatedId", "ClickableViewAccessibility")
+    @SuppressLint("MissingInflatedId", "ClickableViewAccessibility", "ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoBinding.inflate(layoutInflater)
@@ -54,8 +58,8 @@ class VideoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val account = GoogleSignIn.getLastSignedInAccount(this)
-        val logo = binding.imageView6
-        Picasso.get().load(account.photoUrl.toString()).into(logo)
+//        val logo = binding.imageView6
+//        Picasso.get().load(account.photoUrl.toString()).into(logo)
 
         mRecyclerView = binding.videoRecycleview
         mRecyclerView.setHasFixedSize(true)
@@ -164,6 +168,83 @@ class VideoActivity : AppCompatActivity() {
             belowedLayout = !belowedLayout
         }
 
+        // addLike
+        var isLikeAdded = false
+        var isDisLikeAdded = false
+        val like = binding.addLike
+        like.setOnClickListener {
+            if (isDisLikeAdded){
+                binding.itemVideoDislikeImg.setImageResource(R.drawable.dislike_v2)
+                isDisLikeAdded = !isDisLikeAdded
+            }
+            val likeImg = binding.itemVideoLikeImg
+            isLikeAdded = if (isLikeAdded){
+
+                likeImg.setImageResource(R.drawable.like_v2)
+                !isLikeAdded
+            }else {
+                likeImg.setImageResource(R.drawable.ic_like_ful)
+                !isLikeAdded
+            }
+        }
+        // addDisLike
+
+        binding.addDisLike.setOnClickListener {
+            if (isLikeAdded){
+                binding.itemVideoLikeImg.setImageResource(R.drawable.like_v2)
+                isLikeAdded=!isLikeAdded
+            }
+            isDisLikeAdded = if (isDisLikeAdded){
+                binding.itemVideoDislikeImg.setImageResource(R.drawable.dislike_v2)
+                !isDisLikeAdded
+            }else {
+                binding.itemVideoDislikeImg.setImageResource(R.drawable.ic_dislike_full)
+                !isDisLikeAdded
+            }
+        }
+
+        // add subscribe
+        var isSubAdded = false
+        val sub = binding.addSubscribe
+        sub.setOnClickListener {
+//            val unwrappedDrawable = AppCompatResources.getDrawable(baseContext, R.drawable.background_subscriber)
+//            val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable!!)
+//            DrawableCompat.setTint(wrappedDrawable, ContextCompat.getColor(applicationContext, R.color.greyly))
+            isSubAdded = if (isSubAdded){
+                sub.setBackgroundResource(R.drawable.background_subscriber)
+                sub.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
+                sub.text = baseContext.resources.getString(R.string.sub)
+                !isSubAdded
+            }else {
+                sub.setBackgroundResource(R.drawable.background_subscriber_added)
+                sub.setTextColor(ContextCompat.getColor(applicationContext, R.color.blackly))
+                sub.text = baseContext.resources.getString(R.string.subAdded)
+                !isSubAdded
+            }
+        }
+
+        binding.addComment.setOnClickListener {
+            val comment = binding.commentContent.text
+            if (comment.isNotEmpty()){
+                val sdf = SimpleDateFormat("yyyy-MM-dd")
+                val currentDate = sdf.format(Date())
+                commentList.add(0,
+                    Comment(
+                        "qw321qwe321",
+                        comment.toString(),
+                        "Hugo",
+                        "https://yt3.ggpht.com/JznZM_24hwJY-38C39RzvL4NjVBPQw9o9PKYz8fkgAGlDIel3R2Xij6Sdkt1HkaSClAFu3Vk=s240-c-k-c0x00ffffff-no-rj",
+                        "0",
+                        currentDate+"T"
+                    )
+                )
+                mRecyclerView.setHasFixedSize(true)
+                mAdapter = CommentAdapter(commentList)
+                mRecyclerView.layoutManager = mLayoutManager
+                mRecyclerView.adapter = mAdapter
+//                mAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
     //getting comments by id of video
@@ -203,8 +284,6 @@ class VideoActivity : AppCompatActivity() {
             }
         })
     }
-
-    // converting numbers (example: 2.300 -> 2.3K)
 
 
 }

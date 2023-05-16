@@ -117,11 +117,11 @@ interface ApiServices {
     @POST("token")
     @FormUrlEncoded
     fun getToken(
+        @Field("client_id") clientId: String = "469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com",
+        @Field("client_secret") clientSecret: String = "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",
+        @Field("redirect_uri") redirectUri: String = "http://localhost:8080",
+        @Field("code_challenge") codeVerifier: String,
         @Field("code") code: String,
-        @Field("client_id") clientId: String = "469398138855-2qgn9emqks2dv1ou3mfcoo1upenj854e.apps.googleusercontent.com",
-        @Field("client_secret") clientSecret: String = "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",
-        @Field("redirect_uri") redirectUri: String = "http://127.0.0.1:9004",
-        @Field("code_verifier") codeVerifier: String,
         @Field("grant_type") grantType: String = "authorization_code"
     ): Call<TokenResponse>
 
@@ -148,7 +148,6 @@ interface ApiServices {
                 .addInterceptor { chain ->
                     val original = chain.request()
                     val requestBuilder = original.newBuilder()
-                        .header("Content-Type", "application/x-www-form-urlencoded")
                     val request = requestBuilder.build()
                     chain.proceed(request)
                 }

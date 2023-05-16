@@ -80,35 +80,43 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout10">
 
             <LinearLayout
+                android:id="@+id/addLike"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:clickable="true"
+                android:focusable="true">
 
                 <ImageView
-                    android:id="@+id/eqweqwe"
+                    android:id="@+id/item_video_like_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textAlignment="textEnd"
-                    app:srcCompat="@drawable/like_v2" />
+                    android:src="@drawable/like_v2"
+                     />
 
                 <TextView
                     android:id="@+id/item_video_like"
                     style="@style/activityVideo_text_TextView"
                     android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:text="32tyś"
                     android:textAlignment="textStart" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/addDisLike"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:clickable="true"
+                android:orientation="vertical"
+                android:focusable="true">
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/item_video_dislike_img"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/dislike_v2" />
@@ -117,10 +125,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/addToPlaylist"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
 
                 <ImageView
                     android:id="@+id/imageView4"
@@ -181,7 +192,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/addSubscribe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -261,21 +272,24 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/imageView6"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:id="@+id/userLogo"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     app:shapeAppearanceOverlay="@style/Circular"
                     android:padding="5dp"
                     android:src="@drawable/guest_icon" />
 
                 <EditText
-                    android:layout_width="wrap_content"
+                    android:id="@+id/commentContent"
+                    android:layout_width="0dp"
                     android:layout_height="60dp"
                     android:layout_weight="1"
-                    android:textColorHint="@color/black" />
+                    android:textColorHighlight="@color/blackly"
+                    android:hint="@string/addComment"
+                    android:textColorLink="@color/blackly" />
 
                 <ImageButton
-                    android:id="@+id/imageButton2"
+                    android:id="@+id/addComment"
                     android:layout_width="40dp"
                     android:layout_height="60dp"
                     android:background="@android:color/transparent"
