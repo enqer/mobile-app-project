@@ -100,11 +100,16 @@ class LoginActivity : AppCompatActivity() {
         GoogleLogin.gsc.signOut()
     }
     fun auth(){
+
         val webView= WebView(this)
+        val alertDialogBuilder = AlertDialog.Builder(this)
+        alertDialogBuilder.setTitle("Autoryzacja użytkownika")
+        alertDialogBuilder.setView(webView)
+        alertDialogBuilder.create().show()
         val settings: WebSettings = webView.settings
         settings.userAgentString = "Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36"
         webView.settings.javaScriptEnabled = true
-        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2qgn9emqks2dv1ou3mfcoo1upenj854e.apps.googleusercontent.com&redirect_uri=http://127.0.0.1:9004&response_type=code&scope=https://www.googleapis.com/auth/youtube")
+        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com&redirect_uri=http://localhost:8080&response_type=code&scope=https://www.googleapis.com/auth/youtube")
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
@@ -117,10 +122,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
-        val alertDialogBuilder = AlertDialog.Builder(this@LoginActivity)
-        alertDialogBuilder.setTitle("Auto")
-        alertDialogBuilder.setView(webView)
-        alertDialogBuilder.create().show()
+
     }
     fun getAuthToken(code:String,codeVerifier: String){
         val apiService = ApiServices.getClient()
@@ -134,8 +136,8 @@ class LoginActivity : AppCompatActivity() {
                     val result = response.body()
                     Log.d("tak","git")
                     if (result != null) {
-                        Log.d("token", result.accessToken.toString())
-                        ApiServices.authToken = result.accessToken
+                         Log.d("token", result.accessToken.toString())
+                        //ApiServices.authToken = result.accessToken
                     }
                 }
             }
@@ -180,10 +182,10 @@ class LoginActivity : AppCompatActivity() {
                 if (acc != null) {
                     Log.d("server code",acc)
                 }
-                //auth()
+                auth()
                 val userEmail=account.photoUrl
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                intent.putExtra("email", userEmail)
+//                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//                intent.putExtra("email", userEmail)
                 startActivity(intent)
             } catch (e: ApiException) {
                 Log.d("test", e.message.toString())
