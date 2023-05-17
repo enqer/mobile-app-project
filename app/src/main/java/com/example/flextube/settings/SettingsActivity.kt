@@ -30,6 +30,7 @@ import java.util.Locale
 
 class SettingsActivity : AppCompatActivity() {
 
+    private var selectedLanguage: String? = null
     lateinit var switch1: Switch
     private val DARK_MODE_PREF = "darkModePref"
     private val LANGUAGE_PREF = "languagePref"
@@ -70,7 +71,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         //val closeButtonIcon = findViewById<ImageView>(R.id.close_button)
-        val languageTv = findViewById<TextView>(R.id.language_TV)
+        //val languageTv = findViewById<TextView>(R.id.language_TV)
 
 
 
@@ -81,12 +82,13 @@ class SettingsActivity : AppCompatActivity() {
         val linearLayout5 = findViewById<LinearLayout>(R.id.linearLayout5) // help
         val linearLayout6 = findViewById<LinearLayout>(R.id.linearLayout6) // how it works
 
-        val darkModePrefs = getSharedPreferences("DarkModePrefs", Context.MODE_PRIVATE)
-        val languagePrefs = getSharedPreferences("LanguagePrefs", Context.MODE_PRIVATE)
+        val darkModePrefs = getSharedPreferences(DARK_MODE_PREF, Context.MODE_PRIVATE)
+        val languagePrefs = getSharedPreferences(LANGUAGE_PREF, Context.MODE_PRIVATE)
 
-        val selectedLanguage =
+        selectedLanguage =
             languagePrefs.getString(LANGUAGE_PREF, "Polish") // default to English
         setLocale(this, selectedLanguage?.let { getLanguageCode(it) })
+        //setLocale(this, getLanguageCode(it) )
 
         val isDarkModeOn = darkModePrefs.getBoolean(DARK_MODE_PREF, false)
         if (isDarkModeOn) {
@@ -104,8 +106,8 @@ class SettingsActivity : AppCompatActivity() {
             val alertDialogBuilder = AlertDialog.Builder(this)
             alertDialogBuilder.setTitle("Choose Language")
                 .setItems(languages) { dialog, which ->
-                    val selectedLanguage = languages[which]
-                    setLocale(this, getLanguageCode(selectedLanguage)) // Set selected language
+                    selectedLanguage = languages[which]
+                    setLocale(this, getLanguageCode(selectedLanguage!!)) // Set selected language
                     Toast.makeText(this, "Selected Language: $selectedLanguage", Toast.LENGTH_SHORT)
                         .show()
 
@@ -113,8 +115,9 @@ class SettingsActivity : AppCompatActivity() {
                     val editor = languagePrefs.edit()
                     editor.putString(LANGUAGE_PREF, selectedLanguage)
                     editor.apply()
-                    recreate()
                     dialog.dismiss() // close window
+                    //recreate()
+
 //                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 //                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 //                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -128,8 +131,8 @@ class SettingsActivity : AppCompatActivity() {
 //                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 //                    }
 
-//                    finish();
-//                    startActivity(getIntent());
+                    finish();
+                    startActivity(getIntent());
 
                 }
                 .setNegativeButton("Cancel") { dialog, _ ->
@@ -176,6 +179,7 @@ class SettingsActivity : AppCompatActivity() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 darkModePrefs.edit().putBoolean(DARK_MODE_PREF, false).apply()
             }
+            //setLocale(this, selectedLanguage?.let { getLanguageCode(it) }) // Set locale again
             //recreate()
 //                    finish();
 //                    startActivity(getIntent());
