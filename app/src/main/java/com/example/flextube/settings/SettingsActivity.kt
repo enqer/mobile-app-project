@@ -7,17 +7,9 @@ import android.app.Activity
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
 
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
-import android.util.AttributeSet
 import android.widget.Button
-
-import android.util.Log
 
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -28,15 +20,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
-import androidx.appcompat.widget.AppCompatTextView
-import com.example.flextube.MainActivity
-
 import com.example.flextube.R
 import com.example.flextube.interfaces.GoogleLogin
 import com.example.flextube.login.LoginActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.squareup.picasso.Picasso
 import java.util.Locale
 
@@ -44,8 +31,8 @@ import java.util.Locale
 class SettingsActivity : AppCompatActivity() {
 
     lateinit var switch1: Switch
-    private val DARK_MODE = "darkMode"
-    private val LANGUAGE = "language"
+    private val DARK_MODE_PREF = "darkModePref"
+    private val LANGUAGE_PREF = "languagePref"
 
     fun setLocale(activity: Activity, languageCode: String?) {
         val locale = Locale(languageCode)
@@ -69,7 +56,6 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-
         val account = GoogleSignIn.getLastSignedInAccount(this)
         val signOut = findViewById<Button>(R.id.signOut)
         val logo = findViewById<ImageView>(R.id.person_icon)
@@ -77,7 +63,7 @@ class SettingsActivity : AppCompatActivity() {
         Picasso.get().load(account.photoUrl.toString()).into(logo)
         author.setText(account.displayName)
 
-        signOut.setOnClickListener{
+        signOut.setOnClickListener {
             GoogleLogin.gsc.signOut()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -95,12 +81,14 @@ class SettingsActivity : AppCompatActivity() {
         val linearLayout5 = findViewById<LinearLayout>(R.id.linearLayout5) // help
         val linearLayout6 = findViewById<LinearLayout>(R.id.linearLayout6) // how it works
 
-        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val darkModePrefs = getSharedPreferences("DarkModePrefs", Context.MODE_PRIVATE)
+        val languagePrefs = getSharedPreferences("LanguagePrefs", Context.MODE_PRIVATE)
 
-        val selectedLanguage = sharedPreferences.getString(LANGUAGE, "Polsih") // default to English
+        val selectedLanguage =
+            languagePrefs.getString(LANGUAGE_PREF, "Polish") // default to English
         setLocale(this, selectedLanguage?.let { getLanguageCode(it) })
 
-        val isDarkModeOn = sharedPreferences.getBoolean(DARK_MODE, false)
+        val isDarkModeOn = darkModePrefs.getBoolean(DARK_MODE_PREF, false)
         if (isDarkModeOn) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             switch1.isChecked = true
@@ -118,13 +106,19 @@ class SettingsActivity : AppCompatActivity() {
                 .setItems(languages) { dialog, which ->
                     val selectedLanguage = languages[which]
                     setLocale(this, getLanguageCode(selectedLanguage)) // Set selected language
-                    Toast.makeText(this, "Selected Language: $selectedLanguage", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Selected Language: $selectedLanguage", Toast.LENGTH_SHORT)
+                        .show()
 
                     // Language save
-                    val editor = sharedPreferences.edit()
-                    editor.putString(LANGUAGE, selectedLanguage)
+                    val editor = languagePrefs.edit()
+                    editor.putString(LANGUAGE_PREF, selectedLanguage)
                     editor.apply()
+                    recreate()
                     dialog.dismiss() // close window
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     //that's interesting
 //                    if (switch1.isChecked == true){
 //                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -133,8 +127,9 @@ class SettingsActivity : AppCompatActivity() {
 //                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 //                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 //                    }
-                    finish();
-                    startActivity(getIntent());
+
+//                    finish();
+//                    startActivity(getIntent());
 
                 }
                 .setNegativeButton("Cancel") { dialog, _ ->
@@ -175,14 +170,16 @@ class SettingsActivity : AppCompatActivity() {
             if (isChecked) {
                 // turn on dark mode
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                sharedPreferences.edit().putBoolean(DARK_MODE, true).apply()
+                darkModePrefs.edit().putBoolean(DARK_MODE_PREF, true).apply()
             } else {
                 // turn on light mode
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                sharedPreferences.edit().putBoolean(DARK_MODE, false).apply()
+                darkModePrefs.edit().putBoolean(DARK_MODE_PREF, false).apply()
             }
+            //recreate()
+//                    finish();
+//                    startActivity(getIntent());
         }
-
     }
 
 
