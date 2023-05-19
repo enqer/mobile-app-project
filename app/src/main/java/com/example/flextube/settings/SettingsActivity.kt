@@ -1,16 +1,13 @@
 package com.example.flextube.settings
 
 
+import android.R.attr.key
 import android.annotation.SuppressLint
-
 import android.app.Activity
-
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-
 import android.widget.Button
-
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
@@ -19,7 +16,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-
 import com.example.flextube.R
 import com.example.flextube.interfaces.GoogleLogin
 import com.example.flextube.login.LoginActivity
@@ -74,7 +70,6 @@ class SettingsActivity : AppCompatActivity() {
         //val languageTv = findViewById<TextView>(R.id.language_TV)
 
 
-
         switch1 = findViewById(R.id.switch1)
         val closeButtonIcon = findViewById<ImageView>(R.id.close_button)
         val linearLayout2 = findViewById<LinearLayout>(R.id.linearLayout2) // language
@@ -82,7 +77,7 @@ class SettingsActivity : AppCompatActivity() {
         val linearLayout5 = findViewById<LinearLayout>(R.id.linearLayout5) // help
         val linearLayout6 = findViewById<LinearLayout>(R.id.linearLayout6) // how it works
 
-        val darkModePrefs = getSharedPreferences(DARK_MODE_PREF, Context.MODE_PRIVATE)
+        val darkModePrefs = getSharedPreferences(DARK_MODE_PREF, 0)
         val languagePrefs = getSharedPreferences(LANGUAGE_PREF, Context.MODE_PRIVATE)
 
         selectedLanguage =
@@ -98,8 +93,17 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             switch1.isChecked = false
-
         }
+
+        val editorD = darkModePrefs.edit()
+        editorD.putBoolean(DARK_MODE_PREF, isDarkModeOn)
+        editorD.apply()
+
+//        val mPrefs = getSharedPreferences("IDvalue", 0)
+//        val editor = mPrefs.edit()
+//        editor.putString(key, value)
+//        editor.commit()
+
 
         linearLayout2.setOnClickListener {
             val languages = arrayOf("English", "Polish")
@@ -174,15 +178,34 @@ class SettingsActivity : AppCompatActivity() {
                 // turn on dark mode
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 darkModePrefs.edit().putBoolean(DARK_MODE_PREF, true).apply()
+
+//                val intent = Intent(this, LoginActivity::class.java)
+//                intent.putExtra("darkModePref", isDarkModeOn)
+//                startActivity(intent)
             } else {
                 // turn on light mode
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 darkModePrefs.edit().putBoolean(DARK_MODE_PREF, false).apply()
+
+//                val intent = Intent(this, LoginActivity::class.java)
+//                intent.putExtra("darkModePref", isDarkModeOn)
+//                startActivity(intent)
             }
             //setLocale(this, selectedLanguage?.let { getLanguageCode(it) }) // Set locale again
             //recreate()
 //                    finish();
 //                    startActivity(getIntent());
+
+
+
+//            val darkModePrefs = getSharedPreferences(DARK_MODE_PREF, Context.MODE_PRIVATE)
+//            val editor = darkModePrefs.edit()
+//            editor.putBoolean(DARK_MODE_PREF, isChecked)
+//            editor.apply()
+//
+//            val intent = Intent(this, LoginActivity::class.java)
+//            intent.putExtra(DARK_MODE_PREF, isChecked)
+//            startActivity(intent)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.flextube.login
 
+
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -8,11 +9,11 @@ import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.flextube.MainActivity
 import com.example.flextube.api.ApiServices
 import com.example.flextube.auth.TokenResponse
@@ -20,24 +21,15 @@ import com.example.flextube.interfaces.GoogleLogin
 import com.example.flextube.interfaces.GoogleLogin.Companion.gso
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.security.MessageDigest
 import java.security.SecureRandom
-import java.security.spec.MGF1ParameterSpec.SHA256
 import java.util.Base64
-
-
-import com.example.flextube.settings.SettingsActivity
-import com.example.flextube.ui.library.LibraryFragment
-import com.example.flextube.ui.library.LibraryViewModel
-
 
 
 class LoginActivity : AppCompatActivity() {
@@ -47,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
     //val webView: WebView = WebView(this)
     // val webView: WebView = WebView(requireNotNull(this).applicationContext)
     lateinit var codeVerifier: String
+    private val DARK_MODE_PREF = "darkModePref"
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -54,6 +47,14 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.example.flextube.R.layout.activity_login)
 
+
+        val darkModePrefs = getSharedPreferences(DARK_MODE_PREF, 0)
+        val isDarkModeOn = darkModePrefs.getBoolean(DARK_MODE_PREF, false)
+        if (isDarkModeOn) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
 
         val google: View = findViewById(com.example.flextube.R.id.google_area)
         val guest: View = findViewById(com.example.flextube.R.id.guest_area)
