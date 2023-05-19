@@ -31,6 +31,9 @@ class Video(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun convertTime(time: String): String {
+        if (':' in time)
+            return time
+
         val duration = Duration.parse(time)
         val hours = duration.toHours()
 
@@ -48,7 +51,9 @@ class Video(
             }
         }
     }
-    private fun convertPublishedAt(){
+    private fun convertPublishedAt() {
+        if(!publishedDate.contains("T"))
+            publishedDate = publishedDate + "T"
         publishedDate = publishedDate.subSequence(0,publishedDate.indexOf('T')).toString()
     }
 }

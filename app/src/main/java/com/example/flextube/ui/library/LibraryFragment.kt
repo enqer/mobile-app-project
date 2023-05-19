@@ -55,8 +55,7 @@ class LibraryFragment : Fragment() {
     }
 
     private fun readDatabase() {
-        val databaseVersion: String = "my_table12"
-
+        val databaseVersion: String = "my_table20"
         val dbHelper = context?.let { DatabaseHelper(it) }
         val db = dbHelper?.writableDatabase
 
@@ -86,30 +85,69 @@ class LibraryFragment : Fragment() {
                         val likeCountValueIndex = cursor.getColumnIndex("likeCountValue")
                         val likeCountValue = cursor.getString(likeCountValueIndex)
 
+                        val commentCountIndex = cursor.getColumnIndex("commentCountValue")
+                        val commentCountValue = cursor.getString(commentCountIndex)
+
+                        val publishedDateIndex = cursor.getColumnIndex("publishedDateValue")
+                        val publishedDateValue = cursor.getString(publishedDateIndex)
+
+                        val playerHtmlIndex = cursor.getColumnIndex("playerHtmlValue")
+                        val playerHtmlValue = cursor.getString(playerHtmlIndex)
+
+                        val playerHeightIndex = cursor.getColumnIndex("playerHeightValue")
+                        val playerHeightValue = cursor.getLong(playerHeightIndex)
+
+                        val playerWidthIndex = cursor.getColumnIndex("playerWidthValue")
+                        val playerWidthValue = cursor.getLong(playerWidthIndex)
+
+                        val vidVideoValueIndex = cursor.getColumnIndex("vidVideoValue")
+                        val vidVideoValue = cursor.getString(vidVideoValueIndex)
+
                         val authorVideoIndex = cursor.getColumnIndex("authorVideo")
                         val authorVideoValue = cursor.getString(authorVideoIndex)
+
+                        val urlLogoValueIndex = cursor.getColumnIndex("urlLogoValue")
+                        val urlLogoValue = cursor.getString(urlLogoValueIndex)
+
+                        val subscriberCountValueIndex = cursor.getColumnIndex("subscriberCountValue")
+                        val subscriberCountValue = cursor.getString(subscriberCountValueIndex)
                         Log.d(
                             "MyApp",
-                            "Pobrana wartość: $idValue, $urlPhotoValue, $durationValue, $titleValue, $viewCountValue, $likeCountValue, $authorVideoValue"
+                            "Pobrana wartość: " +
+                                    "$idValue, " +
+                                    "$urlPhotoValue, " +
+                                    "$durationValue, " +
+                                    "$titleValue, " +
+                                    "$viewCountValue, " +
+                                    "$likeCountValue, " +
+                                    "$commentCountValue, " +
+                                    "$publishedDateValue, " +
+                                    "$playerHtmlValue, " +
+                                    "$playerHeightValue, " +
+                                    "$playerWidthValue, " +
+                                    "$vidVideoValue, " +
+                                    "$authorVideoValue, " +
+                                    "$urlLogoValue, " +
+                                    "$subscriberCountValue ,"
                         )
                         historyList.add(
                             Video(
                                 idValue,
                                 urlPhotoValue,
-                                "PT47S",
+                                durationValue,
                                 titleValue,
                                 viewCountValue,
                                 likeCountValue,
-                                "30",
-                                "2023-05-07T08:30:09Z",
-                                "i.player.embedHtml",
-                                50,
-                                50,
+                                commentCountValue,
+                                publishedDateValue,
+                                playerHtmlValue,
+                                playerHeightValue,
+                                playerWidthValue,
                                 AuthorVideo(
-                                    "random1",
+                                    vidVideoValue,
                                     authorVideoValue,
-                                    "random3",
-                                    "50"
+                                    urlLogoValue,
+                                    subscriberCountValue
                                 )
                             )
                         )

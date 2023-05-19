@@ -142,25 +142,20 @@ class HomeFragment : Fragment() {
                         val titleValue = video.title
                         val viewCountValue = video.viewCount
                         val likeCountValue = video.likeCount
-                        //val commentCountValue = video.commentCount
+                        val commentCountValue = video.commentCount
 
+                        val publishedDateValue = video.publishedDate
+                        val playerHtmlValue = video.playerHtml
+
+                        val playerHeightValue = video.playerHeight
+                        val playerWidthValue = video.playerWidth
+
+                        val vidVideoValue = video.authorVideo.id
                         val authorVideoValue = video.authorVideo.name
+                        val urlLogoValue = video.authorVideo.urlLogo
+                        val subscriberCountValue = video.authorVideo.subscriberCount
 
-//                        ----val id: String,
-//                        ----val urlPhoto: String,
-//                        ????var duration: String,
-//                        ----val title: String,
-//                        ----var viewCount: String,
-//                        ----var likeCount: String,
-//                        val commentCount: String,
-//                        var publishedDate: String,
-//                        val playerHtml: String,
-//                        val playerHeight: Long,
-//                        val playerWidth: Long,
-//                        ----val authorVideo: AuthorVideo
-
-
-                        val databaseVersion: String = "my_table12"
+                        val databaseVersion: String = "my_table20"
                         val insertQuery =
                             "INSERT INTO $databaseVersion (" +
                                     "video_id, " +
@@ -169,15 +164,32 @@ class HomeFragment : Fragment() {
                                     "titleValue, " +
                                     "viewCountValue, " +
                                     "likeCountValue, " +
-                                    "authorVideo" +
+                                    "commentCountValue, " +
+                                    "publishedDateValue, " +
+                                    "playerHtmlValue, " +
+                                    "playerHeightValue, " +
+                                    "playerWidthValue, " +
+                                    "vidVideoValue, " +
+                                    "authorVideo, " +
+                                    "urlLogoValue, " +
+                                    "subscriberCountValue " +
                                     ") VALUES ('" +
                                     "$idValue', " +
                                     "'$urlPhotoValue', " +
                                     "'$durationValue', " +
                                     "'${titleValue.replace("'", "''").replace("\"", "\"\"")}', " +
                                     "'$viewCountValue', " +
-                                    "'$likeCountValue'," +
-                                    "'$authorVideoValue')"
+                                    "'$likeCountValue', " +
+                                    "'$commentCountValue', " +
+                                    "'$publishedDateValue', " +
+                                    "'$playerHtmlValue', " +
+                                    "'$playerHeightValue', " +
+                                    "'$playerWidthValue', " +
+                                    "'$vidVideoValue', " +
+                                    "'$authorVideoValue', " +
+                                    "'$urlLogoValue', " +
+                                    "'$subscriberCountValue')"
+
                         db?.execSQL(insertQuery)
 
 
