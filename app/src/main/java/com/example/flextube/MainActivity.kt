@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         val account = GoogleSignIn.getLastSignedInAccount(this)
 
         val btnToSetting = binding.toSettings
-//        Picasso.get().load(account.photoUrl.toString()).into(btnToSetting)
+        Picasso.get().load(account?.photoUrl.toString()).into(btnToSetting)
         btnToSetting.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
