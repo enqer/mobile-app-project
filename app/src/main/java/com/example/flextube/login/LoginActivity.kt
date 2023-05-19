@@ -56,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
+
         val google: View = findViewById(com.example.flextube.R.id.google_area)
         val guest: View = findViewById(com.example.flextube.R.id.guest_area)
         val serverClientId = getString(com.example.flextube.R.string.id_client)

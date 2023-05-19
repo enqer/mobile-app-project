@@ -67,6 +67,7 @@ interface ApiServices {
         @Query("key") key: String = KEY2,
         @Query("textFormat") textFormat: String = "plainText"
     ) : Call<CommentApiModel>
+
     @GET("playlists")
     fun getPlaylist(
         @Query("part") part: String,
@@ -76,6 +77,12 @@ interface ApiServices {
         @Query("maxResults") maxResults: Int
     ): Call<PlaylistApiModel>
 
+//    @GET("playlistItems")
+//    fun getPlaylistItems(
+//        @Query("part") part: String,
+//        @Query("playlistId") playlistId: String,
+//        @Query("maxResults") maxResults: Int = 10
+//    ): Call<PlaylistItemApiModel>
 
     @GET("search")
     fun getShorts(
@@ -136,11 +143,11 @@ interface ApiServices {
 
 
     companion object {
-        private final const val KEY = "AIzaSyDrvd66oJPdfjmm8c93lOSupl0ls71uDB8"
+        private final const val KEY = "AIzaSyChDXUbavQGMp0QHKvTzwKd5re7kM4SQKA"
         //private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
-        private final const val KEY3 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
+        private final const val KEY3 = "AIzaSyChDXUbavQGMp0QHKvTzwKd5re7kM4SQKA"
         //const val KEY2 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
-        const val KEY2 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
+        const val KEY2 = "AIzaSyChDXUbavQGMp0QHKvTzwKd5re7kM4SQKA"
         var authToken: String = ""
 
 

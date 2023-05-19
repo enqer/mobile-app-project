@@ -53,7 +53,7 @@ class Video(
     }
     private fun convertPublishedAt() {
         if(!publishedDate.contains("T"))
-            publishedDate = publishedDate + "T"
+            publishedDate += "T"
         publishedDate = publishedDate.subSequence(0,publishedDate.indexOf('T')).toString()
     }
 }

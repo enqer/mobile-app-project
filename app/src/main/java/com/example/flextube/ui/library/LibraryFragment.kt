@@ -20,6 +20,8 @@ import com.example.flextube.playlist.PlaylistApiModel
 import com.example.flextube.playlist_item.PlaylistActivity
 import com.example.flextube.video.AuthorVideo
 import com.example.flextube.video.Video
+import com.example.flextube.video.VideoActivity
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -160,6 +162,12 @@ class LibraryFragment : Fragment() {
                                         TAG,
                                         "LibraryFragment/readDatabase/onItemClick -> Item clicked"
                                     )
+
+                                    val intent = Intent(activity?.baseContext, VideoActivity::class.java)
+                                    val gson = Gson()
+                                    val json: String = gson.toJson(history)
+                                    intent.putExtra("video", json)
+                                    startActivity(intent)
 
                                     //Toast.makeText(requireContext(), playlist.title,Toast.LENGTH_SHORT).show()
                                 }
