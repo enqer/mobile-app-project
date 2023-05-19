@@ -9,6 +9,7 @@ import com.example.flextube.playlist.PlaylistApiModel
 
 
 import com.example.flextube.comment.CommentApiModel
+import com.example.flextube.playlist_item.PlaylistItemApiModel
 
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.shorts.ShortsApiModel
@@ -77,12 +78,12 @@ interface ApiServices {
         @Query("maxResults") maxResults: Int
     ): Call<PlaylistApiModel>
 
-//    @GET("playlistItems")
-//    fun getPlaylistItems(
-//        @Query("part") part: String,
-//        @Query("playlistId") playlistId: String,
-//        @Query("maxResults") maxResults: Int = 10
-//    ): Call<PlaylistItemApiModel>
+    @GET("playlistItems")
+    fun getPlaylistItems(
+        @Query("part") part: String,
+        @Query("playlistId") playlistId: String,
+        @Query("maxResults") maxResults: Int = 10
+    ): Call<PlaylistItemApiModel>
 
     @GET("search")
     fun getShorts(

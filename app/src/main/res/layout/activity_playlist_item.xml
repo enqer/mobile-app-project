@@ -17,20 +17,37 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/IV_activity_video_template"
+                android:id="@+id/IV_playlistItem_template"
                 android:layout_width="130dp"
                 android:layout_height="90dp"
                 app:srcCompat="@drawable/app_logo_black" />
 
             <TextView
-                android:id="@+id/TV_activity_video_name"
+                android:id="@+id/TV_playlistItem_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="140dp"
-                android:layout_marginTop="10dp"
-                android:text="Lorem"
-                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:text="title"
+                android:textSize="18sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/TV_playlistItem_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="140dp"
+                android:layout_marginTop="30dp"
+                android:textSize="16sp"
+                android:text="Author" />
+
+            <ImageView
+                android:id="@+id/IV_playlistItem_user"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="140dp"
+                android:layout_marginTop="55dp"
+                app:srcCompat="@drawable/person" />
         </FrameLayout>
     </LinearLayout>
 
