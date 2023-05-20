@@ -5,7 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
 import com.example.flextube.api.ApiServices
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -18,6 +22,9 @@ import retrofit2.Response
 class PlaylistActivity : AppCompatActivity() {
     private var playlistListId: String = ""
     private val playlistItemList: ArrayList<PlaylistItem> = ArrayList()
+    private lateinit var mLayoutManager: RecyclerView.LayoutManager
+    private lateinit var mRecyclerView: RecyclerView
+    private lateinit var mAdapter: RecyclerView.Adapter<PlaylistItemAdapter.PlaylistItemViewHolder>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +53,9 @@ class PlaylistActivity : AppCompatActivity() {
     }
 
     private fun getPlaylistItems() {
+        val maxLength = 25
         val apiServices = ApiServices.getRetrofit()
-        apiServices.getPlaylistItems("snippet, contentDetails", playlistListId, 10)
+        apiServices.getPlaylistItems("snippet, contentDetails", playlistListId, ApiServices.KEY2, 10)
             .enqueue(object : Callback<PlaylistItemApiModel> {
                 override fun onResponse(
                     call: Call<PlaylistItemApiModel>,
@@ -58,16 +66,23 @@ class PlaylistActivity : AppCompatActivity() {
                         playlistItems?.let {
                             for (item in playlistItems) {
                                 val id = item.id
-                                val title = item.snippet.title
-                                val channelTitle = item.snippet.videoOwnerChannelTitle
+                                var title = item.snippet.title
+                                var channelTitle = item.snippet.videoOwnerChannelTitle
                                 val thumbnails = item.snippet.thumbnails.medium.url
-                                val channelId = item.snippet.channelId
+                                val videoOwnerChannelId = item.snippet.videoOwnerChannelId
+
+                                if(title.length > maxLength){
+                                    title = title.substring(0, maxLength) + "..."
+                                }
+                                if(channelTitle.length > maxLength){
+                                    channelTitle =channelTitle.substring(0, maxLength) + "..."
+                                }
 
                                 Log.d(TAG, "Id: $id")
                                 Log.d(TAG, "Title: $title")
                                 Log.d(TAG, "channelTitle: $channelTitle")
                                 Log.d(TAG, "thumbnails: $thumbnails")
-                                Log.d(TAG, "channelId: $channelId")
+                                Log.d(TAG, "videoOwnerChannelId: $videoOwnerChannelId")
 
                                 playlistItemList.add(
                                     PlaylistItem(
@@ -75,10 +90,27 @@ class PlaylistActivity : AppCompatActivity() {
                                         title,
                                         channelTitle,
                                         thumbnails,
-                                        channelId
+                                        videoOwnerChannelId
                                     )
                                 )
                             }
+
+                            mAdapter = PlaylistItemAdapter(
+                                playlistItemList,
+                                object : PlaylistItemAdapter.ItemClickListener {
+                                    override fun onItemClick(playlistItem: PlaylistItem) {
+                                        Log.d(TAG, "click click click")
+                                }
+                            })
+
+                            mLayoutManager = LinearLayoutManager(this@PlaylistActivity)
+                            mRecyclerView = findViewById(R.id.playlist_items_recyclerview)
+                            mRecyclerView.layoutManager = mLayoutManager
+                            mRecyclerView.adapter = mAdapter
+                            mRecyclerView.setHasFixedSize(true)
+
+                            mAdapter.notifyDataSetChanged() // Aktualizacja adaptera
+
                         }
                     } else {
                         Log.e(TAG, "Response not successful: ${response.code()}")
