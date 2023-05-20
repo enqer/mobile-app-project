@@ -73,7 +73,7 @@ class HomeFragment : Fragment() {
         mLayoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         // getting id channels and videos of searching videos
-        getIDsOfVideos(q)
+//        getIDsOfVideos(q)
 
 
         //getIDsOfVideos()
@@ -86,8 +86,8 @@ class HomeFragment : Fragment() {
     // getting videos by id video
     private fun getVideos(id: String) {
         // Variables used in SQLite stuff
-        val dbHelper = context?.let { DatabaseHelper(it) }
-        val db = dbHelper?.writableDatabase
+//        val dbHelper = context?.let { DatabaseHelper(it) }
+//        val db = dbHelper?.writableDatabase
 
         val api = ApiServices.getRetrofit()
         val videos: Call<VideoApiModel> = api.getStatsVideos(id = id)
@@ -152,37 +152,37 @@ class HomeFragment : Fragment() {
 //                        val playerWidth: Long,
 //                        --val authorVideo: AuthorVideo
 
-                        val insertQuery =
-                            "INSERT INTO my_table8 (video_id, urlPhotoValue, titleValue, authorVideo) VALUES ('$idValue', '$urlPhotoValue', '$titleValue', '$authorVideoValue')"
-                        db?.execSQL(insertQuery)
-
-
-                        val selectQuery = "SELECT video_id, urlPhotoValue, titleValue, authorVideo FROM my_table8"
-                        val cursor = db?.rawQuery(selectQuery, null)
-
-                        if (cursor != null) {
-                            if (cursor.moveToFirst()) {
-                                if (cursor != null) {
-                                    do {
-                                        val idIndex = cursor.getColumnIndex("video_id")
-                                        val idValue = cursor.getString(idIndex)
-
-                                        val urlPhotoValueIndex = cursor.getColumnIndex("urlPhotoValue")
-                                        val urlPhotoValue = cursor.getString(urlPhotoValueIndex)
-
-                                        val titleValueIndex = cursor.getColumnIndex("titleValue")
-                                        val titleValue = cursor.getString(titleValueIndex)
-
-                                        val authorVideoIndex = cursor.getColumnIndex("authorVideo")
-                                        val authorVideoValue = cursor.getString(authorVideoIndex)
-                                        Log.d(
-                                            "MyApp",
-                                            "Pobrana wartość: $idValue, $urlPhotoValue, $titleValue, $authorVideoValue"
-                                        )
-                                    } while (cursor.moveToNext())
-                                }
-                            }
-                        }
+//                        val insertQuery =
+//                            "INSERT INTO my_table8 (video_id, urlPhotoValue, titleValue, authorVideo) VALUES ('$idValue', '$urlPhotoValue', '$titleValue', '$authorVideoValue')"
+//                        db?.execSQL(insertQuery)
+//
+//
+//                        val selectQuery = "SELECT video_id, urlPhotoValue, titleValue, authorVideo FROM my_table8"
+//                        val cursor = db?.rawQuery(selectQuery, null)
+//
+//                        if (cursor != null) {
+//                            if (cursor.moveToFirst()) {
+//                                if (cursor != null) {
+//                                    do {
+//                                        val idIndex = cursor.getColumnIndex("video_id")
+//                                        val idValue = cursor.getString(idIndex)
+//
+//                                        val urlPhotoValueIndex = cursor.getColumnIndex("urlPhotoValue")
+//                                        val urlPhotoValue = cursor.getString(urlPhotoValueIndex)
+//
+//                                        val titleValueIndex = cursor.getColumnIndex("titleValue")
+//                                        val titleValue = cursor.getString(titleValueIndex)
+//
+//                                        val authorVideoIndex = cursor.getColumnIndex("authorVideo")
+//                                        val authorVideoValue = cursor.getString(authorVideoIndex)
+//                                        Log.d(
+//                                            "MyApp",
+//                                            "Pobrana wartość: $idValue, $urlPhotoValue, $titleValue, $authorVideoValue"
+//                                        )
+//                                    } while (cursor.moveToNext())
+//                                }
+//                            }
+//                        }
 
                         // CODE REQUIRED TO RESET ALL ITEMS IN DATABASE
                         // UNCOMMENT THAT LINES AND CLICK THE BUTTON
@@ -195,7 +195,7 @@ class HomeFragment : Fragment() {
 
                         // END OF RESTARTING DATABASE CODE
 
-                        cursor?.close()
+//                        cursor?.close()
                         // End of SQLite
 
 

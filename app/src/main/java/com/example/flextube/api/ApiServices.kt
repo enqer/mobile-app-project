@@ -161,6 +161,13 @@ interface ApiServices {
                 .build()
             return retrofit.create(ApiServices::class.java)
         }
+        fun getHTTP(): ApiServices{
+            val retrofit: Retrofit =
+                Retrofit.Builder().baseUrl("https://oauth2.googleapis.com")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+            return retrofit.create(ApiServices::class.java)
+        }
 
 
         fun getRetrofit(): ApiServices {

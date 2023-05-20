@@ -107,9 +107,13 @@ class LoginActivity : AppCompatActivity() {
         alertDialogBuilder.setView(webView)
         alertDialogBuilder.create().show()
         val settings: WebSettings = webView.settings
+        webView.isClickable = true
+        webView.isFocusableInTouchMode = true
+        webView.isFocusable = true
         settings.userAgentString = "Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36"
         webView.settings.javaScriptEnabled = true
-        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com&redirect_uri=http://localhost:8080&response_type=code&scope=https://www.googleapis.com/auth/youtube")
+//        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com&redirect_uri=http://localhost:8080&response_type=code&scope=https://www.googleapis.com/auth/youtube")
+        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com&redirect_uri=http://localhost:8080&response_type=code&scope=https://www.googleapis.com/auth/youtube&access_type=offline")
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
@@ -135,9 +139,19 @@ class LoginActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val result = response.body()
                     if (result != null) {
-                         Log.d("token", result.accessToken.toString())
+                         Log.d("token", result.accessToken)
+                         Log.d("refresh", result.refreshToken)
+                         Log.d("scope", result.scope)
+                         Log.d("expiresIn", result.expiresIn.toString())
                         //ApiServices.authToken = result.accessToken
                     }
+                    Log.d("result", response.body()!!.accessToken)
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    startActivity(intent)
+                }else{
+                    Log.d("notSuccessful", response.code().toString())
+                    Log.d("notSuccessful", response.message())
+//                    auth()
                 }
             }
 
@@ -146,8 +160,7 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-        startActivity(intent)
+
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun generateCodeVerifier(): String {
