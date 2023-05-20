@@ -137,6 +137,7 @@ class LibraryFragment : Fragment() {
                                 idValue,
                                 urlPhotoValue,
                                 durationValue,
+                                //"0:20",
                                 titleValue,
                                 viewCountValue,
                                 likeCountValue,
@@ -255,7 +256,8 @@ class LibraryFragment : Fragment() {
                                         // Starts new activity
                                         val startNew = Intent(context, PlaylistActivity::class.java)
 
-                                        startNew.putExtra("message", playlist.id)
+                                        startNew.putExtra("id", playlist.id)
+                                        startNew.putExtra("title", playlist.title)
                                         activity!!.startActivity(startNew)
 
                                         //Toast.makeText(requireContext(), playlist.title,Toast.LENGTH_SHORT).show()

@@ -201,23 +201,22 @@ class HomeFragment : Fragment() {
                         // UNCOMMENT THAT LINES AND CLICK THE BUTTON
                         // THEN SHUT DOWN YOUR APP AND COMMENT THAT LINES AGAIN
 
-//                                    val deleteQuery = "DELETE FROM "+ databaseVersion
-//                                    if (db != null) {
-//                                        db.execSQL(deleteQuery)
-//                                    }
+//                        val deleteQuery = "DELETE FROM "+ databaseVersion
+//                        if (db != null) {
+//                            db.execSQL(deleteQuery)
+//                        }
 
                         // END OF RESTARTING DATABASE CODE
 
-/* KONFLIKT
+
 //                        if (cursor != null) {
 //                            cursor.close()
 //                        }
-                        if (dbHelper != null) {
-                            dbHelper.close()
-                        }
-===
-                        cursor?.close()
-*/
+//                        if (dbHelper != null) {
+//                            dbHelper.close()
+//                        }
+//                        cursor?.close()
+
                         // End of SQLite
 
 
