@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
 import com.example.flextube.api.ApiServices
+import com.example.flextube.video.AuthorApiModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -25,6 +26,8 @@ class PlaylistActivity : AppCompatActivity() {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: RecyclerView.Adapter<PlaylistItemAdapter.PlaylistItemViewHolder>
+
+    private var videoOwnerChannelId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +52,9 @@ class PlaylistActivity : AppCompatActivity() {
 
         playlistName.setText(title)
 
+        getIconUser()
         getPlaylistItems()
+        //getIconUser()
     }
 
     private fun getPlaylistItems() {
@@ -69,7 +74,7 @@ class PlaylistActivity : AppCompatActivity() {
                                 var title = item.snippet.title
                                 var channelTitle = item.snippet.videoOwnerChannelTitle
                                 val thumbnails = item.snippet.thumbnails.medium.url
-                                val videoOwnerChannelId = item.snippet.videoOwnerChannelId
+                                videoOwnerChannelId = item.snippet.videoOwnerChannelId
 
                                 if(title.length > maxLength){
                                     title = title.substring(0, maxLength) + "..."
@@ -120,6 +125,40 @@ class PlaylistActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<PlaylistItemApiModel>, t: Throwable) {
                     Log.e(TAG, "Error fetching playlist: ${t.localizedMessage}")
                 }
+            })
+    }
+    private fun getIconUser(){
+        val apiServices = ApiServices.getRetrofit()
+        apiServices.getChannel("snippet", "statistics", videoOwnerChannelId, ApiServices.KEY2)
+            .enqueue(object : Callback<AuthorApiModel>{
+                override fun onResponse(
+                    call: Call<AuthorApiModel>,
+                    response: Response<AuthorApiModel>
+                ) {
+                    if(response.isSuccessful){
+                        val channelItem = response.body()?.items
+                        channelItem?.let{
+                            for (item in channelItem){
+                                val id = item.id
+                                val name = item.snippet.title
+                                val urlLogo = item.snippet.thumbnails.picture.url
+                                val subscriberCount = item.statistics.subscriberCount
+
+                                Log.d(TAG, "id: $id")
+                                Log.d(TAG, "name: $name")
+                                Log.d(TAG, "urlLogo: $urlLogo")
+                                Log.d(TAG, "subscriberCount: $subscriberCount")
+                            }
+                        }
+                    } else {
+                        Log.e(TAG, "Response not successful: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<AuthorApiModel>, t: Throwable) {
+                    Log.e(TAG, "Error fetching playlist: ${t.localizedMessage}")
+                }
+
             })
     }
 
