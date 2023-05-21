@@ -5,19 +5,22 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
 import com.example.flextube.api.ApiServices
-import com.example.flextube.video.AuthorApiModel
+import com.example.flextube.shorts.ShortsApiModel
+import com.example.flextube.shorts.ShortsAuthor
+import com.example.flextube.shorts.ShortsAuthorApiModel
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+
 
 
 class PlaylistActivity : AppCompatActivity() {
@@ -29,6 +32,12 @@ class PlaylistActivity : AppCompatActivity() {
 
     private var videoOwnerChannelId: String = ""
 
+    private val channelList: ArrayList<ShortsAuthor> = ArrayList()
+//    private lateinit var qLayoutManager: RecyclerView.LayoutManager
+//    private lateinit var qRecyclerView: RecyclerView
+//    private lateinit var qAdapter: RecyclerView.Adapter<ChannelsAdapter.ChannelItemsViewHolder>
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_playlist)
@@ -38,8 +47,6 @@ class PlaylistActivity : AppCompatActivity() {
         val playlistName = findViewById<TextView>(R.id.TV_playlist_name_activity)
         val logo = findViewById<ImageView>(R.id.person_icon)
 
-
-
         // set photo and person name
         Picasso.get().load(account.photoUrl.toString()).into(logo)
 
@@ -47,18 +54,38 @@ class PlaylistActivity : AppCompatActivity() {
         playlistListId = intent.getStringExtra("id").toString()
         val title = intent.getStringExtra("title")
 
+
+        // Inicjalizacja widoków i adaptera
+        mRecyclerView = findViewById(R.id.playlist_items_recyclerview)
+        mAdapter = PlaylistItemAdapter(playlistItemList, channelList, object : PlaylistItemAdapter.ItemClickListener {
+            override fun onItemClick(playlistItem: PlaylistItem) {
+                // Obsługa kliknięcia na element listy
+                Log.d(TAG, "click click click")
+            }
+
+            override fun onChannelItemClick(channelItem: ShortsAuthor) {
+                // Obsługa kliknięcia na ikonkę kanału
+                Log.d(TAG, "click click click")
+            }
+        })
+
+        // Konfiguracja RecyclerView
+        mLayoutManager = LinearLayoutManager(this)
+        mRecyclerView.layoutManager = mLayoutManager
+        mRecyclerView.adapter = mAdapter
+        mRecyclerView.setHasFixedSize(true)
+
+
         Log.d(TAG, "PlaylistActivity/onCreate -> playlistListId: $playlistListId")
         Log.d(TAG, "PlaylistActivity/onCreate -> title: $title")
 
         playlistName.setText(title)
 
-        //getIconUser()
         getPlaylistItems()
-        //getIconUser()
     }
 
     private fun getPlaylistItems() {
-        val maxLength = 25
+        val maxLength = 22
         val apiServices = ApiServices.getRetrofit()
         apiServices.getPlaylistItems("snippet, contentDetails", playlistListId, ApiServices.KEY2, 10)
             .enqueue(object : Callback<PlaylistItemApiModel> {
@@ -102,21 +129,21 @@ class PlaylistActivity : AppCompatActivity() {
                                 )
                             }
 
-                            mAdapter = PlaylistItemAdapter(
-                                playlistItemList,
-                                object : PlaylistItemAdapter.ItemClickListener {
-                                    override fun onItemClick(playlistItem: PlaylistItem) {
-                                        Log.d(TAG, "click click click")
-                                }
-                            })
-
-                            mLayoutManager = LinearLayoutManager(this@PlaylistActivity)
-                            mRecyclerView = findViewById(R.id.playlist_items_recyclerview)
-                            mRecyclerView.layoutManager = mLayoutManager
-                            mRecyclerView.adapter = mAdapter
-                            mRecyclerView.setHasFixedSize(true)
-
-                            mAdapter.notifyDataSetChanged() // Aktualizacja adaptera
+//                            mAdapter = PlaylistItemAdapter(
+//                                playlistItemList,
+//                                object : PlaylistItemAdapter.ItemClickListener {
+//                                    override fun onItemClick(playlistItem: PlaylistItem) {
+//                                        Log.d(TAG, "click click click")
+//                                }
+//                            })
+//
+//                            mLayoutManager = LinearLayoutManager(this@PlaylistActivity)
+//                            mRecyclerView = findViewById(R.id.playlist_items_recyclerview)
+//                            mRecyclerView.layoutManager = mLayoutManager
+//                            mRecyclerView.adapter = mAdapter
+//                            mRecyclerView.setHasFixedSize(true)
+//
+//                            mAdapter.notifyDataSetChanged() // Aktualizacja adaptera
 
                         }
                     } else {
@@ -129,40 +156,54 @@ class PlaylistActivity : AppCompatActivity() {
                 }
             })
     }
-    private fun getIconUser(){
+    private fun getIconUser() {
         val apiServices = ApiServices.getRetrofit()
-        apiServices.getChannel("snippet", "statistics", videoOwnerChannelId, ApiServices.KEY2)
-            .enqueue(object : Callback<AuthorApiModel>{
+        apiServices.getShortsChannel("snippet", "statistics", videoOwnerChannelId, ApiServices.KEY2)
+            .enqueue(object : Callback<ShortsAuthorApiModel> {
                 override fun onResponse(
-                    call: Call<AuthorApiModel>,
-                    response: Response<AuthorApiModel>
+                    call: Call<ShortsAuthorApiModel>,
+                    response: Response<ShortsAuthorApiModel>
                 ) {
-                    if(response.isSuccessful){
+                    if (response.isSuccessful) {
                         val channelItem = response.body()?.items
 
-//                        if(channelItem == null){
-//                            Log.e(TAG, "Response: $channelItem")
-//                        }
-
-                        channelItem?.let{
-                            for (item in channelItem){
+                        channelItem?.let {
+                            for (item in channelItem) {
                                 val id = item.id
-                                val name = item.snippet.title
                                 val urlLogo = item.snippet.thumbnails.picture.url
-                                val subscriberCount = item.statistics.subscriberCount
 
                                 Log.d(TAG, "id: $id")
-                                Log.d(TAG, "name: $name")
                                 Log.d(TAG, "urlLogo: $urlLogo")
-                                Log.d(TAG, "subscriberCount: $subscriberCount")
+
+                                channelList.add(
+                                    ShortsAuthor(
+                                        id,
+                                        urlLogo
+                                    )
+                                )
                             }
+                            mAdapter.notifyDataSetChanged()
+//                            qAdapter = ChannelsAdapter(
+//                                channelList,
+//                                object : ChannelsAdapter.ItemClickListener {
+//                                    override fun onItemClick(channelItem: ShortsApiModel.Shorts) {
+//                                        Log.d(TAG, "click click click")
+//                                    }
+//                                }
+//                            )
+//
+//                            qLayoutManager = LinearLayoutManager(this@PlaylistActivity)
+//                            qRecyclerView = findViewById(R.id.playlist_items_recyclerview)
+//                            qRecyclerView.layoutManager = qLayoutManager
+//                            qRecyclerView.adapter = qAdapter
+//                            qRecyclerView.setHasFixedSize(true)
                         }
                     } else {
                         Log.e(TAG, "Response not successful: ${response.code()}")
                     }
                 }
 
-                override fun onFailure(call: Call<AuthorApiModel>, t: Throwable) {
+                override fun onFailure(call: Call<ShortsAuthorApiModel>, t: Throwable) {
                     Log.e(TAG, "Error fetching playlist: ${t.localizedMessage}")
                 }
 

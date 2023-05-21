@@ -36,17 +36,19 @@
                 android:id="@+id/TV_playlistItem_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="140dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginLeft="183dp"
+                android:layout_marginTop="45dp"
                 android:textSize="14sp"
                 android:text="Author" />
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/IV_playlistItem_user"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginLeft="140dp"
-                android:layout_marginTop="55dp"
+                android:layout_marginTop="35dp"
+                android:layout_weight="1"
+                app:shapeAppearanceOverlay="@style/Circular"
                 app:srcCompat="@drawable/person" />
         </FrameLayout>
     </LinearLayout>
