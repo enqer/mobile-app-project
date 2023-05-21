@@ -54,7 +54,7 @@ class PlaylistActivity : AppCompatActivity() {
 
         //getIconUser()
         getPlaylistItems()
-        getIconUser()
+        //getIconUser()
     }
 
     private fun getPlaylistItems() {
@@ -88,6 +88,8 @@ class PlaylistActivity : AppCompatActivity() {
                                 Log.d(TAG, "channelTitle: $channelTitle")
                                 Log.d(TAG, "thumbnails: $thumbnails")
                                 Log.d(TAG, "videoOwnerChannelId: $videoOwnerChannelId")
+
+                                getIconUser()
 
                                 playlistItemList.add(
                                     PlaylistItem(
@@ -135,11 +137,13 @@ class PlaylistActivity : AppCompatActivity() {
                     call: Call<AuthorApiModel>,
                     response: Response<AuthorApiModel>
                 ) {
-                    Log.e(TAG, "Response: ${response.code()}")
                     if(response.isSuccessful){
-                        Log.e(TAG, "Response: ${response.code()}")
                         val channelItem = response.body()?.items
-                        Log.e(TAG, "Response: ${response.body()?.items}")
+
+//                        if(channelItem == null){
+//                            Log.e(TAG, "Response: $channelItem")
+//                        }
+
                         channelItem?.let{
                             for (item in channelItem){
                                 val id = item.id
