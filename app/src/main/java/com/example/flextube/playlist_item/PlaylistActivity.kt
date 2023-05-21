@@ -52,9 +52,9 @@ class PlaylistActivity : AppCompatActivity() {
 
         playlistName.setText(title)
 
-        getIconUser()
-        getPlaylistItems()
         //getIconUser()
+        getPlaylistItems()
+        getIconUser()
     }
 
     private fun getPlaylistItems() {
@@ -135,8 +135,11 @@ class PlaylistActivity : AppCompatActivity() {
                     call: Call<AuthorApiModel>,
                     response: Response<AuthorApiModel>
                 ) {
+                    Log.e(TAG, "Response: ${response.code()}")
                     if(response.isSuccessful){
+                        Log.e(TAG, "Response: ${response.code()}")
                         val channelItem = response.body()?.items
+                        Log.e(TAG, "Response: ${response.body()?.items}")
                         channelItem?.let{
                             for (item in channelItem){
                                 val id = item.id
