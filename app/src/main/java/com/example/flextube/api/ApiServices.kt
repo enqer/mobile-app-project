@@ -82,7 +82,7 @@ interface ApiServices {
         @Query("part") part: String = "snippet",
         @Query("type") type: String = "video",
         @Query("videoDuration") videoDuration: String = "short",
-        @Query("key") key: String = KEY2,
+        //@Query("key") key: String = KEY2,
         @Query("maxResults") results: Int = 5,
         //@Query("videoCategoryId") videoCategoryId: String = "12"
     ): Call<VideoIdsApiModel>
@@ -94,14 +94,14 @@ interface ApiServices {
         @Query("part") part3: String = "snippet",
         @Query("part") part4: String = "player",
         @Query("id") id: String,
-        @Query("key") key: String = KEY2
+       // @Query("key") key: String = KEY2
     ): Call<ShortsApiModel>
     @GET("channels")
     fun getShortsChannel(
         @Query("part") part: String = "snippet",
         @Query("part") part2: String = "statistics",
         @Query("id") id: String,
-        @Query("key") key: String = KEY2
+       // @Query("key") key: String = KEY2
     ): Call<ShortsAuthorApiModel>
 
 //    @POST("https://accounts.google.com/o/oauth2/v2/auth")
@@ -128,8 +128,8 @@ interface ApiServices {
     @POST("token")
     @FormUrlEncoded
     fun refreshToken(
-        @Field("client_id") clientId: String = "469398138855-2qgn9emqks2dv1ou3mfcoo1upenj854e.apps.googleusercontent.com",
-        @Field("client_secret") clientSecret: String = "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",
+        @Field("client_id") clientId: String = "469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com",
+        @Field("client_secret") clientSecret: String = "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",
         @Field("refresh_token") refreshToken: String,
         @Field("grant_type") grantType: String="refresh_token"
     ): Call<TokenResponse>
@@ -140,7 +140,7 @@ interface ApiServices {
         //private final const val KEY2 = "AIzaSyBVhdqkI4hsX2iJDyicTQxQqPrk7b4jYTk"
         private final const val KEY3 = "AIzaSyDdGRDghuNkU8ewbsf8T_cvrS9fxe39_P4"
         const val KEY2 = "AIzaSyBhdimCg11eSsAieixZwVvJJKKCIIyFhE8"
-        var authToken: String = ""
+        var authToken: String = "ya29.a0AWY7CkkuOiqWaTVJD-wxEBISK2WKcaWmqpI4EVdHb_JYccgvAqseljmfFOfH7Wo_76Q5shcHgi9pWvvl0J6vcIQmf4eJO_oG26HNSLWqibzbMQdb9v8DNGddNPmw0sOV8uqWAMzqOHreBKed-Pidgy0ZbcbFaCgYKARASARMSFQG1tDrpLaJZyY0QxIZ-UKxANmWI4w0163"
 
 
         fun getClient(): ApiServices {
@@ -164,7 +164,6 @@ interface ApiServices {
 
 
         fun getRetrofit(): ApiServices {
-            Log.i("tok", authToken)
             val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
                     val request: Request = chain.request()
@@ -181,7 +180,6 @@ interface ApiServices {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
-            Log.i("ret", authToken)
             return retrofit.create(ApiServices::class.java)
         }
         fun getRetrofit2(): ApiServices {

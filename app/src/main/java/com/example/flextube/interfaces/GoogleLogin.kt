@@ -7,5 +7,7 @@ interface GoogleLogin {
     companion object{
         lateinit var gso: GoogleSignInOptions
         lateinit var gsc: GoogleSignInClient
+        lateinit var access_token: String
+        lateinit var refresh_token: String
     }
 }

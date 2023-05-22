@@ -1,6 +1,7 @@
 package com.example.flextube
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 
 
@@ -13,7 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.example.flextube.api.ApiServices
+import com.example.flextube.auth.TokenResponse
 import com.example.flextube.databinding.ActivityMainBinding
+import com.example.flextube.interfaces.GoogleLogin
 
 
 import com.example.flextube.settings.SettingsActivity
@@ -27,17 +31,27 @@ import com.example.flextube.ui.home.HomeFragment
 
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
+    lateinit var sharedPreferences: SharedPreferences
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPreferences = getSharedPreferences("auth", MODE_PRIVATE)
+
+        val acTOken = sharedPreferences.getString("access_token","error")
+        val rfrTOken = sharedPreferences.getString("refresh_token","1//0c1e_0QNdd-TwCgYIARAAGAwSNwF-L9IrnjFQx4c_cx4sxjalaO8T-ZQAFWY-eZliyBchkEwNOvGreWjuL1XQZfuI4msGFEOLRcg")
+        if (rfrTOken != null) {
+            refreshToken(rfrTOken)
+        }
 
         val account = GoogleSignIn.getLastSignedInAccount(this)
 
@@ -88,6 +102,31 @@ class MainActivity : AppCompatActivity() {
 
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+    private fun refreshToken(refresh_token: String){
+        val apiService = ApiServices.getClient()
+        val call = apiService.refreshToken(refreshToken = refresh_token)
+        call.enqueue(object: Callback<TokenResponse> {
+            override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                if(response.isSuccessful){
+                    val result = response.body()
+                    if(result!=null){
+                        //Log.d("Refresh Token",result.refreshToken)
+                        Log.d("Access Token",result.accessToken)
+                        val editor = sharedPreferences.edit()
+                        editor.putString("access_token", result.accessToken)
+                        editor.putString("refresh_token", result.refreshToken)
+                        editor.apply()
+                        GoogleLogin.access_token = result.accessToken
+                       // GoogleLogin.refresh_token = result.refreshToken
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
 }

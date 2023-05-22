@@ -1,6 +1,8 @@
 package com.example.flextube.login
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -47,12 +49,16 @@ class LoginActivity : AppCompatActivity() {
     //val webView: WebView = WebView(this)
     // val webView: WebView = WebView(requireNotNull(this).applicationContext)
     lateinit var codeVerifier: String
+    lateinit var sharedPreferences: SharedPreferences
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.flextube.R.layout.activity_login)
+
+        sharedPreferences=getSharedPreferences("auth", Context.MODE_PRIVATE)
 
 
         val google: View = findViewById(com.example.flextube.R.id.google_area)
@@ -66,6 +72,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         codeVerifier=generateCodeChallenge(generateCodeVerifier())
+
 
 
 
@@ -101,7 +108,14 @@ class LoginActivity : AppCompatActivity() {
     }
     fun auth(){
 
+
         val webView= WebView(this)
+        webView.clearFormData()
+        webView.clearCache(true)
+        webView.clearHistory()
+        webView.isClickable = true
+        webView.isFocusableInTouchMode = true
+        webView.isFocusable = true
         val alertDialogBuilder = AlertDialog.Builder(this)
         alertDialogBuilder.setTitle("Autoryzacja użytkownika")
         alertDialogBuilder.setView(webView)
@@ -109,7 +123,8 @@ class LoginActivity : AppCompatActivity() {
         val settings: WebSettings = webView.settings
         settings.userAgentString = "Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36"
         webView.settings.javaScriptEnabled = true
-        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com&redirect_uri=http://localhost:8080&response_type=code&scope=https://www.googleapis.com/auth/youtube")
+//        webView.loadUrl("https://oauth2.googleapis.com/revoke?token=ya29.a0AWY7CklEK7MhUDu8hlSzi84EcUyCfJaO0NDAS5-XONbVLNN1EwkikkDcRKSUOmSNofxMXXE35rGyn4AZf9ooy090e_tH4JTU70c12qWw1u3un5RtnWapeKV9MbDDHUWcXD-UkIhCvf88hqS2asZs4zJUg-XHaCgYKAa8SARASFQG1tDrppVTvDVE3Q94Rq35jy5Utvg0163")
+        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com&redirect_uri=http://localhost:8080&access_type=offline&response_type=code&scope=https://www.googleapis.com/auth/youtube")
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
@@ -136,14 +151,19 @@ class LoginActivity : AppCompatActivity() {
                     val result = response.body()
                     Log.d("tak","git")
                     if (result != null) {
-                         Log.d("token", result.accessToken.toString())
-                        //ApiServices.authToken = result.accessToken
+                         Log.d("token", result.accessToken)
+                         Log.d("refresh_token", result.refreshToken)
+                         val editor = sharedPreferences.edit()
+                         editor.putString("access_token", result.accessToken)
+                         editor.putString("refresh_token", result.refreshToken)
+                         editor.apply()
+//                         ApiServices.authToken = result.accessToken
                     }
                 }
             }
 
             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                Log.i("nie",t.message.toString())
+                Log.i("Error",t.message.toString())
             }
         })
 
@@ -185,7 +205,7 @@ class LoginActivity : AppCompatActivity() {
                 auth()
                 val userEmail=account.photoUrl
 //                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//                intent.putExtra("email", userEmail)
+//                intent.putExtra("email", userEmail)988
                 startActivity(intent)
             } catch (e: ApiException) {
                 Log.d("test", e.message.toString())
