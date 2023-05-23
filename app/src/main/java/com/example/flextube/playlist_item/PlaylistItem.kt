@@ -5,5 +5,6 @@ data class PlaylistItem(
     val title: String,
     val channelTitle: String,
     val thumnailsUrl: String,
-    val videoOwnerChannelId: String
+    val videoOwnerChannelId: String,
+    val videoId: String
 )

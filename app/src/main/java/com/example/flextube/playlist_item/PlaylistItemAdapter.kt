@@ -10,44 +10,47 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
-import com.example.flextube.shorts.ShortsAuthor
-import com.example.flextube.video.Video
+import com.example.flextube.video.AuthorVideo
 import com.squareup.picasso.Picasso
 
-class PlaylistItemAdapter (
+class PlaylistItemAdapter(
     private val playlistItems: ArrayList<PlaylistItem>,
-    private val channelItems: ArrayList<ShortsAuthor>,
-    private val mItemListener: PlaylistItemAdapter.ItemClickListener,
-    private var context: Context? = null
-        ):
-    RecyclerView.Adapter<PlaylistItemAdapter.PlaylistItemViewHolder>() {
+    private val channelItems: ArrayList<AuthorVideo>,
+    private val itemClickListener: ItemClickListener
+) : RecyclerView.Adapter<PlaylistItemAdapter.PlaylistItemViewHolder>() {
 
-
-    class PlaylistItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val playlistItemThumnails: ImageView
+    inner class PlaylistItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
+        val playlistItemThumbnails: ImageView
         val playlistItemTitle: TextView
         val playlistItemAuthor: TextView
         val playlistItemUser: ImageView
 
-        private var context: Context
-
         init {
-            playlistItemThumnails = itemView.findViewById(R.id.IV_playlistItem_template)
+            playlistItemThumbnails = itemView.findViewById(R.id.IV_playlistItem_template)
             playlistItemTitle = itemView.findViewById(R.id.TV_playlistItem_title)
             playlistItemAuthor = itemView.findViewById(R.id.TV_playlistItem_author)
             playlistItemUser = itemView.findViewById(R.id.IV_playlistItem_user)
 
-            context = itemView.context
+            itemView.setOnClickListener(this)
 
             Log.d(TAG, "PlaylistItemViewHolder/PlaylistViewHolder")
+        }
+
+        override fun onClick(view: View) {
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                val clickedItem = playlistItems[position]
+                itemClickListener.onItemClick(clickedItem)
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistItemViewHolder {
         Log.d(TAG, "PlaylistItemViewHolder/onCreateViewHolder")
 
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.activity_playlist_item, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.activity_playlist_item, parent, false)
         return PlaylistItemViewHolder(view)
     }
 
@@ -60,21 +63,17 @@ class PlaylistItemAdapter (
     override fun onBindViewHolder(holder: PlaylistItemViewHolder, position: Int) {
         val playlistItem = playlistItems[position]
 
-        Picasso.get().load(playlistItem.thumnailsUrl).into(holder.playlistItemThumnails)
+        Picasso.get().load(playlistItem.thumnailsUrl).into(holder.playlistItemThumbnails)
         holder.playlistItemTitle.text = playlistItem.title
         holder.playlistItemAuthor.text = playlistItem.channelTitle
-        //Picasso.get().load(playlistItem.videoOwnerChannelId).into(holder.playlistItemUser)
-        //Picasso.get().load(playlistItem.authorVideo.urlLogo).into(holder.playlistItemUser)
+
         val channelItem = channelItems.find { it.id == playlistItem.videoOwnerChannelId }
         channelItem?.let {
             Picasso.get().load(channelItem.urlLogo).into(holder.playlistItemUser)
         }
-
     }
 
     interface ItemClickListener {
         fun onItemClick(playlistItem: PlaylistItem)
-        fun onChannelItemClick(channelItem: ShortsAuthor)
     }
-
 }
