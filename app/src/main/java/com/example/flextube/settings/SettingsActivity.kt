@@ -1,8 +1,5 @@
 package com.example.flextube.settings
 
-
-import android.R.attr.key
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -52,7 +49,6 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -121,6 +117,7 @@ class SettingsActivity : AppCompatActivity() {
             languagePrefs.getString(LANGUAGE_PREF, "Polish") // default to English
         setLocale(this, selectedLanguage?.let { getLanguageCode(it) })
 
+
         // change language
         linearLayout2.setOnClickListener {
             val languages = arrayOf("English", "Polish")
@@ -133,15 +130,28 @@ class SettingsActivity : AppCompatActivity() {
                         .show()
 
                     // Language save
-                    val editor = languagePrefs.edit()
-                    editor.putString(LANGUAGE_PREF, selectedLanguage)
-                    editor.apply()
+                    //val editor = languagePrefs.edit()
+                    //editor.putString(LANGUAGE_PREF, selectedLanguage)
+                    //editor.apply()
+                    SharedPreferencesManager.initialize(applicationContext)
+                    SharedPreferencesManager.setSelectedLanguage(selectedLanguage!!)
                     Log.d(selectedLanguage, "selectedLanguage")
-                    dialog.dismiss() // close window
-                    //recreate()
 
-                    finish();
-                    startActivity(getIntent());
+                    if (switch1.isChecked == true){
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    } else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    }
+
+
+
+                    dialog.dismiss() // close window
+                    recreate()
+
+//                    finish();
+//                    startActivity(getIntent());
 
                 }
                 .setNegativeButton("Cancel") { dialog, _ ->

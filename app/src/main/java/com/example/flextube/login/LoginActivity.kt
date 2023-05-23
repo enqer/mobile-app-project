@@ -1,6 +1,7 @@
 package com.example.flextube.login
 
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +20,7 @@ import com.example.flextube.api.ApiServices
 import com.example.flextube.auth.TokenResponse
 import com.example.flextube.interfaces.GoogleLogin
 import com.example.flextube.interfaces.GoogleLogin.Companion.gso
+import com.example.flextube.settings.SharedPreferencesManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -30,6 +32,7 @@ import retrofit2.Response
 import java.security.MessageDigest
 import java.security.SecureRandom
 import java.util.Base64
+import java.util.Locale
 
 
 class LoginActivity : AppCompatActivity() {
@@ -40,6 +43,25 @@ class LoginActivity : AppCompatActivity() {
     // val webView: WebView = WebView(requireNotNull(this).applicationContext)
     lateinit var codeVerifier: String
     private val DARK_MODE_PREF = "darkModePref"
+//    private val LANGUAGE_PREF = "languagePref"
+
+//    fun setLocale(activity: Activity, languageCode: String?) {
+//        val locale = Locale(languageCode)
+//        Locale.setDefault(locale)
+//        val resources = activity.resources
+//        val config = resources.configuration
+//        config.setLocale(locale)
+//        resources.updateConfiguration(config, resources.displayMetrics)
+//    }
+//
+//    // string to language code function
+//    fun getLanguageCode(language: String): String {
+//        return when (language) {
+//            "English" -> "en"
+//            "Polish" -> "pl"
+//            else -> "en" // default
+//        }
+//    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -55,6 +77,12 @@ class LoginActivity : AppCompatActivity() {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
+
+
+//        val selectedLanguage = SharedPreferencesManager.getSelectedLanguage()
+//        // Tutaj możesz wywołać swoją funkcję do ustawiania języka na podstawie `selectedLanguage`
+//        setLocale(this, getLanguageCode(selectedLanguage ?: "Polish"))
+
 
 
         val google: View = findViewById(com.example.flextube.R.id.google_area)
