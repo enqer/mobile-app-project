@@ -1,6 +1,5 @@
 package com.example.flextube.playlist_item
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,17 +15,13 @@ import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.video.AuthorVideo
 import com.example.flextube.video.Video
 import com.example.flextube.video.VideoActivity
-import com.example.flextube.video.VideoAdapter
 import com.example.flextube.video.VideoApiModel
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-
 
 
 class PlaylistActivity : AppCompatActivity() {
@@ -36,17 +31,7 @@ class PlaylistActivity : AppCompatActivity() {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: RecyclerView.Adapter<PlaylistItemAdapter.PlaylistItemViewHolder>
 
-    //private var videoOwnerChannelId: String = ""
-
     private val channelList: ArrayList<AuthorVideo> = ArrayList()
-
-    //private var videoId: String = ""
-    public val videoItemList: ArrayList<Video> = ArrayList()
-    public var authorList: ArrayList<AuthorVideo> = ArrayList<AuthorVideo>()
-    var idAuthorsVideos: HashMap<String, String> = HashMap<String, String>()
-    private lateinit var qAdapter: RecyclerView.Adapter<VideoAdapter.VideoViewHolder>
-
-    var iterator = 0
 
     private var authorId: String = ""
     private var authorName: String = ""
@@ -56,7 +41,7 @@ class PlaylistActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_playlist)
-        Log.d(TAG, "PLaylistActivity/onCreate -> Start activity")
+        Log.d("PLaylistActivity/onCreate", "Start activity")
 
         val account = GoogleSignIn.getLastSignedInAccount(this)
         val playlistName = findViewById<TextView>(R.id.TV_playlist_name_activity)
@@ -71,37 +56,27 @@ class PlaylistActivity : AppCompatActivity() {
 
         val imageView = findViewById<ImageView>(R.id.person_icon)
         imageView.setOnClickListener {
-
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
 
-        // Inicjalizacja widoków i adaptera
         mRecyclerView = findViewById(R.id.playlist_items_recyclerview)
         mAdapter = PlaylistItemAdapter(
             playlistItemList,
             channelList,
             object : PlaylistItemAdapter.ItemClickListener {
                 override fun onItemClick(playlistItem: PlaylistItem) {
-                    // Obsługa kliknięcia na element listy
-                    Log.d(TAG, "click click click")
+                    Log.d("PlaylistActivity/onCreate/onItemClick", "click")
                 }
-
-//            override fun onChannelItemClick(channelItem: AuthorVideo) {
-//                // Obsługa kliknięcia na ikonkę kanału
-//                Log.d(TAG, "click click click")
-//            }
             })
 
-        // Konfiguracja RecyclerView
         mLayoutManager = LinearLayoutManager(this)
         mRecyclerView.layoutManager = mLayoutManager
         mRecyclerView.adapter = mAdapter
         mRecyclerView.setHasFixedSize(true)
 
-
-        Log.d(TAG, "PlaylistActivity/onCreate -> playlistListId: $playlistListId")
-        Log.d(TAG, "PlaylistActivity/onCreate -> title: $title")
+        Log.d("PlaylistActivity/onCreate", "playlistListId: $playlistListId")
+        Log.d("PlaylistActivity/onCreate", "title: $title")
 
         playlistName.setText(title)
 
@@ -126,13 +101,8 @@ class PlaylistActivity : AppCompatActivity() {
                         val playlistItems = response.body()?.items
                         playlistItems?.let {
                             for (item in playlistItems) {
-
-                                val id = item.id
                                 var title = item.snippet.title
                                 var channelTitle = item.snippet.videoOwnerChannelTitle
-                                val thumbnails = item.snippet.thumbnails.medium.url
-                                val videoOwnerChannelId = item.snippet.videoOwnerChannelId
-                                val videoId = item.snippet.resourceId.videoId
 
                                 if (title.length > maxLength) {
                                     title = title.substring(0, maxLength) + "..."
@@ -141,28 +111,17 @@ class PlaylistActivity : AppCompatActivity() {
                                     channelTitle = channelTitle.substring(0, maxLength) + "..."
                                 }
 
-                                Log.d(TAG, "id: $id")
-                                Log.d(TAG, "Title: $title")
-                                Log.d(TAG, "channelTitle: $channelTitle")
-                                Log.d(TAG, "thumbnails: $thumbnails")
-                                Log.d(TAG, "videoOwnerChannelId: $videoOwnerChannelId")
-                                Log.d(TAG, "videoId: $videoId")
-
-
-                                getIconUser(videoOwnerChannelId)
-
-
                                 playlistItemList.add(
                                     PlaylistItem(
-                                        id,
+                                        item.id,
                                         title,
                                         channelTitle,
-                                        thumbnails,
-                                        videoOwnerChannelId,
-                                        videoId
-
+                                        item.snippet.thumbnails.medium.url,
+                                        item.snippet.videoOwnerChannelId,
+                                        item.snippet.resourceId.videoId
                                     )
                                 )
+                                getIconUser(item.snippet.videoOwnerChannelId)
                             }
 
                             mAdapter = PlaylistItemAdapter(
@@ -170,43 +129,29 @@ class PlaylistActivity : AppCompatActivity() {
                                 channelList,
                                 object : PlaylistItemAdapter.ItemClickListener {
                                     override fun onItemClick(playlistItem: PlaylistItem) {
-
+                                        Log.d("PlaylistActivity/PlaylistItems", "onItemClick click")
                                         getIconUser(playlistItem.videoOwnerChannelId)
-                                        val obj = getVideoItems(playlistItem.videoId)
-
-
-                                        Log.d("chuj debugging", "test")
-
-
-//                                        val intent = Intent(baseContext, VideoActivity::class.java)
-//                                        val gson = Gson()
-//                                        val json: String = gson.toJson(videoItemList)
-//                                        intent.putExtra("video", json)
-//                                        startActivity(intent)
-
-
+                                        getIconUser(playlistItem.videoOwnerChannelId)
+                                        getIconUser(playlistItem.videoOwnerChannelId)
+                                        getVideoItems(playlistItem.videoId)
                                     }
                                 }
                             )
-
-
-                            Log.d("chuj debugging", "tes222t")
                             mLayoutManager = LinearLayoutManager(this@PlaylistActivity)
                             mRecyclerView = findViewById(R.id.playlist_items_recyclerview)
                             mRecyclerView.layoutManager = mLayoutManager
                             mRecyclerView.adapter = mAdapter
                             mRecyclerView.setHasFixedSize(true)
 
-                            mAdapter.notifyDataSetChanged() // Aktualizacja adaptera
-
+                            mAdapter.notifyDataSetChanged()
                         }
                     } else {
-                        Log.e(TAG, "Response not successful: ${response.code()}")
+                        Log.e("PlaylistActivity/PlaylistItems", "Response not successful: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<PlaylistItemApiModel>, t: Throwable) {
-                    Log.e(TAG, "Error fetching playlist: ${t.localizedMessage}")
+                    Log.e("PlaylistActivity/PlaylistItems/onFailure", "Error fetching playlist: ${t.localizedMessage}")
                 }
             })
     }
@@ -219,7 +164,6 @@ class PlaylistActivity : AppCompatActivity() {
                     call: Call<AuthorApiModel>,
                     response: Response<AuthorApiModel>
                 ) {
-
                     if (response.isSuccessful) {
                         val channelItem = response.body()?.items
                         channelItem?.let {
@@ -228,11 +172,6 @@ class PlaylistActivity : AppCompatActivity() {
                                 authorName = item.snippet.title
                                 authorUrlLogo = item.snippet.thumbnails.picture.url
                                 authorSubscriberCount = item.statistics.subscriberCount
-
-                                Log.d(TAG, "id: $authorId")
-                                Log.d(TAG, "name: $authorName")
-                                Log.d(TAG, "urlLogo: $authorUrlLogo")
-                                Log.d(TAG, "subscriberCount: $authorSubscriberCount")
 
                                 channelList.add(
                                     AuthorVideo(
@@ -246,14 +185,13 @@ class PlaylistActivity : AppCompatActivity() {
                             mAdapter.notifyDataSetChanged()
                         }
                     } else {
-                        Log.e(TAG, "Response not successful: ${response.code()}")
+                        Log.e("PlaylistActivity/getIconUser", "Response not successful: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<AuthorApiModel>, t: Throwable) {
-                    Log.e(TAG, "Error fetching playlist: ${t.localizedMessage}")
+                    Log.e("PlaylistActivity/getIconUser/onFailure", "Error fetching playlist: ${t.localizedMessage}")
                 }
-
             })
     }
 
@@ -268,39 +206,26 @@ class PlaylistActivity : AppCompatActivity() {
                     call: Call<VideoApiModel>,
                     response: Response<VideoApiModel>
                 ) {
-                    Log.d(TAG, "videoId: $videoId")
+                    Log.d("PlaylistActivity/getVideoItems", "videoId: $videoId")
 
                     if (response.isSuccessful) {
                         val videoItems = response.body()?.items
                         videoItems?.let {
-
                             for (item in videoItems) {
 
 
-                                val id = item.id
-                                val urlPhoto = item.snippet.thumbnails.photoVideo.urlPhoto
-                                val duration = item.contentDetails.duration
-                                val title = item.snippet.title
-                                val viewCount = item.statistics.viewCount
-                                val likeCount = item.statistics.likeCount
-                                val commentCount = item.statistics.commentCount
-                                val publishedAt = item.snippet.publishedAt
-                                val embedHtml = item.player.embedHtml
-                                val embedHeight = item.player.embedHeight
-                                val embedWidth = item.player.embedWidth
-
                                 val videoObj = Video(
-                                    id,
-                                    urlPhoto,
-                                    duration,
-                                    title,
-                                    viewCount,
-                                    likeCount,
-                                    commentCount,
-                                    publishedAt,
-                                    embedHtml,
-                                    embedHeight,
-                                    embedWidth,
+                                    item.id,
+                                    item.snippet.thumbnails.photoVideo.urlPhoto,
+                                    item.contentDetails.duration,
+                                    item.snippet.title,
+                                    item.statistics.viewCount,
+                                    item.statistics.likeCount,
+                                    item.statistics.commentCount,
+                                    item.snippet.publishedAt,
+                                    item.player.embedHtml,
+                                    item.player.embedHeight,
+                                    item.player.embedWidth,
                                     AuthorVideo(
                                         authorId,
                                         authorName,
@@ -309,76 +234,21 @@ class PlaylistActivity : AppCompatActivity() {
                                     )
                                 )
 
-                                        val intent = Intent(baseContext, VideoActivity::class.java)
-                                        val gson = Gson()
-                                        val json: String = gson.toJson(videoObj)
-                                        intent.putExtra("video", json)
-                                        startActivity(intent)
-
-
-                                Log.d(TAG, "id: $id")
-                                Log.d(TAG, "urlPhoto: $urlPhoto")
-                                Log.d(TAG, "duration: $duration")
-                                Log.d(TAG, "title: $title")
-                                Log.d(TAG, "viewCount: $viewCount")
-                                Log.d(TAG, "likeCount: $likeCount")
-                                Log.d(TAG, "commentCount: $commentCount")
-                                Log.d(TAG, "publishedAt: $publishedAt")
-                                Log.d(TAG, "embedHtml: $embedHtml")
-                                Log.d(TAG, "embedHeight: $embedHeight")
-                                Log.d(TAG, "embedWidth: $embedWidth")
-
-                                Log.d(TAG, "authorId: $authorId")
-                                Log.d(TAG, "authorName: $authorName")
-                                Log.d(TAG, "authorUrlLogo: $authorUrlLogo")
-                                Log.d(TAG, "authorSubscriberCount: $authorSubscriberCount")
-
-                                videoItemList.add(
-                                    Video(
-                                        id,
-                                        urlPhoto,
-                                        duration,
-                                        title,
-                                        viewCount,
-                                        likeCount,
-                                        commentCount,
-                                        publishedAt,
-                                        embedHtml,
-                                        embedHeight,
-                                        embedWidth,
-                                        AuthorVideo(
-                                            authorId,
-                                            authorName,
-                                            authorUrlLogo,
-                                            authorSubscriberCount
-                                        )
-                                    )
-                                )
-
-
-
-//                            qAdapter = VideoAdapter(videoItemList, object : VideoAdapter.ItemClickListener{
-//                                override fun onItemClick(video: Video) {
-//                                    val intent = Intent(baseContext, VideoActivity::class.java)
-//                                    val gson = Gson()
-//                                    val json: String = gson.toJson(video)
-//                                    Log.d("chuj debugging", video.toString())
-//                                    intent.putExtra("video", json)
-//                                    startActivity(intent)
-//                                }
-//                            })
-
+                                val intent = Intent(baseContext, VideoActivity::class.java)
+                                val gson = Gson()
+                                val json: String = gson.toJson(videoObj)
+                                intent.putExtra("video", json)
+                                startActivity(intent)
                             }
                         }
                     } else {
-                        Log.e(TAG, "Response not successful: ${response.code()}")
+                        Log.e("PlaylistActivity/getVideoItems", "Response not successful: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<VideoApiModel>, t: Throwable) {
-                    Log.e(TAG, "Error fetching playlist: ${t.localizedMessage}")
+                    Log.e("PlaylistActivity/getVideoItems/onFailure", "Error fetching playlist: ${t.localizedMessage}")
                 }
             })
-        //return videoItemList
     }
 }

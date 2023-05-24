@@ -20,7 +20,7 @@ import com.example.flextube.api.ApiServices
 import com.example.flextube.auth.TokenResponse
 import com.example.flextube.interfaces.GoogleLogin
 import com.example.flextube.interfaces.GoogleLogin.Companion.gso
-import com.example.flextube.settings.SharedPreferencesManager
+//import com.example.flextube.settings.SharedPreferencesManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -80,7 +80,6 @@ class LoginActivity : AppCompatActivity() {
 
 
 //        val selectedLanguage = SharedPreferencesManager.getSelectedLanguage()
-//        // Tutaj możesz wywołać swoją funkcję do ustawiania języka na podstawie `selectedLanguage`
 //        setLocale(this, getLanguageCode(selectedLanguage ?: "Polish"))
 
 

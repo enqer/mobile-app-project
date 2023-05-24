@@ -34,7 +34,7 @@ class PlaylistItemAdapter(
 
             itemView.setOnClickListener(this)
 
-            Log.d(TAG, "PlaylistItemViewHolder/PlaylistViewHolder")
+            Log.d("PlaylistItemViewHolder/PlaylistViewHolder", "done")
         }
 
         override fun onClick(view: View) {
@@ -47,7 +47,7 @@ class PlaylistItemAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistItemViewHolder {
-        Log.d(TAG, "PlaylistItemViewHolder/onCreateViewHolder")
+        Log.d("PlaylistItemViewHolder/onCreateViewHolder", "done")
 
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.activity_playlist_item, parent, false)
@@ -55,7 +55,7 @@ class PlaylistItemAdapter(
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG, "PlaylistItemViewHolder/getItemCount")
+        Log.d("PlaylistItemViewHolder/getItemCount", "done")
 
         return playlistItems.size
     }
@@ -63,7 +63,7 @@ class PlaylistItemAdapter(
     override fun onBindViewHolder(holder: PlaylistItemViewHolder, position: Int) {
         val playlistItem = playlistItems[position]
 
-        Picasso.get().load(playlistItem.thumnailsUrl).into(holder.playlistItemThumbnails)
+        Picasso.get().load(playlistItem.thumbnailsUrl).into(holder.playlistItemThumbnails)
         holder.playlistItemTitle.text = playlistItem.title
         holder.playlistItemAuthor.text = playlistItem.channelTitle
 

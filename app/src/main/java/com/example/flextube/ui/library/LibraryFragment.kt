@@ -283,8 +283,6 @@ class LibraryFragment : Fragment() {
             })
     }
 
-
-
     // Execute order 66
     override fun onDestroyView() {
         super.onDestroyView()

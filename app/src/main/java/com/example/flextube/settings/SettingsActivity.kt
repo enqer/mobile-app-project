@@ -130,11 +130,11 @@ class SettingsActivity : AppCompatActivity() {
                         .show()
 
                     // Language save
-                    //val editor = languagePrefs.edit()
-                    //editor.putString(LANGUAGE_PREF, selectedLanguage)
-                    //editor.apply()
-                    SharedPreferencesManager.initialize(applicationContext)
-                    SharedPreferencesManager.setSelectedLanguage(selectedLanguage!!)
+                    val editor = languagePrefs.edit()
+                    editor.putString(LANGUAGE_PREF, selectedLanguage)
+                    editor.apply()
+//                    SharedPreferencesManager.initialize(applicationContext)
+//                    SharedPreferencesManager.setSelectedLanguage(selectedLanguage!!)
                     Log.d(selectedLanguage, "selectedLanguage")
 
                     if (switch1.isChecked == true){
@@ -144,8 +144,6 @@ class SettingsActivity : AppCompatActivity() {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     }
-
-
 
                     dialog.dismiss() // close window
                     recreate()
