@@ -107,8 +107,6 @@ class LoginActivity : AppCompatActivity() {
         GoogleLogin.gsc.signOut()
     }
     fun auth(){
-
-
         val webView= WebView(this)
         webView.clearFormData()
         webView.clearCache(true)
@@ -154,12 +152,22 @@ class LoginActivity : AppCompatActivity() {
                          Log.d("token", result.accessToken)
                          Log.d("refresh_token", result.refreshToken)
                          val editor = sharedPreferences.edit()
+                         editor.putString("temp","teraz")
                          editor.putString("access_token", result.accessToken)
                          editor.putString("refresh_token", result.refreshToken)
                          editor.apply()
+                         ApiServices.authToken = result.accessToken
+                         //ApiServices.authToken = result.accessToken
+
 //                         ApiServices.authToken = result.accessToken
                     }
                 }
+                val accessToken: String? = sharedPreferences.getString("access_token",null)
+                if(accessToken!=null){
+                    ApiServices.authToken=accessToken
+                }
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
             }
 
             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
@@ -167,8 +175,8 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-        startActivity(intent)
+//        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//        startActivity(intent)
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun generateCodeVerifier(): String {

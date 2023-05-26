@@ -94,8 +94,6 @@ class ShortsFragment : Fragment() {
         mRecyclerView.layoutManager = mLayoutManager
 
         getIDsOfVideos()
-        Log.i("lista short", shortList.size.toString())
-        Log.i("lista title", authorsLogosList.size.toString())
 
         return root
     }
@@ -154,14 +152,14 @@ class ShortsFragment : Fragment() {
     }
 
     private fun viewVideos() {
-
+        if (idVideos.size > 0 && idAuthors.size > 0) {
             for (i in idAuthors) {
                 getAuthors(i)
             }
             for (i in idVideos)
                 getVideos(i)
-
-        }
+         }
+    }
     private fun getVideos(id: String){
         val api = ApiServices.getRetrofit()
         val videos: Call<ShortsApiModel> = api.getStatsShorts(id=id)
@@ -171,6 +169,8 @@ class ShortsFragment : Fragment() {
                     val vid = response.body()
                     if (vid != null && authorList.size > 0) {
                         var author = authorList[index]
+                        Log.d("shorts","oks")
+                        Log.d("name",vid.items[0].snippet.title)
                             for (i in vid.items) {
                                 for (j in authorList)
                                 {
