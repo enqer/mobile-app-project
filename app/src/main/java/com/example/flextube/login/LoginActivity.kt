@@ -1,8 +1,8 @@
 package com.example.flextube.login
 
-
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -10,29 +10,36 @@ import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import com.example.flextube.MainActivity
 import com.example.flextube.api.ApiServices
 import com.example.flextube.auth.TokenResponse
 import com.example.flextube.interfaces.GoogleLogin
 import com.example.flextube.interfaces.GoogleLogin.Companion.gso
-//import com.example.flextube.settings.SharedPreferencesManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.security.MessageDigest
 import java.security.SecureRandom
+import java.security.spec.MGF1ParameterSpec.SHA256
 import java.util.Base64
-import java.util.Locale
+
+
+import com.example.flextube.settings.SettingsActivity
+import com.example.flextube.ui.library.LibraryFragment
+import com.example.flextube.ui.library.LibraryViewModel
+
 
 
 class LoginActivity : AppCompatActivity() {
@@ -42,26 +49,8 @@ class LoginActivity : AppCompatActivity() {
     //val webView: WebView = WebView(this)
     // val webView: WebView = WebView(requireNotNull(this).applicationContext)
     lateinit var codeVerifier: String
-    private val DARK_MODE_PREF = "darkModePref"
-//    private val LANGUAGE_PREF = "languagePref"
+    lateinit var sharedPreferences: SharedPreferences
 
-//    fun setLocale(activity: Activity, languageCode: String?) {
-//        val locale = Locale(languageCode)
-//        Locale.setDefault(locale)
-//        val resources = activity.resources
-//        val config = resources.configuration
-//        config.setLocale(locale)
-//        resources.updateConfiguration(config, resources.displayMetrics)
-//    }
-//
-//    // string to language code function
-//    fun getLanguageCode(language: String): String {
-//        return when (language) {
-//            "English" -> "en"
-//            "Polish" -> "pl"
-//            else -> "en" // default
-//        }
-//    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -69,19 +58,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.example.flextube.R.layout.activity_login)
 
-
-        val darkModePrefs = getSharedPreferences(DARK_MODE_PREF, 0)
-        val isDarkModeOn = darkModePrefs.getBoolean(DARK_MODE_PREF, false)
-        if (isDarkModeOn) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-
-
-//        val selectedLanguage = SharedPreferencesManager.getSelectedLanguage()
-//        setLocale(this, getLanguageCode(selectedLanguage ?: "Polish"))
-
+        sharedPreferences=getSharedPreferences("auth", Context.MODE_PRIVATE)
 
 
         val google: View = findViewById(com.example.flextube.R.id.google_area)
@@ -95,6 +72,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         codeVerifier=generateCodeChallenge(generateCodeVerifier())
+
 
 
 
@@ -129,8 +107,13 @@ class LoginActivity : AppCompatActivity() {
         GoogleLogin.gsc.signOut()
     }
     fun auth(){
-
         val webView= WebView(this)
+        webView.clearFormData()
+        webView.clearCache(true)
+        webView.clearHistory()
+        webView.isClickable = true
+        webView.isFocusableInTouchMode = true
+        webView.isFocusable = true
         val alertDialogBuilder = AlertDialog.Builder(this)
         alertDialogBuilder.setTitle("Autoryzacja użytkownika")
         alertDialogBuilder.setView(webView)
@@ -138,7 +121,8 @@ class LoginActivity : AppCompatActivity() {
         val settings: WebSettings = webView.settings
         settings.userAgentString = "Mozilla/5.0 (Linux; Android 11; Pixel 4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36"
         webView.settings.javaScriptEnabled = true
-        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com&redirect_uri=http://localhost:8080&response_type=code&scope=https://www.googleapis.com/auth/youtube")
+//        webView.loadUrl("https://oauth2.googleapis.com/revoke?token=ya29.a0AWY7CklEK7MhUDu8hlSzi84EcUyCfJaO0NDAS5-XONbVLNN1EwkikkDcRKSUOmSNofxMXXE35rGyn4AZf9ooy090e_tH4JTU70c12qWw1u3un5RtnWapeKV9MbDDHUWcXD-UkIhCvf88hqS2asZs4zJUg-XHaCgYKAa8SARASFQG1tDrppVTvDVE3Q94Rq35jy5Utvg0163")
+        webView.loadUrl("https://accounts.google.com/o/oauth2/v2/auth?client_id=469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com&redirect_uri=http://localhost:8080&access_type=offline&response_type=code&scope=https://www.googleapis.com/auth/youtube")
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
@@ -163,20 +147,36 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("kod autoryzacyjny",code)
                 if (response.isSuccessful) {
                     val result = response.body()
+                    Log.d("tak","git")
                     if (result != null) {
-                         Log.d("token", result.accessToken.toString())
-                        //ApiServices.authToken = result.accessToken
+                         Log.d("token", result.accessToken)
+                         Log.d("refresh_token", result.refreshToken)
+                         val editor = sharedPreferences.edit()
+                         editor.putString("temp","teraz")
+                         editor.putString("access_token", result.accessToken)
+                         editor.putString("refresh_token", result.refreshToken)
+                         editor.apply()
+                         ApiServices.authToken = result.accessToken
+                         //ApiServices.authToken = result.accessToken
+
+//                         ApiServices.authToken = result.accessToken
                     }
                 }
+                val accessToken: String? = sharedPreferences.getString("access_token",null)
+                if(accessToken!=null){
+                    ApiServices.authToken=accessToken
+                }
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
             }
 
             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                Log.i("nie",t.message.toString())
+                Log.i("Error",t.message.toString())
             }
         })
 
-        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-        startActivity(intent)
+//        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//        startActivity(intent)
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun generateCodeVerifier(): String {
@@ -213,7 +213,7 @@ class LoginActivity : AppCompatActivity() {
                 auth()
                 val userEmail=account.photoUrl
 //                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//                intent.putExtra("email", userEmail)
+//                intent.putExtra("email", userEmail)988
                 startActivity(intent)
             } catch (e: ApiException) {
                 Log.d("test", e.message.toString())

@@ -1,43 +1,64 @@
 package com.example.flextube
 
+
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-
-
 import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.example.flextube.api.ApiServices
+import com.example.flextube.auth.TokenResponse
 import com.example.flextube.databinding.ActivityMainBinding
-
-
+import com.example.flextube.interfaces.GoogleLogin
 import com.example.flextube.settings.SettingsActivity
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-
-import com.example.flextube.ui.home.HomeFragment
-
-
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.squareup.picasso.Picasso
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
+    lateinit var sharedPreferences: SharedPreferences
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        sharedPreferences = getSharedPreferences("auth", Context.MODE_PRIVATE)
+
+        val acTOken = sharedPreferences.getString("access_token",null)
+        val rfrTOken = sharedPreferences.getString("refresh_token",null)
+        if (acTOken != null) {
+            ApiServices.authToken = acTOken
+        }
+        if (rfrTOken != null) {
+            refreshToken(rfrTOken)
+            val t: Thread = object : Thread() {
+                override fun run() {
+                    try {
+                        while (true) {
+                            sleep(1800000)
+                            runOnUiThread {
+                                refreshToken(rfrTOken)
+                            }
+                        }
+                    } catch (e: InterruptedException) {
+                    }
+                }
+            }
+            t.start()
+        }
 
         val account = GoogleSignIn.getLastSignedInAccount(this)
 
@@ -88,6 +109,33 @@ class MainActivity : AppCompatActivity() {
 
 //        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+    private fun refreshToken(refresh_token: String){
+        val apiService = ApiServices.getClient()
+        val call = apiService.refreshToken(refreshToken = refresh_token)
+        call.enqueue(object: Callback<TokenResponse> {
+            override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                if(response.isSuccessful){
+                    val result = response.body()
+                    if(response.code()==200 && result!=null){
+                        //Log.d("Refresh Token",result.refreshToken)
+                        Log.d("Access Token",result.accessToken)
+                        val editor = sharedPreferences.edit()
+                        editor.putString("access_token", result.accessToken)
+                        editor.putString("refresh_token", result.refreshToken)
+                        editor.apply()
+                        ApiServices.authToken = result.accessToken
+//                        ApiServices.authToken = result.accessToken
+//                        GoogleLogin.access_token = result.accessToken
+//                        GoogleLogin.refresh_token = result.refreshToken
+                    }
+                    }
+                }
+
+            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
 }

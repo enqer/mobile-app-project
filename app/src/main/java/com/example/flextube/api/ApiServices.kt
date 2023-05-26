@@ -1,6 +1,8 @@
 package com.example.flextube.api
 
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.example.flextube.auth.TokenResponse
 
@@ -34,7 +36,6 @@ interface ApiServices {
     @GET("search")
     fun getSearchedVideos(
         @Query("part") part: String = "snippet",
-        @Query("key") key: String = KEY2,
         @Query("q") q: String,
         @Query("type") type: String = "video", // musi być ustawione jeśli chcemy videoEmbeddable
         @Query("maxResults") maxResults: Int = 20  // 10 filmów się wyświetli na głównej tylko, defaultowo jest 5 na api
@@ -48,7 +49,6 @@ interface ApiServices {
         @Query("part") part3: String = "snippet",
         @Query("part") part4: String = "player",
         @Query("id") id: String,
-        @Query("key") key: String = KEY2
     ) : Call<VideoApiModel>
 
     @GET("channels")
@@ -56,7 +56,6 @@ interface ApiServices {
         @Query("part") part: String = "snippet",
         @Query("part") part2: String = "statistics",
         @Query("id") id: String,
-        @Query("key") key: String = KEY2
     ): Call<AuthorApiModel>
 
     @GET("commentThreads")
@@ -65,7 +64,6 @@ interface ApiServices {
         @Query("order") order: String = "relevance",
         @Query("videoId") videoId: String,
         @Query("maxResults") results: Int = 40,
-        @Query("key") key: String = KEY2,
         @Query("textFormat") textFormat: String = "plainText"
     ) : Call<CommentApiModel>
 
@@ -73,7 +71,6 @@ interface ApiServices {
     fun getPlaylist(
         @Query("part") part: String,
         @Query("channelId") channelId: String,
-        @Query("key") key: String = KEY2,
         @Query("pageToken") pageToken: String?,
         @Query("maxResults") maxResults: Int
     ): Call<PlaylistApiModel>
@@ -91,9 +88,7 @@ interface ApiServices {
         @Query("part") part: String = "snippet",
         @Query("type") type: String = "video",
         @Query("videoDuration") videoDuration: String = "short",
-        @Query("key") key: String = KEY2,
         @Query("maxResults") results: Int = 5,
-        //@Query("videoCategoryId") videoCategoryId: String = "12"
     ): Call<VideoIdsApiModel>
 
     @GET("videos")
@@ -103,14 +98,12 @@ interface ApiServices {
         @Query("part") part3: String = "snippet",
         @Query("part") part4: String = "player",
         @Query("id") id: String,
-        @Query("key") key: String = KEY2
     ): Call<ShortsApiModel>
     @GET("channels")
     fun getShortsChannel(
         @Query("part") part: String = "snippet",
         @Query("part") part2: String = "statistics",
         @Query("id") id: String,
-        @Query("key") key: String = KEY2
     ): Call<ShortsAuthorApiModel>
 
 //    @POST("https://accounts.google.com/o/oauth2/v2/auth")
@@ -137,8 +130,8 @@ interface ApiServices {
     @POST("token")
     @FormUrlEncoded
     fun refreshToken(
-        @Field("client_id") clientId: String = "469398138855-2qgn9emqks2dv1ou3mfcoo1upenj854e.apps.googleusercontent.com",
-        @Field("client_secret") clientSecret: String = "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",
+        @Field("client_id") clientId: String = "469398138855-2l543p9gbvvfe1hnirm7m1b6au97v6g5.apps.googleusercontent.com",
+        @Field("client_secret") clientSecret: String = "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",
         @Field("refresh_token") refreshToken: String,
         @Field("grant_type") grantType: String="refresh_token"
     ): Call<TokenResponse>
@@ -174,7 +167,6 @@ interface ApiServices {
 
 
         fun getRetrofit(): ApiServices {
-            Log.i("tok", authToken)
             val client = OkHttpClient.Builder()
                 .addInterceptor { chain ->
                     val request: Request = chain.request()
@@ -185,13 +177,13 @@ interface ApiServices {
                 }
                 .build()
 
+
             val retrofit: Retrofit = Retrofit.Builder()
 
                 .baseUrl("https://www.googleapis.com/youtube/v3/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
-            Log.i("ret", authToken)
             return retrofit.create(ApiServices::class.java)
         }
         fun getRetrofit2(): ApiServices {
