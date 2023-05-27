@@ -79,7 +79,7 @@ interface ApiServices {
     fun getPlaylistItems(
         @Query("part") part: String,
         @Query("playlistId") playlistId: String,
-        @Query("key") key: String = KEY2,
+        //@Query("key") key: String = KEY2,
         @Query("maxResults") maxResults: Int = 10
     ): Call<PlaylistItemApiModel>
 

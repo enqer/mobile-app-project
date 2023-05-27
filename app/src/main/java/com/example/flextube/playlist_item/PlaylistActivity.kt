@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
 import com.example.flextube.api.ApiServices
+import com.example.flextube.database.DatabaseHelper
 import com.example.flextube.settings.SettingsActivity
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.video.AuthorVideo
@@ -89,7 +90,6 @@ class PlaylistActivity : AppCompatActivity() {
         apiServices.getPlaylistItems(
             "snippet, contentDetails",
             playlistListId,
-            ApiServices.KEY2,
             10
         )
             .enqueue(object : Callback<PlaylistItemApiModel> {
@@ -146,19 +146,25 @@ class PlaylistActivity : AppCompatActivity() {
                             mAdapter.notifyDataSetChanged()
                         }
                     } else {
-                        Log.e("PlaylistActivity/PlaylistItems", "Response not successful: ${response.code()}")
+                        Log.e(
+                            "PlaylistActivity/PlaylistItems",
+                            "Response not successful: ${response.code()}"
+                        )
                     }
                 }
 
                 override fun onFailure(call: Call<PlaylistItemApiModel>, t: Throwable) {
-                    Log.e("PlaylistActivity/PlaylistItems/onFailure", "Error fetching playlist: ${t.localizedMessage}")
+                    Log.e(
+                        "PlaylistActivity/PlaylistItems/onFailure",
+                        "Error fetching playlist: ${t.localizedMessage}"
+                    )
                 }
             })
     }
 
     private fun getIconUser(videoOwnerChannelId: String) {
         val apiServices = ApiServices.getRetrofit()
-        apiServices.getChannel("snippet", "statistics", videoOwnerChannelId, ApiServices.KEY2)
+        apiServices.getChannel("snippet", "statistics", videoOwnerChannelId)
             .enqueue(object : Callback<AuthorApiModel> {
                 override fun onResponse(
                     call: Call<AuthorApiModel>,
@@ -185,21 +191,30 @@ class PlaylistActivity : AppCompatActivity() {
                             mAdapter.notifyDataSetChanged()
                         }
                     } else {
-                        Log.e("PlaylistActivity/getIconUser", "Response not successful: ${response.code()}")
+                        Log.e(
+                            "PlaylistActivity/getIconUser",
+                            "Response not successful: ${response.code()}"
+                        )
                     }
                 }
 
                 override fun onFailure(call: Call<AuthorApiModel>, t: Throwable) {
-                    Log.e("PlaylistActivity/getIconUser/onFailure", "Error fetching playlist: ${t.localizedMessage}")
+                    Log.e(
+                        "PlaylistActivity/getIconUser/onFailure",
+                        "Error fetching playlist: ${t.localizedMessage}"
+                    )
                 }
             })
     }
 
     private fun getVideoItems(videoId: String) {
+        val dbHelper = DatabaseHelper(this)
+        val db = dbHelper?.writableDatabase
+
         val apiServices = ApiServices.getRetrofit()
         apiServices.getStatsVideos(
             "contentDetails", "statistics", "snippet", "player",
-            videoId, ApiServices.KEY2
+            videoId
         )
             .enqueue(object : Callback<VideoApiModel> {
                 override fun onResponse(
@@ -234,6 +249,63 @@ class PlaylistActivity : AppCompatActivity() {
                                     )
                                 )
 
+                                // Save and store data in SQLite
+                                val databaseVersion: String = "my_table20"
+                                val insertQuery =
+                                    "INSERT INTO $databaseVersion (" +
+                                            "video_id, " +
+                                            "urlPhotoValue, " +
+                                            "durationValue, " +
+                                            "titleValue, " +
+                                            "viewCountValue, " +
+                                            "likeCountValue, " +
+                                            "commentCountValue, " +
+                                            "publishedDateValue, " +
+                                            "playerHtmlValue, " +
+                                            "playerHeightValue, " +
+                                            "playerWidthValue, " +
+                                            "vidVideoValue, " +
+                                            "authorVideo, " +
+                                            "urlLogoValue, " +
+                                            "subscriberCountValue " +
+                                            ") VALUES ('" +
+                                            "${videoObj.id}', " +
+                                            "'${videoObj.urlPhoto}', " +
+                                            "'${videoObj.duration}', " +
+                                            "'${
+                                                videoObj.title.replace("'", "''").replace("\"", "\"\"")
+                                            }', " +
+                                            "'${videoObj.viewCount}', " +
+                                            "'${videoObj.likeCount}', " +
+                                            "'${videoObj.commentCount}', " +
+                                            "'${videoObj.publishedDate}', " +
+                                            "'${videoObj.playerHtml}', " +
+                                            "'${videoObj.playerHeight}', " +
+                                            "'${videoObj.playerWidth}', " +
+                                            "'${videoObj.authorVideo.id}', " +
+                                            "'${videoObj.authorVideo.name}', " +
+                                            "'${videoObj.authorVideo.urlLogo}', " +
+                                            "'${videoObj.authorVideo.subscriberCount}')"
+
+                                db?.execSQL(insertQuery)
+
+
+                                // CODE REQUIRED TO RESET ALL ITEMS IN DATABASE
+                                // UNCOMMENT THAT LINES AND CLICK THE BUTTON
+                                // THEN SHUT DOWN YOUR APP AND COMMENT THAT LINES AGAIN
+
+//                                  val deleteQuery = "DELETE FROM "+ databaseVersion
+//                                      if (db != null) {
+//                                      db.execSQL(deleteQuery)
+//                                  }
+
+                                // END OF RESTARTING DATABASE CODE
+
+
+                                db?.close()
+
+                                // End of SQLite
+
                                 val intent = Intent(baseContext, VideoActivity::class.java)
                                 val gson = Gson()
                                 val json: String = gson.toJson(videoObj)
@@ -242,12 +314,18 @@ class PlaylistActivity : AppCompatActivity() {
                             }
                         }
                     } else {
-                        Log.e("PlaylistActivity/getVideoItems", "Response not successful: ${response.code()}")
+                        Log.e(
+                            "PlaylistActivity/getVideoItems",
+                            "Response not successful: ${response.code()}"
+                        )
                     }
                 }
 
                 override fun onFailure(call: Call<VideoApiModel>, t: Throwable) {
-                    Log.e("PlaylistActivity/getVideoItems/onFailure", "Error fetching playlist: ${t.localizedMessage}")
+                    Log.e(
+                        "PlaylistActivity/getVideoItems/onFailure",
+                        "Error fetching playlist: ${t.localizedMessage}"
+                    )
                 }
             })
     }
