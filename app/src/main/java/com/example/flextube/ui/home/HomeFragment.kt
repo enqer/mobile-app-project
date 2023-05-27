@@ -136,25 +136,6 @@ class HomeFragment : Fragment() {
                         Log.d("HomeFragment/getVideos/onItemClick -> video.id", video.id)
 
                         // Save and store data in SQLite
-                        val idValue = video.id
-                        val urlPhotoValue = video.urlPhoto
-                        val durationValue = video.duration
-                        val titleValue = video.title
-                        val viewCountValue = video.viewCount
-                        val likeCountValue = video.likeCount
-                        val commentCountValue = video.commentCount
-
-                        val publishedDateValue = video.publishedDate
-                        val playerHtmlValue = video.playerHtml
-
-                        val playerHeightValue = video.playerHeight
-                        val playerWidthValue = video.playerWidth
-
-                        val vidVideoValue = video.authorVideo.id
-                        val authorVideoValue = video.authorVideo.name
-                        val urlLogoValue = video.authorVideo.urlLogo
-                        val subscriberCountValue = video.authorVideo.subscriberCount
-
                         val databaseVersion: String = "my_table20"
                         val insertQuery =
                             "INSERT INTO $databaseVersion (" +
@@ -174,28 +155,25 @@ class HomeFragment : Fragment() {
                                     "urlLogoValue, " +
                                     "subscriberCountValue " +
                                     ") VALUES ('" +
-                                    "$idValue', " +
-                                    "'$urlPhotoValue', " +
-                                    "'$durationValue', " +
-                                    "'${titleValue.replace("'", "''").replace("\"", "\"\"")}', " +
-                                    "'$viewCountValue', " +
-                                    "'$likeCountValue', " +
-                                    "'$commentCountValue', " +
-                                    "'$publishedDateValue', " +
-                                    "'$playerHtmlValue', " +
-                                    "'$playerHeightValue', " +
-                                    "'$playerWidthValue', " +
-                                    "'$vidVideoValue', " +
-                                    "'$authorVideoValue', " +
-                                    "'$urlLogoValue', " +
-                                    "'$subscriberCountValue')"
+                                    "${video.id}', " +
+                                    "'${video.urlPhoto}', " +
+                                    "'${video.duration}', " +
+                                    "'${
+                                        video.title.replace("'", "''").replace("\"", "\"\"")
+                                    }', " +
+                                    "'${video.viewCount}', " +
+                                    "'${video.likeCount}', " +
+                                    "'${video.commentCount}', " +
+                                    "'${video.publishedDate}', " +
+                                    "'${video.playerHtml}', " +
+                                    "'${video.playerHeight}', " +
+                                    "'${video.playerWidth}', " +
+                                    "'${video.authorVideo.id}', " +
+                                    "'${video.authorVideo.name}', " +
+                                    "'${video.authorVideo.urlLogo}', " +
+                                    "'${video.authorVideo.subscriberCount}')"
 
                         db?.execSQL(insertQuery)
-
-
-//                        val selectQuery = "SELECT video_id, urlPhotoValue, durationValue, titleValue, authorVideo FROM "+ databaseVersion
-//                        val cursor = db?.rawQuery(selectQuery, null)
-
 
                         // CODE REQUIRED TO RESET ALL ITEMS IN DATABASE
                         // UNCOMMENT THAT LINES AND CLICK THE BUTTON
@@ -209,13 +187,7 @@ class HomeFragment : Fragment() {
                         // END OF RESTARTING DATABASE CODE
 
 
-//                        if (cursor != null) {
-//                            cursor.close()
-//                        }
-//                        if (dbHelper != null) {
-//                            dbHelper.close()
-//                        }
-//                        cursor?.close()
+                        db?.close()
 
                         // End of SQLite
 
