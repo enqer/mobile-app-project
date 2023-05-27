@@ -252,16 +252,21 @@ class VideoActivity : AppCompatActivity() {
 
     //getting comments by id of video
     private fun getComments(id: String) {
-        val retrofit = ApiServices.getRetrofit()
+        Log.d("comment", "first")
+        val retrofit = ApiServices.getRetrofit2()
         val comment: Call<CommentApiModel> = retrofit.getCommentsOfVideo(videoId = id)
         comment.enqueue(object : Callback<CommentApiModel> {
             override fun onResponse(
                 call: Call<CommentApiModel>,
                 response: Response<CommentApiModel>
             ) {
+                Log.d("comment", "respone")
+                Log.d("comment", response.code().toString())
                 if (response.isSuccessful) {
+                    Log.d("comment", "second")
                     val c = response.body()
                     for (i in c?.items!!) {
+                        Log.d("comment", "third")
                         commentList.add(
                             Comment(
                                 i.snippet.topLevelComment.id,
@@ -286,6 +291,7 @@ class VideoActivity : AppCompatActivity() {
                 Log.i("RETROFIT/COMMENT", t.message.toString())
             }
         })
+        Log.d("comment", "forth")
     }
 
 

@@ -158,7 +158,7 @@ class PlaylistActivity : AppCompatActivity() {
 
     private fun getIconUser(videoOwnerChannelId: String) {
         val apiServices = ApiServices.getRetrofit()
-        apiServices.getChannel("snippet", "statistics", videoOwnerChannelId, ApiServices.KEY2)
+        apiServices.getChannel("snippet", "statistics", videoOwnerChannelId)
             .enqueue(object : Callback<AuthorApiModel> {
                 override fun onResponse(
                     call: Call<AuthorApiModel>,
@@ -199,7 +199,7 @@ class PlaylistActivity : AppCompatActivity() {
         val apiServices = ApiServices.getRetrofit()
         apiServices.getStatsVideos(
             "contentDetails", "statistics", "snippet", "player",
-            videoId, ApiServices.KEY2
+            videoId
         )
             .enqueue(object : Callback<VideoApiModel> {
                 override fun onResponse(

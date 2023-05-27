@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         val rfrTOken = sharedPreferences.getString("refresh_token",null)
         if (acTOken != null) {
             ApiServices.authToken = acTOken
+            Log.d("Access Token",acTOken.toString())
         }
         if (rfrTOken != null) {
             refreshToken(rfrTOken)
