@@ -37,6 +37,9 @@
             android:name=".playlist_item.PlaylistActivity"
             android:exported="false" />
         <activity
+            android:name=".playlist_item.PlaylistItemInsertActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

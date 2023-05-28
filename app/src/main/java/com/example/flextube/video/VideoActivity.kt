@@ -3,6 +3,7 @@ package com.example.flextube.video
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +16,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -29,6 +31,7 @@ import com.example.flextube.comment.CommentAdapter
 import com.example.flextube.comment.CommentApiModel
 import com.example.flextube.databinding.ActivityVideoBinding
 import com.example.flextube.interfaces.Formatter
+import com.example.flextube.playlist_item.PlaylistItemInsertActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
@@ -221,6 +224,19 @@ class VideoActivity : AppCompatActivity() {
                 sub.text = baseContext.resources.getString(R.string.subAdded)
                 !isSubAdded
             }
+        }
+
+        // add to playlist
+        binding.addToPlaylist.setOnClickListener {
+            val videoId = video.id
+            val title = video.title
+            Log.d("VideoActivity/onCreate", "videoId: $videoId")
+            Log.d("VideoActivity/onCreate", "title: $title")
+
+            val intent = Intent(this, PlaylistItemInsertActivity::class.java)
+            intent.putExtra("videoId", videoId)
+            intent.putExtra("title", title)
+            startActivity(intent)
         }
 
         binding.addComment.setOnClickListener {

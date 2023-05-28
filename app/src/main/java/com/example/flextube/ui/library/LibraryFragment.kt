@@ -207,7 +207,6 @@ class LibraryFragment : Fragment() {
         val apiServices = ApiServices.getRetrofit()
         val channelId = "UCOyHGlRFb30g-h76XiBW_pw"
 
-
         apiServices.getPlaylist("snippet,contentDetails", channelId, null, 5)
             .enqueue(object : Callback<PlaylistApiModel> {
                 override fun onResponse(
