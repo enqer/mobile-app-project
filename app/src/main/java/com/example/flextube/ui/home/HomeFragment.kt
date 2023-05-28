@@ -1,7 +1,6 @@
 package com.example.flextube.ui.home
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,9 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.flextube.R
 import com.example.flextube.api.ApiServices
-import com.example.flextube.database.DatabaseHelper
+import com.example.flextube.database.SQLiteManager
 import com.example.flextube.databinding.FragmentHomeBinding
 import com.example.flextube.interfaces.Formatter
 import com.example.flextube.video.AuthorApiModel
@@ -27,14 +25,10 @@ import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 
 class HomeFragment : Fragment() {
-
+    private lateinit var sqLiteManager: SQLiteManager   //SQL
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: RecyclerView.Adapter<VideoAdapter.VideoViewHolder>
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
@@ -67,7 +61,7 @@ class HomeFragment : Fragment() {
 
         val homeViewModel =
             ViewModelProvider(this).get(HomeViewModel::class.java)
-
+        sqLiteManager = SQLiteManager(requireActivity().baseContext)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -90,8 +84,8 @@ class HomeFragment : Fragment() {
     // getting videos by id video
     private fun getVideos(id: String) {
         // Variables used in SQLite stuff
-        val dbHelper = context?.let { DatabaseHelper(it) }
-        val db = dbHelper?.writableDatabase
+//        val dbHelper = context?.let { DatabaseHelper(it) }
+//        val db = dbHelper?.writableDatabase
 
         val api = ApiServices.getRetrofit()
         val videos: Call<VideoApiModel> = api.getStatsVideos(id = id)
@@ -132,48 +126,48 @@ class HomeFragment : Fragment() {
                 mAdapter = VideoAdapter(videosList, object : VideoAdapter.ItemClickListener {
                     override fun onItemClick(video: Video) {
 //                        Toast.makeText(requireContext(), video.title,Toast.LENGTH_SHORT).show()
-
-                        Log.d("HomeFragment/getVideos/onItemClick -> video.id", video.id)
-
-                        // Save and store data in SQLite
-                        val databaseVersion: String = "my_table20"
-                        val insertQuery =
-                            "INSERT INTO $databaseVersion (" +
-                                    "video_id, " +
-                                    "urlPhotoValue, " +
-                                    "durationValue, " +
-                                    "titleValue, " +
-                                    "viewCountValue, " +
-                                    "likeCountValue, " +
-                                    "commentCountValue, " +
-                                    "publishedDateValue, " +
-                                    "playerHtmlValue, " +
-                                    "playerHeightValue, " +
-                                    "playerWidthValue, " +
-                                    "vidVideoValue, " +
-                                    "authorVideo, " +
-                                    "urlLogoValue, " +
-                                    "subscriberCountValue " +
-                                    ") VALUES ('" +
-                                    "${video.id}', " +
-                                    "'${video.urlPhoto}', " +
-                                    "'${video.duration}', " +
-                                    "'${
-                                        video.title.replace("'", "''").replace("\"", "\"\"")
-                                    }', " +
-                                    "'${video.viewCount}', " +
-                                    "'${video.likeCount}', " +
-                                    "'${video.commentCount}', " +
-                                    "'${video.publishedDate}', " +
-                                    "'${video.playerHtml}', " +
-                                    "'${video.playerHeight}', " +
-                                    "'${video.playerWidth}', " +
-                                    "'${video.authorVideo.id}', " +
-                                    "'${video.authorVideo.name}', " +
-                                    "'${video.authorVideo.urlLogo}', " +
-                                    "'${video.authorVideo.subscriberCount}')"
-
-                        db?.execSQL(insertQuery)
+//
+//                        Log.d("HomeFragment/getVideos/onItemClick -> video.id", video.id)
+//
+//                        // Save and store data in SQLite
+//                        val databaseVersion: String = "my_table20"
+//                        val insertQuery =
+//                            "INSERT INTO $databaseVersion (" +
+//                                    "video_id, " +
+//                                    "urlPhotoValue, " +
+//                                    "durationValue, " +
+//                                    "titleValue, " +
+//                                    "viewCountValue, " +
+//                                    "likeCountValue, " +
+//                                    "commentCountValue, " +
+//                                    "publishedDateValue, " +
+//                                    "playerHtmlValue, " +
+//                                    "playerHeightValue, " +
+//                                    "playerWidthValue, " +
+//                                    "vidVideoValue, " +
+//                                    "authorVideo, " +
+//                                    "urlLogoValue, " +
+//                                    "subscriberCountValue " +
+//                                    ") VALUES ('" +
+//                                    "${video.id}', " +
+//                                    "'${video.urlPhoto}', " +
+//                                    "'${video.duration}', " +
+//                                    "'${
+//                                        video.title.replace("'", "''").replace("\"", "\"\"")
+//                                    }', " +
+//                                    "'${video.viewCount}', " +
+//                                    "'${video.likeCount}', " +
+//                                    "'${video.commentCount}', " +
+//                                    "'${video.publishedDate}', " +
+//                                    "'${video.playerHtml}', " +
+//                                    "'${video.playerHeight}', " +
+//                                    "'${video.playerWidth}', " +
+//                                    "'${video.authorVideo.id}', " +
+//                                    "'${video.authorVideo.name}', " +
+//                                    "'${video.authorVideo.urlLogo}', " +
+//                                    "'${video.authorVideo.subscriberCount}')"
+//
+//                        db?.execSQL(insertQuery)
 
                         // CODE REQUIRED TO RESET ALL ITEMS IN DATABASE
                         // UNCOMMENT THAT LINES AND CLICK THE BUTTON
@@ -187,10 +181,10 @@ class HomeFragment : Fragment() {
                         // END OF RESTARTING DATABASE CODE
 
 
-                        db?.close()
+//                        db?.close()
 
                         // End of SQLite
-
+                        sqLiteManager.insertVideo(video)
 
                         val intent = Intent(activity?.baseContext, VideoActivity::class.java)
                         val gson = Gson()

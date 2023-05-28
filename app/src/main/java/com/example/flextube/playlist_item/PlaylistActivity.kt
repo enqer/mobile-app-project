@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.flextube.R
 import com.example.flextube.api.ApiServices
-import com.example.flextube.database.DatabaseHelper
+import com.example.flextube.database.SQLiteManager
 import com.example.flextube.settings.SettingsActivity
 import com.example.flextube.video.AuthorApiModel
 import com.example.flextube.video.AuthorVideo
@@ -26,6 +26,8 @@ import retrofit2.Response
 
 
 class PlaylistActivity : AppCompatActivity() {
+    private lateinit var sqLiteManager: SQLiteManager
+
     private var playlistListId: String = ""
     private val playlistItemList: ArrayList<PlaylistItem> = ArrayList()
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
@@ -43,6 +45,7 @@ class PlaylistActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_playlist)
         Log.d("PLaylistActivity/onCreate", "Start activity")
+        sqLiteManager = SQLiteManager(this)
 
         val account = GoogleSignIn.getLastSignedInAccount(this)
         val playlistName = findViewById<TextView>(R.id.TV_playlist_name_activity)
@@ -208,8 +211,6 @@ class PlaylistActivity : AppCompatActivity() {
     }
 
     private fun getVideoItems(videoId: String) {
-        val dbHelper = DatabaseHelper(this)
-        val db = dbHelper?.writableDatabase
 
         val apiServices = ApiServices.getRetrofit()
         apiServices.getStatsVideos(
@@ -249,62 +250,7 @@ class PlaylistActivity : AppCompatActivity() {
                                     )
                                 )
 
-                                // Save and store data in SQLite
-                                val databaseVersion: String = "my_table20"
-                                val insertQuery =
-                                    "INSERT INTO $databaseVersion (" +
-                                            "video_id, " +
-                                            "urlPhotoValue, " +
-                                            "durationValue, " +
-                                            "titleValue, " +
-                                            "viewCountValue, " +
-                                            "likeCountValue, " +
-                                            "commentCountValue, " +
-                                            "publishedDateValue, " +
-                                            "playerHtmlValue, " +
-                                            "playerHeightValue, " +
-                                            "playerWidthValue, " +
-                                            "vidVideoValue, " +
-                                            "authorVideo, " +
-                                            "urlLogoValue, " +
-                                            "subscriberCountValue " +
-                                            ") VALUES ('" +
-                                            "${videoObj.id}', " +
-                                            "'${videoObj.urlPhoto}', " +
-                                            "'${videoObj.duration}', " +
-                                            "'${
-                                                videoObj.title.replace("'", "''").replace("\"", "\"\"")
-                                            }', " +
-                                            "'${videoObj.viewCount}', " +
-                                            "'${videoObj.likeCount}', " +
-                                            "'${videoObj.commentCount}', " +
-                                            "'${videoObj.publishedDate}', " +
-                                            "'${videoObj.playerHtml}', " +
-                                            "'${videoObj.playerHeight}', " +
-                                            "'${videoObj.playerWidth}', " +
-                                            "'${videoObj.authorVideo.id}', " +
-                                            "'${videoObj.authorVideo.name}', " +
-                                            "'${videoObj.authorVideo.urlLogo}', " +
-                                            "'${videoObj.authorVideo.subscriberCount}')"
-
-                                db?.execSQL(insertQuery)
-
-
-                                // CODE REQUIRED TO RESET ALL ITEMS IN DATABASE
-                                // UNCOMMENT THAT LINES AND CLICK THE BUTTON
-                                // THEN SHUT DOWN YOUR APP AND COMMENT THAT LINES AGAIN
-
-//                                  val deleteQuery = "DELETE FROM "+ databaseVersion
-//                                      if (db != null) {
-//                                      db.execSQL(deleteQuery)
-//                                  }
-
-                                // END OF RESTARTING DATABASE CODE
-
-
-                                db?.close()
-
-                                // End of SQLite
+                                sqLiteManager.insertVideo(videoObj)
 
                                 val intent = Intent(baseContext, VideoActivity::class.java)
                                 val gson = Gson()
